@@ -9,3 +9,7 @@ name = "Adic"
 name = "receipts"
 root = "Receipts"
 supportInterpreter = true
+
+[[lean_exe]]
+name = "sim"
+root = "Sim"
