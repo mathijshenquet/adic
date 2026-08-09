@@ -1,5 +1,49 @@
 # adic work log
 
+## 2026-08-10 (night, close) — ALL SEVEN tracks landed; fleet drained; expo definitions convention
+
+- **`track/adaptive-entropy` MERGED** (sol, wall→repair→green):
+  `lean/Adic/Adaptive.lean` — blockwise entropy upper bound
+  (zero-safe), skewed four-head witness exact adaptive cost 664,
+  Gibbs lower 512 + exact four-code Kraft lower 768, and
+  `adaptive_beats_static` (664 < 768) with a structural Kraft
+  lemma (no native_decide). 42 receipts after manifest-union
+  merge. Shannon move 1 is mechanized.
+- **`track/empirical-berry` MERGED** (sol): Rust enters — Cargo
+  workspace + `bench/` (pointer-chase, streaming, write
+  asymmetry; 19-point sweeps, CSVs committed), report
+  `aips/draft/empirical-berry.md` + PDF. Headline: measured
+  hierarchy envelope **s ≈ 2.41** — inside the predicted (2, 3)
+  band. Full cargo gate (fmt/clippy/test) joined the project gate
+  and is green. **Open with Mathijs**: quote workstation s≈2.41
+  or wait for quiet-laptop replication (report recommends
+  host-labeled + sensitivity range).
+- **`track/campbell-renyi` MERGED** (sol): 16-page desk report
+  `aips/draft/campbell-renyi.md`. Verdict: Rényi order
+  α = 1/(1+t) SURVIVES; corrections owed to shannon-programme §2:
+  optimal distances need the escort offset log₂ Z_α; the optimal
+  value is affine in 2^(t·H_α), not H_α itself; the "s=1 = tape"
+  slogan holds for random access but NOT streaming (dyadic sweep
+  at c(ℓ)=2^ℓ is Θ(N log N)); streaming-iff criterion; qualified
+  KN/additivity canonicity; honest NEGATIVE on the WBE rhyme
+  (shallow); six-rung Lean ladder with the hard rung named
+  (denominator-cleared natural Hölder). Claude to amend
+  shannon-programme accordingly (queued).
+- **Expo definitions convention** (Mathijs): AIP-4 §4.5 amended —
+  definitions as plain math prose are first-class expo content, no
+  badge needed; `#defn` in lib.typ; Expo 2 retrofitted as
+  exemplar. Retrofit of Expo 1/3/4 + all future expos follow.
+- **Queued for Claude (next window)**: Expo 5 (adaptive entropy,
+  with definitions per new convention); shannon-programme
+  amendments per campbell report; definitions retrofit expo 1/3/4;
+  nice expos of berry + campbell results per Mathijs's ask.
+- **Open with Mathijs**: s≈2.41 quote-or-replicate; cache-v0 call
+  2; Expo 1+2 corrections (+C=1 paragraph); roadmap q2; Letter 2;
+  veto 5/7.
+- Fleet drained: no workers in flight; all worktrees/workspaces
+  cleaned; 7 tracks launched today, 7 landed (2 exemplary honest
+  walls: adaptive round 1, both repaired same-day).
+
 ## 2026-08-10 (night) — free-up MERGED; adaptive wall repaired; cocycle-framework launched; padding proof completed
 
 - **`track/free-up-refresh` MERGED** (terra, ~15 min): the parked
