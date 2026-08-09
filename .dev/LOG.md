@@ -1,5 +1,33 @@
 # adic work log
 
+## 2026-08-09 (night) — lean-machine green, merged; zip launched
+
+- `track/lean-machine` (sol, 28 min, 1604 lines): full machine
+  (action layer as costed monoid action + finite control above it;
+  read-branching; no inter-head observation *by construction* — the
+  Instruction type can't express it), theorem 4
+  (`disjoint_subtree_interleaving`: result+cost invariant under all
+  interleavings of region-confined words, shared memory, semantic
+  ConfinedOperation — not trivialized), tree metric
+  (|a|+|b|−2|LCP|) with lower bound over all runs, realizability,
+  and `random_access_optimal`. Orchestrator re-verified: clean
+  rebuild exit 0, five theorems core-axioms-only, zero sorry,
+  statement fidelity read. Merged (`ca38486`).
+- AIP-2's theorem targets 1, 2 (both directions) and 4 are now
+  MECHANIZED; target 3 (simulations) deliberately deferred per §5g.
+- **AIP-3 accepted**: `letters/` precursor genre; Letter 1 written
+  (streaming = odometer). Drive-progress imported with composix
+  semantics into CLAUDE.md; worker out-clause standing rule added.
+- Model table: sol Lean datapoint recorded + deployed (nh home
+  switch).
+- Next launched: `track/lean-zip` (spec `.dev/specs/lean-zip.md`) —
+  zip as oblivious schedule (data-indexed word, provably
+  data-independent shape/cost), correctness vs `interleave`, cost
+  closed-form ≤ c·2^n. The uniformity/end-detection seam (convo
+  [15]) is explicitly out of scope and journaled for a future AIP.
+- **Open with Mathijs**: paper.md (3 calls); roadmap q2; Letter 1
+  awaits his read; veto window on 5/7 still open.
+
 ## 2026-08-09 (evening) — lean-spike green, merged; Lean-first ratified
 
 - Calibration spike (sol, `track/lean-spike`, spec
