@@ -119,12 +119,21 @@ program = source (statistics), geometry = channel (prices),
 mounting = the code at their interface — "cost of an algorithm =
 entropy of its access stream" is a separation statement.
 
-Speculative tail: the *noisy* analogue enters where cost becomes
-history-dependent — the write-back cocycle. Channels with memory
-famously lack single-letter capacity formulas; Expo 3's conjecture
-("bandwidth cannot be statically priced" — the class is not a
-coboundary off a homomorphism) has exactly that flavor. Left as a
-resonance, not a target.
+On the *noisy* coding theorem: demoted after discussion (Mathijs
+2026-08-10, "misschien is er niet echt iets op het noisy coding
+theorem") — see §7 for the dividing line. The candidates all
+dissolve on inspection: destination uncertainty is the *source*
+(already the $H$; adaptively revealed destinations — pointer
+chasing — are feedback/interaction, a different theory); hardware
+faults would be a genuine BSC import (reliable addressing at
+$n/(1 - H(\varepsilon))$) but a model variant we don't need;
+contention between heads is real and coming (cache-v1 dynamic
+mounting) but is *adversarial*, and its home theory is competitive
+analysis (move 2), not capacity. The write-back cocycle's rhyme
+with channels-with-memory (state breaks single-letter pricing) is
+structural but generates no theorem here — the real theorem is the
+cohomology nontriviality itself, which stands without Shannon.
+A rhyme, not a target.
 
 ## 6. Move 4 — rate–distortion (bounded near-space)
 
@@ -136,7 +145,32 @@ eviction is lossy compression of the working set. This is where
 cache-v0 was already heading; the k-way cliff is plausibly the
 distortion threshold in that picture.
 
-## 7. Suggested order
+## 7. The dividing line (the programme's honest thesis)
+
+Sharpened in discussion (Mathijs 2026-08-10): the analogy is exact
+on one half of information theory and decorative on the other, and
+the line is principled.
+
+- **The combinatorial / individual-sequence half transfers** —
+  because it is not an analogy: codewords and mount-paths are the
+  *same object* (prefix-free sets in the binary tree), and the
+  theorems are counting statements. Our entropy pair is the
+  individual-sequence form (empirical frequencies, no probability
+  measure) — which is exactly why it mechanizes over ℕ with no
+  measure theory. Moves 1, 2, 4 and §2's Campbell/Rényi live here.
+- **The probabilistic half does not** — the noisy coding theorem's
+  content is reliability against *exogenous* randomness via random
+  block codes, and the deterministic machine has none. Adding
+  randomness would be a modeling choice, not a discovery. Move 3
+  survives only as the $C = 1$ normalization remark.
+
+So the programme, honestly stated: **mechanize the combinatorial
+half of information theory** — individual-sequence information
+theory over the dyadic machine. This predicts which future imports
+work: entropy rate on blocks, LZ/universal coding, the counting
+side of rate–distortion — yes; capacity, random coding — no.
+
+## 8. Suggested order
 
 1. Move 1 (block-adaptive re-mounting = entropy rate): natural next
    theorem, building blocks mechanized.

@@ -31,7 +31,10 @@
   rate–distortion for bounded near-space) + the geometry answer
   to Mathijs's distance objection (unit prices = hyperbolic;
   c(ℓ)=2^(ℓ/k) = k-dim Euclidean, √N = 2D/VLSI; Campbell/Rényi
-  under exponential prices — desk, verify).
+  under exponential prices — desk, verify). Sharpened after
+  discussion: noisy-channel analogue DEMOTED (rhyme, not target);
+  honest thesis = mechanize the combinatorial/individual-sequence
+  half of information theory (draft §7).
 - Expo 3 corrections from the same tail applied + pushed this
   session: Grothendieck construction explicit (morphisms are pairs
   $(w,c)$; cocycle law = functoriality), $"cost"_c (w)$ component
