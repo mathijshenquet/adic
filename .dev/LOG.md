@@ -2,6 +2,18 @@
 
 ## 2026-08-10 (late) — slots 1–3 decided; roadmap rev 2; dirty direction endorsed; Euclidean variants decided
 
+- dirty-cocycle rev 2 (Mathijs asked for full AIP form with
+  pros/cons): two NEW results while writing — (a) commutativity of
+  Bℕ forces homomorphisms to see only letter counts, giving a
+  padding/holonomy argument that upgrades the nontriviality
+  conjecture to near-desk-proved (padding bookkeeping remains);
+  (b) write cost of a set = its box-counting profile (Σ_ℓ N_ℓ),
+  fractal dimension on the data side — write-side twin of the
+  entropy theorem. Also: dirty ≤ 2× clean (class changes, not
+  magnitude); ℕ-coefficients resolved by exchange form (= Tarjan's
+  amortized identity); gauge rec: lazy as ground truth,
+  flush-inclusive for interface statements.
+
 - Mathijs slotted the three proposed steps onto the todo list:
   **(1) Shannon move 1** (block-adaptive re-mounting = entropy
   rate; Claude spec → sol), **(2) mergesort ledger entry**
