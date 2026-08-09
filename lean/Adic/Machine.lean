@@ -79,7 +79,21 @@ def actionStep (operation : AddressedOp k) (config : ActionConfig n k) :
 
 abbrev ActionWord (k : Nat) := List (AddressedOp k)
 
-def actionCost (word : ActionWord k) : Nat := word.length
+def LocalOp.cost : LocalOp → Nat
+  | .up => 0
+  | .down0 | .down1 | .read | .write0 | .write1 => 1
+
+def actionCost (word : ActionWord k) : Nat :=
+  (word.map fun operation => operation.operation.cost).sum
+
+@[simp] theorem actionCost_nil : actionCost ([] : ActionWord k) = 0 := rfl
+
+@[simp] theorem actionCost_cons (operation : AddressedOp k) (word : ActionWord k) :
+    actionCost (operation :: word) = operation.operation.cost + actionCost word := rfl
+
+@[simp] theorem actionCost_append (first second : ActionWord k) :
+    actionCost (first ++ second) = actionCost first + actionCost second := by
+  simp [actionCost]
 
 def runActions : ActionWord k → ActionConfig n k → Option (ActionConfig n k)
   | [], config => some config
@@ -164,9 +178,12 @@ def runFor : Nat → Config k program n → Option (Config k program n)
 def runUntilHalt : Nat → Config k program n → Option (Config k program n × Nat)
   | _, config@{ control := .halted, .. } => some (config, 0)
   | 0, { control := .running _, .. } => none
-  | fuel + 1, config@{ control := .running _, .. } => do
+  | fuel + 1, config@{ control := .running state, .. } => do
       let next ← machineStep config
       let (final, cost) ← runUntilHalt fuel next
-      pure (final, cost + 1)
+      let stepCost := match program.transition state with
+        | .up _ _ => 0
+        | _ => 1
+      pure (final, cost + stepCost)
 
 end Adic.Dyadic

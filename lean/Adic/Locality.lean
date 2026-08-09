@@ -474,7 +474,7 @@ theorem disjoint_subtree_commute (config : ActionConfig n k)
           apply hheads
           rw [← hleftHead, ← hrightHead]
           exact equality) hpaths
-  · rfl
+  · simp [actionCost, Nat.add_comm]
 
 def ActionsCommute (left right : AddressedOp k) : Prop :=
   ∀ {n : Nat} (config : ActionConfig n k),
@@ -526,6 +526,14 @@ inductive Interleaving : List α → List α → List α → Prop where
 theorem Interleaving.length {left right merged : List α}
     (hinterleaving : Interleaving left right merged) :
     merged.length = left.length + right.length := by
+  induction hinterleaving with
+  | nil => rfl
+  | takeLeft hinterleaving ih => simp [ih]; omega
+  | takeRight hinterleaving ih => simp [ih]; omega
+
+theorem Interleaving.sum_map {left right merged : List α}
+    (hinterleaving : Interleaving left right merged) (weight : α → Nat) :
+    (merged.map weight).sum = (left.map weight).sum + (right.map weight).sum := by
   induction hinterleaving with
   | nil => rfl
   | takeLeft hinterleaving ih => simp [ih]; omega
@@ -587,7 +595,7 @@ theorem interleaving_result_and_cost_invariant
   · rw [runActions_interleaving_eq_append hfirst hcommute config,
       runActions_interleaving_eq_append hsecond hcommute config]
   · unfold actionCost
-    rw [hfirst.length, hsecond.length]
+    rw [hfirst.sum_map, hsecond.sum_map]
 
 def PreservesInvariant (invariant : ActionConfig n k → Prop) (operation : AddressedOp k) : Prop :=
   ∀ config next, invariant config → actionStep operation config = some next → invariant next
@@ -718,7 +726,7 @@ theorem interleaving_invariant_under
       runActions_interleaving_eq_append_under invariant hsecond hpreserveLeft
         hpreserveRight hcommute config hinvariant]
   · unfold actionCost
-    rw [hfirst.length, hsecond.length]
+    rw [hfirst.sum_map, hsecond.sum_map]
 
 theorem actionStep_preserves_other_head (operation : AddressedOp k)
     (config next : ActionConfig n k) (other : Fin k)

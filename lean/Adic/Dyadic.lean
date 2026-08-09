@@ -88,7 +88,21 @@ inductive Move where
 
 abbrev Word := List Move
 
-def cost (word : Word) : Nat := word.length
+def Move.cost : Move → Nat
+  | .up => 0
+  | .down0 => 1
+  | .down1 => 1
+
+def cost (word : Word) : Nat := (word.map Move.cost).sum
+
+@[simp] theorem cost_nil : cost ([] : Word) = 0 := rfl
+
+@[simp] theorem cost_cons (move : Move) (word : Word) :
+    cost (move :: word) = move.cost + cost word := rfl
+
+@[simp] theorem cost_append (first second : Word) :
+    cost (first ++ second) = cost first + cost second := by
+  simp [cost]
 
 def moveUp : Head n → Option (Head n)
   | ⟨_, .root⟩ => none
@@ -146,10 +160,13 @@ def descend : Path n → Word
         simp [descend, run, step, moveDown0, moveDown1, Cursor.follow, ih]
 
 @[simp] theorem cost_descend (p : Path n) : cost (descend p) = n := by
-  unfold cost
   induction p with
   | nil => rfl
-  | cons bit tail ih => cases bit <;> simp [descend, ih]
+  | cons bit tail ih =>
+      cases bit <;>
+        simp only [descend, cost, List.map_cons, Move.cost, List.sum_cons] <;>
+        change 1 + cost (descend tail) = _ <;>
+        omega
 
 theorem random_access (p : Path n) :
     ∃ final : Head n,
@@ -166,19 +183,20 @@ def euler : Nat → Word
 
 @[simp] theorem cost_euler_zero : cost (euler 0) = 0 := rfl
 
-theorem cost_euler_succ (n : Nat) : cost (euler (n + 1)) = 2 * cost (euler n) + 4 := by
-  simp [euler, cost]
+theorem cost_euler_succ (n : Nat) : cost (euler (n + 1)) = 2 * cost (euler n) + 2 := by
+  simp [euler, cost, Move.cost]
   omega
 
-theorem cost_euler_closed (n : Nat) : cost (euler n) + 4 = 4 * 2 ^ n := by
+theorem cost_euler_closed (n : Nat) : cost (euler n) = 2 * (2 ^ n - 1) := by
   induction n with
   | zero => simp [cost_euler_zero]
   | succ n ih =>
       rw [cost_euler_succ]
       simp only [Nat.pow_succ]
+      have hpositive : 1 ≤ 2 ^ n := Nat.two_pow_pos n
       omega
 
-theorem euler_length_bound (n : Nat) : cost (euler n) ≤ 4 * 2 ^ n := by
+theorem euler_length_bound (n : Nat) : cost (euler n) ≤ 2 * 2 ^ n := by
   have := cost_euler_closed n
   omega
 
@@ -280,7 +298,7 @@ theorem euler_leaf_visits (n : Nat) :
     leftToRightLeaves, rootHead]
 
 theorem streaming (n : Nat) :
-    cost (euler n) ≤ 4 * 2 ^ n ∧
+    cost (euler n) ≤ 2 * 2 ^ n ∧
     run (euler n) (rootHead n) = some (rootHead n) ∧
     leafVisits (euler n) (rootHead n) = some (leftToRightLeaves n) ∧
     (leftToRightLeaves n).length = 2 ^ n :=

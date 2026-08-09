@@ -19,7 +19,7 @@ def copyWord : (n : Nat) → Tree n → ActionWord 2
       copyDescend false ++ copyWord n left ++ copyAscend ++
       copyDescend true ++ copyWord n right ++ copyAscend
 
-def copyCost (n : Nat) : Nat := 10 * 2 ^ n - 8
+def copyCost (n : Nat) : Nat := 6 * 2 ^ n - 4
 
 theorem copyWord_shape_independent (source source' : Tree n) :
     actionShape (copyWord n source) = actionShape (copyWord n source') := by
@@ -34,19 +34,21 @@ theorem copyWord_shape_independent (source source' : Tree n) :
 
 theorem copyWord_cost (source : Tree n) : actionCost (copyWord n source) = copyCost n := by
   induction n with
-  | zero => simp [copyWord, actionCost, copyCost]
+  | zero =>
+      cases source <;>
+        simp [copyWord, actionCost, copyCost, LocalOp.cost, addressed, writeBit]
   | succ n ih =>
       obtain ⟨left, right⟩ := source
-      simp [copyWord, actionCost, copyDescend, copyAscend]
-      rw [show (copyWord n left).length = copyCost n by exact ih left,
-        show (copyWord n right).length = copyCost n by exact ih right]
+      simp only [copyWord, actionCost_append]
+      rw [ih left, ih right]
+      simp [copyDescend, copyAscend, actionCost, LocalOp.cost, addressed]
       unfold copyCost
       rw [Nat.pow_succ]
       have hpositive : 1 ≤ 2 ^ n := Nat.two_pow_pos n
       omega
 
 theorem copyWord_linear_bound (source : Tree n) :
-    actionCost (copyWord n source) ≤ 10 * 2 ^ n := by
+    actionCost (copyWord n source) ≤ 6 * 2 ^ n := by
   rw [copyWord_cost]
   exact Nat.sub_le _ _
 
@@ -218,7 +220,7 @@ def doublingCopyTotal : Nat → Nat
   | c + 1 => doublingCopyTotal c + copyCost (c + 1)
 
 theorem doublingCopyTotal_closed (c : Nat) :
-    doublingCopyTotal c + 8 * (c + 1) + 10 = 10 * 2 ^ (c + 1) := by
+    doublingCopyTotal c + 4 * (c + 1) + 6 = 6 * 2 ^ (c + 1) := by
   induction c with
   | zero => decide
   | succ c ih =>
@@ -229,7 +231,7 @@ theorem doublingCopyTotal_closed (c : Nat) :
       omega
 
 theorem doublingCopyTotal_linear_bound (c : Nat) :
-    doublingCopyTotal c ≤ 20 * 2 ^ c := by
+    doublingCopyTotal c ≤ 12 * 2 ^ c := by
   have hclosed := doublingCopyTotal_closed c
   rw [Nat.pow_succ] at hclosed
   omega

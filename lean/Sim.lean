@@ -17,17 +17,17 @@ def fail (message : String) : IO Bool := do
 
 def checkEulerCost (grade : Nat) : IO Bool := do
   let actual := cost (euler grade)
-  let expected := 4 * 2 ^ grade
-  if actual + 4 == expected then
+  let expected := 2 * (2 ^ grade - 1)
+  if actual == expected then
     pure true
   else
-    fail s!"grade {grade}: euler cost {actual} + 4 /= {expected}"
+    fail s!"grade {grade}: euler cost {actual} /= {expected}"
 
 def checkZipCost (grade : Nat) : IO Bool := do
   let a := Tree.falseTree grade
   let b := sampleTree grade
   let actual := actionCost (zipWord grade a b)
-  let expected := 20 * 2 ^ grade - 12
+  let expected := 12 * 2 ^ grade - 6
   if actual == expected then
     pure true
   else
@@ -36,7 +36,7 @@ def checkZipCost (grade : Nat) : IO Bool := do
 def checkCopyCost (grade : Nat) : IO Bool := do
   let source := sampleTree grade
   let actual := actionCost (copyWord grade source)
-  let expected := 10 * 2 ^ grade - 8
+  let expected := 6 * 2 ^ grade - 4
   if actual == expected then
     pure true
   else

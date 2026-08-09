@@ -120,7 +120,7 @@ def zipWord : (n : Nat) → Tree n → Tree n → ActionWord 3
       descendAll false ++ zipWord n a₀ b₀ ++ ascendAll ++
       descendAll true ++ zipWord n a₁ b₁ ++ ascendAll
 
-def zipCost (n : Nat) : Nat := 20 * 2 ^ n - 12
+def zipCost (n : Nat) : Nat := 12 * 2 ^ n - 6
 
 theorem zipWord_shape_independent (a b a' b' : Tree n) :
     actionShape (zipWord n a b) = actionShape (zipWord n a' b') := by
@@ -138,20 +138,22 @@ theorem zipWord_shape_independent (a b a' b' : Tree n) :
 
 theorem zipWord_cost (a b : Tree n) : actionCost (zipWord n a b) = zipCost n := by
   induction n with
-  | zero => simp [zipWord, actionCost, zipCost]
+  | zero =>
+      cases a <;> cases b <;>
+        simp [zipWord, actionCost, zipCost, LocalOp.cost, addressed, writeBit]
   | succ n ih =>
       obtain ⟨a₀, a₁⟩ := a
       obtain ⟨b₀, b₁⟩ := b
-      simp [zipWord, actionCost, descendAll, ascendAll]
-      rw [show (zipWord n a₀ b₀).length = zipCost n by exact ih a₀ b₀,
-        show (zipWord n a₁ b₁).length = zipCost n by exact ih a₁ b₁]
+      simp only [zipWord, actionCost_append]
+      rw [ih a₀ b₀, ih a₁ b₁]
+      simp [descendAll, ascendAll, actionCost, LocalOp.cost, addressed]
       unfold zipCost
       rw [Nat.pow_succ]
       have hpositive : 1 ≤ 2 ^ n := Nat.two_pow_pos n
       omega
 
 theorem zipWord_linear_bound (a b : Tree n) :
-    actionCost (zipWord n a b) ≤ 20 * 2 ^ n := by
+    actionCost (zipWord n a b) ≤ 12 * 2 ^ n := by
   rw [zipWord_cost]
   exact Nat.sub_le _ _
 

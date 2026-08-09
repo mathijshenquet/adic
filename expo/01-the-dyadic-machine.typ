@@ -8,7 +8,8 @@ $n$ with one bit at each of its $2^n$ leaves, and nothing else. A
 fixed finite program drives $k$ cursors ("heads") over this tree;
 the only motions are `up`, `down0`, `down1`, and the only data
 operations are reading or writing the bit under a head resting at a
-leaf. Every instruction costs 1. Space is not measured — the grade
+leaf. Descents, reads, and writes cost 1; `up` is free, because it
+acquires no address bit. Space is not measured — the grade
 $n$ *is* the space, by construction. One program runs uniformly at
 every grade; the tower ${D_n}$, never any single machine, is the
 object of the theory (AIP-2).
@@ -20,11 +21,13 @@ not assumptions about a memory controller.
 
 = Movement and cost
 
-A run is a word of instructions; its cost is its length. Movement
+A run is a word of instructions; its cost counts acquired address
+bits, not bookkeeping ascents. Movement
 composes as a monoid action, and every cost statement below is a
 closed-form total over a concrete word (no potentials, no credits).
-Positions are bit-paths; the metric is the tree distance
-$d(a,b) = |a| + |b| - 2|"lcp"(a,b)|$.
+Positions are bit-paths; the directed distance from $a$ to $b$ is
+$d_("down")(a,b) = |b| - |"lcp"(a,b)|$: only the descent after their
+common prefix is charged.
 
 #leanthm(
   "Adic.Dyadic.random_access",
@@ -48,43 +51,43 @@ $d(a,b) = |a| + |b| - 2|"lcp"(a,b)|$.
 
 #leanthm(
   "Adic.Dyadic.movement_cost_lower_bound",
-  pin: "a9dd1cc5c5b7",
-  title: "Cost dominates the metric",
+  pin: "3831d88542ca",
+  title: "Cost dominates directed distance",
 )[
   Any successful run moving a head from position $a$ to position
-  $b$ costs at least $d(a, b)$ —
+  $b$ costs at least $d_("down")(a, b)$ —
 ]
 
 #leanthm(
   "Adic.Dyadic.movement_cost_realizable",
-  pin: "441789e92c57",
-  title: "…and the metric is realizable",
+  pin: "d743dda5e6f1",
+  title: "…and directed distance is realizable",
 )[
-  — and some word achieves exactly $d(a,b)$: up to the least common
-  ancestor, down the other side. Cost, restricted to movement, *is*
-  the tree metric.
+  — and some word achieves exactly $d_("down")(a,b)$: ascend freely to
+  the least common ancestor, then descend the other side. Cost,
+  restricted to movement, is directed descent distance.
 ]
 
 = Streaming, or the odometer
 
 Number the leaves left to right. Stepping from leaf $i$ to leaf
-$i+1$ costs $2(1 + v_2(i+1))$ — the walk to the least common
-ancestor and back, governed by how far the binary carry propagates
-when incrementing $i$. A full scan telescopes:
-$sum_(i<2^n)(1 + v_2(i)) approx 2 dot 2^n$. Streaming is cheap on
+$i+1$ costs $1 + v_2(i+1)$: ascents to the least common ancestor are
+free, and the charged part is the descent, governed by how far the
+binary carry propagates when incrementing $i$. A full scan telescopes
+to exactly $2 dot (2^n - 1)$ charged moves. Streaming is cheap on
 $D_n$ for the same reason the odometer performs amortized $O(1)$
 carries; the 2-adic valuation is the cost model seen from the
 address side.
 
 #leanthm(
   "Adic.Dyadic.streaming",
-  pin: "da2cf6d93911",
+  pin: "93e3fb282693",
   title: "Streaming is amortized O(1) per leaf",
 )[
   The Euler word of grade $n$ succeeds from the root, returns to
-  the root, costs at most $4 dot 2^n$, and its trace of visited
+  the root, costs at most $2 dot 2^n$, and its trace of visited
   leaves is *exactly* the $2^n$ leaves in left-to-right order —
-  each leaf once, in order. (The exact cost is $4 dot 2^n - 4$.)
+  each leaf once, in order. (The exact cost is $2 dot (2^n - 1)$.)
 ]
 
 = Locality is compositional
@@ -132,21 +135,21 @@ cost) does not depend on the inputs; only the choice between
   pin: "197f534c6425",
   title: "Zip is linear",
 )[
-  The schedule costs exactly $20 dot 2^n - 12$, independent of the
+  The schedule costs exactly $12 dot 2^n - 6$, independent of the
   data — amortized $O(1)$ per element, with the constant in plain
   sight.
 ]
 
 Copy is the second: a two-head streaming copy at exact cost
-$10 dot 2^n - 8$, whose doubling chain telescopes —
+$6 dot 2^n - 4$, whose doubling chain telescopes —
 
 #leanthm(
   "Adic.Dyadic.doublingCopyTotal_linear_bound",
-  pin: "7bf1eddaf4cc",
+  pin: "4ae5d123a26c",
   title: "Doubling telescopes",
 )[
   The total cost of copying at every grade $0, dots, c$ (the
-  doubling vector's copy chain) is at most $20 dot 2^c$: linear in
+  doubling vector's copy chain) is at most $12 dot 2^c$: linear in
   the final size. This is the machine half of FVec's amortized
   $O(1)$ push.
 ]
@@ -160,11 +163,11 @@ address arithmetic is path navigation — and:
 
 #leanthm(
   "Adic.Dyadic.ram_program_simulation",
-  pin: "ae500d06e278",
+  pin: "ab2af3dff9d7",
   title: "The honest log",
 )[
   Every RAM program of cost $T$ runs on $D$ at cost
-  $lt.eq 10 dot T dot (s + 2^v)$ — $O(log S + w)$ per RAM step.
+  $lt.eq 6 dot T dot (s + 2^v)$ — $O(log S + w)$ per RAM step.
   The logarithm was always there; the RAM model merely declines to
   charge for it.
 ]
@@ -182,12 +185,13 @@ address arithmetic is path navigation — and:
 
 #leanthm(
   "Adic.Dyadic.ram_program_reverse_simulation",
-  pin: "32fa4d3c56aa",
+  pin: "0124d398ce8d",
   title: "The reverse direction, whole programs",
 )[
-  And the per-action simulation lifts: every $D$ action word of
-  cost $T$ compiles to a register-RAM run of cost $lt.eq 5T$ that
-  tracks the full configuration. Target 3 of AIP-2 is now closed in
+  And the per-action simulation lifts: every $D$ action word
+  compiles to a register-RAM run of cost at most $5(T + U)$, where
+  $T$ is its charged $D$ cost and $U$ its number of free ascents;
+  the run tracks the full configuration. Target 3 of AIP-2 is now closed in
   both directions: $D$ and the word RAM differ by exactly one
   logarithm, in exactly one direction — machine-checked.
 ]

@@ -715,6 +715,22 @@ def ascendPrefix : Path depth → Word
   | nil => rfl
   | cons bit tail ih => simp [ascendPrefix, ih]
 
+theorem actionCost_liftMoves (head : Fin k) (word : Word) :
+    actionCost (liftMoves head word) = cost word := by
+  induction word with
+  | nil => rfl
+  | cons move word ih =>
+      simp only [liftMoves, List.map_cons, actionCost_cons, cost_cons]
+      change (addressed head (localOpOfMove move)).operation.cost +
+        actionCost (liftMoves head word) = move.cost + cost word
+      rw [ih]
+      cases move <;> rfl
+
+@[simp] theorem cost_ascendPrefix (path : Path depth) : cost (ascendPrefix path) = 0 := by
+  induction path with
+  | nil => rfl
+  | cons bit tail ih => simp [ascendPrefix, ih, Move.cost]
+
 theorem run_descend_prefix (path : Path depth) (cursor : Cursor total (remaining + depth)) :
     run (descend path) ⟨remaining + depth, cursor⟩ =
       some ⟨remaining, Cursor.followPrefix path cursor⟩ := by
@@ -744,12 +760,11 @@ def excursion (sourcePath destinationPath : Path depth) (source : Tree remaining
 
 theorem excursion_cost (sourcePath destinationPath : Path depth) (source : Tree remaining) :
     actionCost (excursion sourcePath destinationPath source) =
-      4 * depth + copyCost remaining := by
-  simp only [excursion, actionCost, List.length_append, liftMoves, List.length_map,
-    ascendPrefix_length]
-  rw [show (descend sourcePath).length = depth by exact cost_descend sourcePath,
-    show (descend destinationPath).length = depth by exact cost_descend destinationPath,
-    show (copyWord remaining source).length = copyCost remaining by exact copyWord_cost source]
+      2 * depth + copyCost remaining := by
+  simp only [excursion, actionCost_append]
+  rw [actionCost_liftMoves, actionCost_liftMoves, copyWord_cost,
+    actionCost_liftMoves, actionCost_liftMoves, cost_descend, cost_descend,
+    cost_ascendPrefix, cost_ascendPrefix]
   omega
 
 theorem set_twoHeads_both (source destination : Cursor total oldRemaining)
@@ -950,7 +965,7 @@ def instructionWord (instruction : RamInstruction s) (config : RamConfig s v) :
         config.accumulator
 
 theorem instructionWord_cost (instruction : RamInstruction s) (config : RamConfig s v) :
-    actionCost (instructionWord instruction config) ≤ 10 * (s + 2 ^ v) := by
+    actionCost (instructionWord instruction config) ≤ 6 * (s + 2 ^ v) := by
   cases instruction with
   | setAddress address => simp [instructionWord, actionCost]
   | shiftLeft bit => simp [instructionWord, actionCost]
@@ -1041,26 +1056,24 @@ def compileProgram : RamProgram s → RamConfig s v → ActionWord 2
 
 theorem compileProgram_cost (program : RamProgram s) (config : RamConfig s v) :
     actionCost (compileProgram program config) ≤
-      10 * ramCost program * (s + 2 ^ v) := by
+      6 * ramCost program * (s + 2 ^ v) := by
   induction program generalizing config with
   | nil => simp [compileProgram, actionCost, ramCost]
   | cons instruction program ih =>
-      simp only [compileProgram, actionCost, List.length_append, ramCost, List.length_cons]
+      simp only [compileProgram, actionCost_append, ramCost, List.length_cons]
       have hstep := instructionWord_cost instruction config
       have hrest := ih (ramStep instruction config)
-      change (instructionWord instruction config).length ≤ _ at hstep
-      change (compileProgram program (ramStep instruction config)).length ≤ _ at hrest
       simp only [ramCost] at hrest
       calc
-        (instructionWord instruction config).length +
-              (compileProgram program (ramStep instruction config)).length ≤
-            10 * (s + 2 ^ v) + 10 * program.length * (s + 2 ^ v) :=
+        actionCost (instructionWord instruction config) +
+              actionCost (compileProgram program (ramStep instruction config)) ≤
+            6 * (s + 2 ^ v) + 6 * program.length * (s + 2 ^ v) :=
           Nat.add_le_add hstep hrest
-        _ = 10 * program.length * (s + 2 ^ v) + 10 * (s + 2 ^ v) :=
+        _ = 6 * program.length * (s + 2 ^ v) + 6 * (s + 2 ^ v) :=
           Nat.add_comm _ _
-        _ = (10 * program.length + 10) * (s + 2 ^ v) := by
+        _ = (6 * program.length + 6) * (s + 2 ^ v) := by
           exact (Nat.add_mul _ _ _).symm
-        _ = 10 * (program.length + 1) * (s + 2 ^ v) := by
+        _ = 6 * (program.length + 1) * (s + 2 ^ v) := by
           congr 1
 
 theorem simulate_program (program : RamProgram s) (config : RamConfig s v)
@@ -1088,7 +1101,7 @@ theorem ram_program_simulation (program : RamProgram s) (config : RamConfig s v)
           some (encodedConfig (runRam program config) scratch') ∧
         ScratchRepresents (runRam program config) scratch' ∧
         actionCost (compileProgram program config) ≤
-          10 * ramCost program * (s + 2 ^ v) := by
+          6 * ramCost program * (s + 2 ^ v) := by
   obtain ⟨scratch, hexec, hrep⟩ :=
     simulate_program program config (repeatWord s config.accumulator)
       (simulatorStart_represents config)
