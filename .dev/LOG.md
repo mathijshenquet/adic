@@ -1,5 +1,38 @@
 # adic work log
 
+## 2026-08-10 — receipts + sim merged; Expo 1 live; two tracks in flight
+
+- Drive-progress activated by Mathijs. Two workers parallel since:
+  sol (lean-spike pane), terra (eval-harness pane, first terra-Lean
+  epsilon — verdict: clean, fast, zero false greens on `lake exe
+  sim`, independently re-run PASS exit 0).
+- Merged: `track/lean-receipts` (sol: `lake exe receipts` → 13-entry
+  ledger, FNV-1a 12-hex pins, forge-guard fails nonzero,
+  deterministic regen) and `track/eval-harness` (terra: `lake exe
+  sim`, costs vs closed forms to grade 12, real runs to grade 10).
+  One lakefile conflict, resolved; full gate green on main (build +
+  receipts + sim).
+- cache-v0 rev 2 (earlier): rebuilt on convo [55]–[59] after
+  Mathijs's corrections — 1+w surcharge, Kraft shares, down-fills/
+  up-evicts, no head overlap; k-way cancellation as target; [72]
+  deferred to size-weighted v1.
+- **Expo 1 published** (`expo/01-the-dyadic-machine.typ`): the
+  machine + 10 lean-backed pinned claims + 1 desk badge (reverse
+  simulation). First real use of the receipt boxes.
+- In flight: sol on `track/lean-kraft` (B4 phase 1: weighted cost,
+  Kraft↔antichain, weighted zip); terra on `track/lean-ram-reverse`
+  (RAM simulates D: extend RAM with shifts, per-move constant
+  lemma; wall genuinely possible, out-clause emphasized).
+- Process friction: compound `&`+`wait` background watchers hit
+  sandbox PermissionDenied — use one simple `herdr agent wait` per
+  background task instead. Sandbox leaves 0-byte dotfile
+  mount-residue in repo root after unsandboxed runs — verified
+  empty, removed. direnv first-build window now observed up to
+  ~2.5 min (retry accordingly).
+- **Open with Mathijs**: Expo 1 corrections; cache-v0 rev 2 read
+  (call 2: c≡1 first?); roadmap q2; Letter 2 closing question;
+  veto 5/7.
+
 ## 2026-08-10 (early) — ram merged (target 3 one-way); expositions accepted (AIP-4)
 
 - `track/lean-fvec` merged earlier tonight (copy + telescoping,
