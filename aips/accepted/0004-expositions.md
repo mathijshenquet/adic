@@ -58,20 +58,23 @@ Mechanism (the tour move, translated):
 Gate: `expo/*.typ` compile (with receipt resolution) joins the gate
 next to letters.
 
-## 4. Open questions (taste calls for Mathijs)
+## 4. Taste calls (all decided by Mathijs, 2026-08-09)
 
-1. **Genre name.** "Expositions" (`expo/`, "Expo 1")? Alternatives:
-   notes, chapters, fascicles. — rec: expositions; it is the
-   mathematician's word for exactly this artifact.
-2. **Pin hardness.** Hash-pin statements (build fails on any
-   statement change, human re-pins) vs display-only (always show
-   current statement, no pin)? — rec: hash-pin; the forced re-read
-   is the point — it is what "asserted" means.
-3. **Authoring surface.** Typst + receipts harness (rec) vs Verso
-   (drift-proof but Lean-authored, leaves our toolchain)? — rec:
-   Typst; revisit Verso if the harness grows painful.
-4. **First exposition.** "Expo 1: The dyadic machine" covering
-   Dyadic/Machine/Metric/Locality receipts — written by Claude,
-   receipts harness built by sol as its own track? — rec: yes,
-   harness track first (it is well-specified), Expo 1 immediately
-   after.
+1. **Genre name.** DECIDED: expositions (`expo/`, "Expo 1").
+   Additionally: expositions largely *replace letters* as the
+   precursor vehicle — existing Letters 1–2 get reformulated as
+   expos; the letters directory remains as immutable correspondence
+   archive (AIP-3 disposition note). An expo need NOT have Lean
+   receipts — but unreceipted mathematics must be clearly badged as
+   such.
+2. **Pin hardness.** DECIDED: hash-pin. Mathijs's framing: an expo
+   *claims*, the Lean code *backs*, and the claim→backing path is
+   CI-checkable — assertable and strikeable by the build.
+3. **Authoring surface.** DECIDED: Typst first, with nice reusable
+   functions and a distinct visual style for "Lean-backed" vs
+   "plain mathematics" (`expo/lib.typ`). Verso stays the fallback
+   if the harness grows painful.
+4. **First exposition + authorship.** DECIDED: harness track first,
+   Expo 1 ("The dyadic machine") after. Claude writes expos with
+   its own hand; Mathijs corrects rather than pre-approves
+   ("ik corrigeer ipv accordeer").

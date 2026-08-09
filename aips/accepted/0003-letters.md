@@ -39,6 +39,15 @@ evaporates).
 - Replies: Mathijs replies in chat, in the margins, or — if he
   likes — with letters of his own in the same directory.
 
+## 3b. Disposition: superseded by expositions (2026-08-09, same day)
+
+AIP-4 (expositions) largely replaces letters as the precursor
+vehicle: readable mathematics belongs in `expo/` with receipt
+badges; Letters 1–2 get reformulated as expos. `letters/` remains
+as an immutable correspondence archive, and the genre stays
+available for genuinely personal correspondence — but the default
+home for precursor mathematics is now an exposition.
+
 ## 4. Disposition of the paper draft (2026-08-09)
 
 With this AIP accepted, the paper AIP draft defers (moved to

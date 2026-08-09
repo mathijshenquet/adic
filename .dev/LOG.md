@@ -1,5 +1,36 @@
 # adic work log
 
+## 2026-08-10 (early) — ram merged (target 3 one-way); expositions accepted (AIP-4)
+
+- `track/lean-fvec` merged earlier tonight (copy + telescoping,
+  ladder step 2, 4m38s). `track/lean-ram` merged (`74fa9cf`): minimal
+  word RAM, address→path layout, and the FULL program-level
+  honest-log simulation `cost ≤ 10·T·(s+2^v)` — sol landed beyond
+  the per-instruction fallback, 17m46s, re-verified green. AIP-2
+  scoreboard: targets 1, 2, 4 fully mechanized; target 3 honest-log
+  direction done, reverse direction (RAM simulates D) still open.
+- **AIP-4 accepted** (Mathijs): expositions — readable math with
+  Lean receipts, tour-style. All four calls decided: name expo/;
+  hash-pin (claim→backing path CI-checkable); Typst first with
+  reusable lib (`expo/lib.typ` built: leanthm green / deskthm amber
+  / openclaim grey, receipt boxes from receipts.json, pin assert);
+  Claude's own hand, Mathijs corrects not pre-approves. Expositions
+  largely supersede letters (AIP-3 §3b); Letters 1–2 to be
+  reformulated as expos once the harness lands; an expo without
+  receipts is fine but must badge honestly.
+- `expo/style-demo.typ` compiles (hand-pasted mock receipt, clearly
+  labeled; forbidden once the harness exists). Launched
+  `track/lean-receipts` (spec `.dev/specs/lean-receipts.md`): lake
+  exe receipts → receipts.json from a manifest, fail-on-missing.
+- Also tonight: cache-v0 draft (Kraft sketch, 4 calls) in Mathijs's
+  inbox — gates the B4 mechanization track.
+- **Open with Mathijs**: cache-v0 (4 calls), roadmap q2, Letter 2's
+  closing question (no-cost-bounded-cone: theorem target or thesis
+  sentence?), veto 5/7.
+- **Queue for agents**: after lean-receipts → Expo 1 (Claude),
+  letters→expo reformulation (Claude), then B4 mechanization once
+  cache-v0 lands; reverse simulation direction; #eval harness.
+
 ## 2026-08-09 (late night) — zip green, merged; fvec launched; Letter 2
 
 - `track/lean-zip` (sol, 14 min, 440 lines): zip as oblivious
