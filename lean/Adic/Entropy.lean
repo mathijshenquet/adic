@@ -81,9 +81,22 @@ theorem touchCost_counts (dists : Dists k) (touches : List (Fin k)) :
         rest.length + (rest.map dists).sum at ih
       omega
 
+def acquisitionTouches : ActionWord k → List (Fin k)
+  | [] => []
+  | operation :: word =>
+      match operation.operation with
+      | .up => acquisitionTouches word
+      | _ => operation.head :: acquisitionTouches word
+
 theorem distCost_eq_touchCost (dists : Dists k) (word : ActionWord k) :
-    distCost dists word = touchCost dists (word.map fun operation => operation.head) := by
-  simp [distCost, touchCost, List.map_map, Function.comp_def]
+    distCost dists word = touchCost dists (acquisitionTouches word) := by
+  induction word with
+  | nil => rfl
+  | cons operation word ih =>
+      rw [distCost_cons]
+      rcases operation with ⟨head, operation⟩
+      cases operation <;>
+        simp [distOperationCost, acquisitionTouches, touchCost, ih]
 
 /-- The exact natural ceiling of `log₂(total / count)` for positive inputs.
 The predecessor quotient avoids truncating the ratio before taking the ceiling. -/

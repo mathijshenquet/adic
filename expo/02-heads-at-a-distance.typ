@@ -21,8 +21,9 @@ Every head $i$ is mounted at a distance $d_i in NN$. Two rules
   nearby: head $i$ occupies the fraction $2^(-d_i)$ of fast state,
   and the shares are disjoint (no overlap between heads, by design:
   overlap is what makes sharing models treacherous).
-+ *Surcharge.* Every operation of head $i$ costs $1 + d_i$ instead
-  of $1$: the distance is the head's address depth in an implicit
++ *Surcharge.* Every paid operation of head $i$ costs $1 + d_i$;
+  `up` remains free because it acquires no address bit. The distance
+  is the head's address depth in an implicit
   fast-state tree. A hot head is near and therefore cheaper to touch.
 
 The plain machine is the fiber $d equiv 0$:
@@ -57,12 +58,13 @@ slots.
 
 #leanthm(
   "Adic.Dyadic.distZipCost_closed",
-  pin: "f053f2677702",
+  pin: "aa03139efba5",
   title: "Zip at a distance, exact",
 )[
   The zip schedule of Expo 1 under fixed distances has an exact
-  closed-form cost, still linear in $2^n$ — the surcharge enters as the
-  multiplicative $(1 + d)$ and nothing worse. The convo's own
+  closed-form cost, still linear in $2^n$ — the paid leaf and node
+  coefficients expose the surcharge exactly, while free ascents
+  contribute nothing. The convo's own
   worked example ([59]) — three heads at uniform distance 2, Kraft
   mass $3/4$ — is instantiated and checked:
 ]

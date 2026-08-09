@@ -148,6 +148,109 @@ theorem structuralDistance_append_both_of_eq_length
               simpa using congrArg (List.cons true) equality
             simpa [structuralDistance] using ih target htail hneTail
 
+def directedStructural : List Bool → List Bool → Nat
+  | [], target => target.length
+  | _ :: _, [] => 0
+  | sourceBit :: source, targetBit :: target =>
+      if sourceBit = targetBit then directedStructural source target else target.length + 1
+
+theorem directedStructural_lcp (source target : List Bool) :
+    directedStructural source target + (longestCommonPrefix source target).length =
+      target.length := by
+  induction source generalizing target with
+  | nil => simp [directedStructural, longestCommonPrefix]
+  | cons sourceBit source ih =>
+      cases target with
+      | nil => simp [directedStructural, longestCommonPrefix]
+      | cons targetBit target =>
+          by_cases h : sourceBit = targetBit
+          · simp [directedStructural, longestCommonPrefix, h]
+            have := ih target
+            omega
+          · simp [directedStructural, longestCommonPrefix, h]
+
+theorem directedStructural_eq_lcp_formula (source target : List Bool) :
+    directedStructural source target =
+      target.length - (longestCommonPrefix source target).length := by
+  have hlcp := lcp_length_le_right source target
+  have heq := directedStructural_lcp source target
+  omega
+
+theorem directedStructural_append_source (source target : List Bool) (bit : Bool) :
+    directedStructural (source ++ [bit]) target ≤ directedStructural source target ∧
+      directedStructural source target ≤ directedStructural (source ++ [bit]) target + 1 := by
+  induction source generalizing target with
+  | nil =>
+      cases target with
+      | nil => simp [directedStructural]
+      | cons targetBit target =>
+          cases bit <;> cases targetBit <;> simp [directedStructural] <;> omega
+  | cons sourceBit source ih =>
+      cases target with
+      | nil => simp [directedStructural]
+      | cons targetBit target =>
+          cases sourceBit <;> cases targetBit <;>
+            simp [directedStructural, ih] <;> omega
+
+theorem directedStructural_append_target_of_length_le (source target : List Bool)
+    (bit : Bool) (hlength : source.length ≤ target.length) :
+    directedStructural source (target ++ [bit]) = directedStructural source target + 1 := by
+  induction source generalizing target with
+  | nil => simp [directedStructural]
+  | cons sourceBit source ih =>
+      cases target with
+      | nil => simp at hlength
+      | cons targetBit target =>
+          have htail : source.length ≤ target.length := by simpa using hlength
+          cases sourceBit <;> cases targetBit <;>
+            simp [directedStructural, ih target htail] <;> omega
+
+theorem directedStructural_append_both_of_eq_length
+    (source target : List Bool) (sourceBit targetBit : Bool)
+    (hlength : source.length = target.length)
+    (hne : source ++ [sourceBit] ≠ target ++ [targetBit]) :
+    directedStructural (source ++ [sourceBit]) (target ++ [targetBit]) =
+      directedStructural source target + 1 := by
+  induction source generalizing target with
+  | nil =>
+      have : target = [] := List.eq_nil_of_length_eq_zero hlength.symm
+      subst target
+      cases sourceBit <;> cases targetBit <;> simp_all [directedStructural]
+  | cons first source ih =>
+      cases target with
+      | nil => simp at hlength
+      | cons other target =>
+          have htail : source.length = target.length := by simpa using hlength
+          cases first <;> cases other
+          · have hneTail : source ++ [sourceBit] ≠ target ++ [targetBit] := by
+              intro equality
+              apply hne
+              simpa using congrArg (List.cons false) equality
+            simpa [directedStructural] using ih target htail hneTail
+          · simp [directedStructural]
+          · simp [directedStructural]
+          · have hneTail : source ++ [sourceBit] ≠ target ++ [targetBit] := by
+              intro equality
+              apply hne
+              simpa using congrArg (List.cons true) equality
+            simpa [directedStructural] using ih target htail hneTail
+
+theorem directedStructural_append_source_of_length_le
+    (source target : List Bool) (bit : Bool) (hlength : target.length ≤ source.length) :
+    directedStructural (source ++ [bit]) target = directedStructural source target := by
+  induction source generalizing target with
+  | nil =>
+      have : target = [] := List.eq_nil_of_length_eq_zero (Nat.eq_zero_of_le_zero hlength)
+      subst target
+      simp [directedStructural]
+  | cons sourceBit source ih =>
+      cases target with
+      | nil => simp [directedStructural]
+      | cons targetBit target =>
+          have htail : target.length ≤ source.length := by simpa using hlength
+          cases sourceBit <;> cases targetBit <;>
+            simp [directedStructural, ih target htail]
+
 def headPath (head : Head n) : List Bool := head.2.path
 
 def Cursor.reversePath : Cursor total remaining → List Bool
@@ -231,6 +334,27 @@ theorem treeDistance_eq_structural (source target : Head n) :
   simpa [treeDistance] using
     (structuralDistance_eq_lcp_formula (headPath source) (headPath target)).symm
 
+def directedDistance (source target : Head n) : Nat :=
+  (headPath target).length -
+    (longestCommonPrefix (headPath source) (headPath target)).length
+
+theorem directedDistance_eq_structural (source target : Head n) :
+    directedDistance source target =
+      directedStructural (headPath source) (headPath target) := by
+  simpa [directedDistance] using
+    (directedStructural_eq_lcp_formula (headPath source) (headPath target)).symm
+
+@[simp] theorem directedStructural_self (path : List Bool) :
+    directedStructural path path = 0 := by
+  induction path with
+  | nil => rfl
+  | cons bit path ih => simp [directedStructural, ih]
+
+@[simp] theorem directedDistance_self (head : Head n) :
+    directedDistance head head = 0 := by
+  rw [directedDistance_eq_structural]
+  exact directedStructural_self (headPath head)
+
 @[simp] theorem structuralDistance_self (path : List Bool) :
     structuralDistance path path = 0 := by
   induction path with
@@ -241,10 +365,10 @@ theorem treeDistance_eq_structural (source target : Head n) :
   rw [treeDistance_eq_structural]
   exact structuralDistance_self (headPath head)
 
-theorem step_distance_bound (move : Move) (source next target : Head n)
+theorem step_directed_distance_bound (move : Move) (source next target : Head n)
     (hstep : step move source = some next) :
-    treeDistance source target ≤ treeDistance next target + 1 := by
-  rw [treeDistance_eq_structural, treeDistance_eq_structural]
+    directedDistance source target ≤ directedDistance next target + move.cost := by
+  rw [directedDistance_eq_structural, directedDistance_eq_structural]
   cases move with
   | up =>
       cases source with
@@ -254,13 +378,13 @@ theorem step_distance_bound (move : Move) (source next target : Head n)
           | left parent =>
               simp [step, moveUp] at hstep
               subst next
-              simpa [headPath] using
-                (structuralDistance_append_edge parent.path (headPath target) false).1
+              simpa [headPath, Move.cost] using
+                (directedStructural_append_source parent.path (headPath target) false).1
           | right parent =>
               simp [step, moveUp] at hstep
               subst next
-              simpa [headPath] using
-                (structuralDistance_append_edge parent.path (headPath target) true).1
+              simpa [headPath, Move.cost] using
+                (directedStructural_append_source parent.path (headPath target) true).1
   | down0 =>
       cases source with
       | mk remaining cursor =>
@@ -269,8 +393,8 @@ theorem step_distance_bound (move : Move) (source next target : Head n)
           | succ remaining =>
               simp [step, moveDown0] at hstep
               subst next
-              simpa [headPath] using
-                (structuralDistance_append_edge cursor.path (headPath target) false).2
+              simpa [headPath, Move.cost] using
+                (directedStructural_append_source cursor.path (headPath target) false).2
   | down1 =>
       cases source with
       | mk remaining cursor =>
@@ -279,12 +403,12 @@ theorem step_distance_bound (move : Move) (source next target : Head n)
           | succ remaining =>
               simp [step, moveDown1] at hstep
               subst next
-              simpa [headPath] using
-                (structuralDistance_append_edge cursor.path (headPath target) true).2
+              simpa [headPath, Move.cost] using
+                (directedStructural_append_source cursor.path (headPath target) true).2
 
 theorem movement_cost_lower_bound (word : Word) (source target : Head n)
     (hrun : run word source = some target) :
-    treeDistance source target ≤ cost word := by
+    directedDistance source target ≤ cost word := by
   induction word generalizing source with
   | nil =>
       simp [run] at hrun
@@ -296,14 +420,15 @@ theorem movement_cost_lower_bound (word : Word) (source target : Head n)
       | none => simp [hstep] at hrun
       | some next =>
           have htail : run word next = some target := by simpa [hstep] using hrun
-          have hlocal := step_distance_bound move source next target hstep
+          have hlocal := step_directed_distance_bound move source next target hstep
           have hrest := ih next htail
-          unfold cost at hrest
-          change treeDistance source target ≤ word.length + 1
+          simp only [cost, List.map_cons, List.sum_cons]
+          change directedDistance source target ≤ move.cost + cost word
           omega
 
 theorem movement_cost_realizable (source target : Head n) :
-    ∃ word : Word, run word source = some target ∧ cost word = treeDistance source target := by
+    ∃ word : Word, run word source = some target ∧
+      cost word = directedDistance source target := by
   generalize hmeasure : (headPath source).length + (headPath target).length = measure
   induction measure using Nat.strongRecOn generalizing source target with
   | ind measure ih =>
@@ -330,14 +455,14 @@ theorem movement_cost_realizable (source target : Head n) :
                 change (headPath source).length < (parent.path ++ [false]).length at hshallower
                 simp at hshallower
                 omega
-              have hdistance := structuralDistance_append_right_of_length_le
+              have hdistance := directedStructural_append_target_of_length_le
                 (headPath source) parent.path false hlength
-              rw [treeDistance_eq_structural] at hcost ⊢
-              change cost word = structuralDistance (headPath source) parent.path at hcost
+              rw [directedDistance_eq_structural] at hcost ⊢
+              change cost word = directedStructural (headPath source) parent.path at hcost
               change cost (word ++ [.down0]) =
-                structuralDistance (headPath source) (parent.path ++ [false])
+                directedStructural (headPath source) (parent.path ++ [false])
               unfold cost at hcost ⊢
-              simp [hcost, hdistance]
+              simp [hcost, hdistance, Move.cost]
         | right parent =>
             have hsmaller :
                 (headPath source).length + parent.path.length < measure := by
@@ -353,14 +478,14 @@ theorem movement_cost_realizable (source target : Head n) :
                 change (headPath source).length < (parent.path ++ [true]).length at hshallower
                 simp at hshallower
                 omega
-              have hdistance := structuralDistance_append_right_of_length_le
+              have hdistance := directedStructural_append_target_of_length_le
                 (headPath source) parent.path true hlength
-              rw [treeDistance_eq_structural] at hcost ⊢
-              change cost word = structuralDistance (headPath source) parent.path at hcost
+              rw [directedDistance_eq_structural] at hcost ⊢
+              change cost word = directedStructural (headPath source) parent.path at hcost
               change cost (word ++ [.down1]) =
-                structuralDistance (headPath source) (parent.path ++ [true])
+                directedStructural (headPath source) (parent.path ++ [true])
               unfold cost at hcost ⊢
-              simp [hcost, hdistance]
+              simp [hcost, hdistance, Move.cost]
       · obtain ⟨sourceRemaining, sourceCursor⟩ := source
         obtain ⟨targetRemaining, targetCursor⟩ := target
         cases sourceCursor with
@@ -393,15 +518,15 @@ theorem movement_cost_realizable (source target : Head n) :
                     apply heq
                     apply headPath_injective
                     exact equality
-                  have hdistance := structuralDistance_append_both_of_eq_length
+                  have hdistance := directedStructural_append_both_of_eq_length
                     sourceParent.path targetParent.path false false hparents hpaths
-                  rw [treeDistance_eq_structural] at hcost ⊢
-                  change cost word = structuralDistance sourceParent.path targetParent.path at hcost
+                  rw [directedDistance_eq_structural] at hcost ⊢
+                  change cost word = directedStructural sourceParent.path targetParent.path at hcost
                   change cost (.up :: word ++ [.down0]) =
-                    structuralDistance (sourceParent.path ++ [false])
+                    directedStructural (sourceParent.path ++ [false])
                       (targetParent.path ++ [false])
                   unfold cost at hcost ⊢
-                  simp [hcost, hdistance]
+                  simp [hcost, hdistance, Move.cost]
             | right targetParent =>
                 have hsmaller : sourceParent.path.length + targetParent.path.length < measure := by
                   change (sourceParent.path ++ [false]).length +
@@ -419,15 +544,15 @@ theorem movement_cost_realizable (source target : Head n) :
                     simpa using hequal
                   have hpaths : sourceParent.path ++ [false] ≠
                       targetParent.path ++ [true] := by simp
-                  have hdistance := structuralDistance_append_both_of_eq_length
+                  have hdistance := directedStructural_append_both_of_eq_length
                     sourceParent.path targetParent.path false true hparents hpaths
-                  rw [treeDistance_eq_structural] at hcost ⊢
-                  change cost word = structuralDistance sourceParent.path targetParent.path at hcost
+                  rw [directedDistance_eq_structural] at hcost ⊢
+                  change cost word = directedStructural sourceParent.path targetParent.path at hcost
                   change cost (.up :: word ++ [.down1]) =
-                    structuralDistance (sourceParent.path ++ [false])
+                    directedStructural (sourceParent.path ++ [false])
                       (targetParent.path ++ [true])
                   unfold cost at hcost ⊢
-                  simp [hcost, hdistance]
+                  simp [hcost, hdistance, Move.cost]
         | right sourceParent =>
             cases targetCursor with
             | root => simp [headPath] at hequal
@@ -448,15 +573,15 @@ theorem movement_cost_realizable (source target : Head n) :
                     simpa using hequal
                   have hpaths : sourceParent.path ++ [true] ≠
                       targetParent.path ++ [false] := by simp
-                  have hdistance := structuralDistance_append_both_of_eq_length
+                  have hdistance := directedStructural_append_both_of_eq_length
                     sourceParent.path targetParent.path true false hparents hpaths
-                  rw [treeDistance_eq_structural] at hcost ⊢
-                  change cost word = structuralDistance sourceParent.path targetParent.path at hcost
+                  rw [directedDistance_eq_structural] at hcost ⊢
+                  change cost word = directedStructural sourceParent.path targetParent.path at hcost
                   change cost (.up :: word ++ [.down0]) =
-                    structuralDistance (sourceParent.path ++ [true])
+                    directedStructural (sourceParent.path ++ [true])
                       (targetParent.path ++ [false])
                   unfold cost at hcost ⊢
-                  simp [hcost, hdistance]
+                  simp [hcost, hdistance, Move.cost]
             | right targetParent =>
                 have hsmaller : sourceParent.path.length + targetParent.path.length < measure := by
                   change (sourceParent.path ++ [true]).length +
@@ -478,15 +603,15 @@ theorem movement_cost_realizable (source target : Head n) :
                     apply heq
                     apply headPath_injective
                     exact equality
-                  have hdistance := structuralDistance_append_both_of_eq_length
+                  have hdistance := directedStructural_append_both_of_eq_length
                     sourceParent.path targetParent.path true true hparents hpaths
-                  rw [treeDistance_eq_structural] at hcost ⊢
-                  change cost word = structuralDistance sourceParent.path targetParent.path at hcost
+                  rw [directedDistance_eq_structural] at hcost ⊢
+                  change cost word = directedStructural sourceParent.path targetParent.path at hcost
                   change cost (.up :: word ++ [.down1]) =
-                    structuralDistance (sourceParent.path ++ [true])
+                    directedStructural (sourceParent.path ++ [true])
                       (targetParent.path ++ [true])
                   unfold cost at hcost ⊢
-                  simp [hcost, hdistance]
+                  simp [hcost, hdistance, Move.cost]
       · obtain ⟨sourceRemaining, sourceCursor⟩ := source
         cases sourceCursor with
         | root => simp [headPath] at hdeeper
@@ -503,14 +628,14 @@ theorem movement_cost_realizable (source target : Head n) :
                 change (headPath target).length < (parent.path ++ [false]).length at hdeeper
                 simp at hdeeper
                 omega
-              have hdistance := structuralDistance_append_of_length_le
+              have hdistance := directedStructural_append_source_of_length_le
                 parent.path (headPath target) false hlength
-              rw [treeDistance_eq_structural] at hcost ⊢
-              change cost word = structuralDistance parent.path (headPath target) at hcost
+              rw [directedDistance_eq_structural] at hcost ⊢
+              change cost word = directedStructural parent.path (headPath target) at hcost
               change cost (.up :: word) =
-                structuralDistance (parent.path ++ [false]) (headPath target)
+                directedStructural (parent.path ++ [false]) (headPath target)
               unfold cost at hcost ⊢
-              simp [hcost, hdistance]
+              simp [hcost, hdistance, Move.cost]
         | right parent =>
             have hsmaller : parent.path.length + (headPath target).length < measure := by
               change (parent.path ++ [true]).length + (headPath target).length = measure at hmeasure
@@ -524,22 +649,22 @@ theorem movement_cost_realizable (source target : Head n) :
                 change (headPath target).length < (parent.path ++ [true]).length at hdeeper
                 simp at hdeeper
                 omega
-              have hdistance := structuralDistance_append_of_length_le
+              have hdistance := directedStructural_append_source_of_length_le
                 parent.path (headPath target) true hlength
-              rw [treeDistance_eq_structural] at hcost ⊢
-              change cost word = structuralDistance parent.path (headPath target) at hcost
+              rw [directedDistance_eq_structural] at hcost ⊢
+              change cost word = directedStructural parent.path (headPath target) at hcost
               change cost (.up :: word) =
-                structuralDistance (parent.path ++ [true]) (headPath target)
+                directedStructural (parent.path ++ [true]) (headPath target)
               unfold cost at hcost ⊢
-              simp [hcost, hdistance]
+              simp [hcost, hdistance, Move.cost]
 
 theorem root_to_leaf_distance (cursor : Cursor n 0) :
-    treeDistance (rootHead n) ⟨0, cursor⟩ = n := by
-  rw [treeDistance_eq_structural]
+    directedDistance (rootHead n) ⟨0, cursor⟩ = n := by
+  rw [directedDistance_eq_structural]
   have hlength := headPath_length (n := n) (⟨0, cursor⟩ : Head n)
   change cursor.path.length = n at hlength
-  change structuralDistance [] cursor.path = n
-  simpa [structuralDistance] using hlength
+  change directedStructural [] cursor.path = n
+  simpa [directedStructural] using hlength
 
 theorem random_access_optimal (p : Path n) (word : Word) (final : Head n)
     (hrun : run word (rootHead n) = some final)

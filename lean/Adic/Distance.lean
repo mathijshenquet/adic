@@ -597,8 +597,15 @@ theorem kraft_iff_mounting (dists : Dists k) :
       incomparable_path := hincomparable
     }
 
+-- Distance is a surcharge on acquired address bits, so bookkeeping ascents
+-- remain free rather than acquiring a distance charge of their own.
+def distOperationCost (dists : Dists k) (operation : AddressedOp k) : Nat :=
+  match operation.operation with
+  | .up => 0
+  | _ => 1 + dists operation.head
+
 def distCost (dists : Dists k) (word : ActionWord k) : Nat :=
-  (word.map fun operation => 1 + dists operation.head).sum
+  (word.map (distOperationCost dists)).sum
 
 @[simp] theorem distCost_nil (dists : Dists k) :
     distCost dists [] = 0 := rfl
@@ -606,7 +613,7 @@ def distCost (dists : Dists k) (word : ActionWord k) : Nat :=
 @[simp] theorem distCost_cons (dists : Dists k) (operation : AddressedOp k)
     (word : ActionWord k) :
     distCost dists (operation :: word) =
-      1 + dists operation.head + distCost dists word := rfl
+    distOperationCost dists operation + distCost dists word := rfl
 
 @[simp] theorem distCost_append (dists : Dists k) (first second : ActionWord k) :
     distCost dists (first ++ second) =
@@ -618,35 +625,40 @@ theorem distCost_zero (word : ActionWord k) :
   induction word with
   | nil => rfl
   | cons operation word ih =>
-      simpa [actionCost, Nat.add_comm] using congrArg Nat.succ ih
+      rw [distCost_cons, actionCost_cons, ih]
+      rcases operation with ⟨head, operation⟩
+      cases operation <;> rfl
 
 theorem distCost_le_maxDist (dists : Dists k) (word : ActionWord k) :
     distCost dists word ≤ (1 + maxDist dists) * actionCost word := by
   induction word with
   | nil => simp [actionCost]
   | cons operation word ih =>
-      have hhead : 1 + dists operation.head ≤ 1 + maxDist dists :=
-        Nat.add_le_add_left (dist_le_maxDist dists operation.head) 1
+      have hhead : distOperationCost dists operation ≤
+          (1 + maxDist dists) * operation.operation.cost := by
+        rcases operation with ⟨head, operation⟩
+        cases operation <;>
+          simp [distOperationCost, LocalOp.cost, dist_le_maxDist]
       rw [distCost_cons]
       calc
-        1 + dists operation.head + distCost dists word ≤
-            (1 + maxDist dists) +
+        distOperationCost dists operation + distCost dists word ≤
+            (1 + maxDist dists) * operation.operation.cost +
               (1 + maxDist dists) * actionCost word :=
           Nat.add_le_add hhead ih
         _ = (1 + maxDist dists) * actionCost (operation :: word) := by
-          simp [actionCost, Nat.mul_add, Nat.add_comm]
+          simp [actionCost, Nat.mul_add]
 
 def distZipLeafCost (dists : Dists 3) : Nat :=
-  8 + dists inputAHead + dists inputBHead + 6 * dists outputHead
+  6 + dists inputAHead + dists inputBHead + 4 * dists outputHead
 
 def distZipNodeCost (dists : Dists 3) : Nat :=
-  12 + 4 * (dists inputAHead + dists inputBHead + dists outputHead)
+  6 + 2 * (dists inputAHead + dists inputBHead + dists outputHead)
 
 def distZipCost (dists : Dists 3) : Nat → Nat
   | 0 => distZipLeafCost dists
   | n + 1 => 2 * distZipCost dists n + distZipNodeCost dists
 
-theorem distZipCost_closed (dists : Dists 3) (n : Nat) :
+theorem distZipCost_closed_aux (dists : Dists 3) (n : Nat) :
     distZipCost dists n =
       distZipLeafCost dists * 2 ^ n +
         distZipNodeCost dists * (2 ^ n - 1) := by
@@ -660,31 +672,41 @@ theorem distZipCost_closed (dists : Dists 3) (n : Nat) :
       simp [Nat.mul_add, Nat.add_mul, Nat.mul_assoc, Nat.mul_comm,
         Nat.add_comm, Nat.add_left_comm]
 
+theorem distZipCost_closed (dists : Dists 3) (n : Nat) :
+    distZipCost dists n =
+      (6 + dists inputAHead + dists inputBHead + 4 * dists outputHead) * 2 ^ n +
+        (6 + 2 * (dists inputAHead + dists inputBHead + dists outputHead)) *
+          (2 ^ n - 1) := by
+  simpa [distZipLeafCost, distZipNodeCost] using
+    distZipCost_closed_aux dists n
+
 theorem dist_zipWord (dists : Dists 3) (a b : Tree n) :
     distCost dists (zipWord n a b) = distZipCost dists n := by
   induction n with
   | zero =>
       cases a <;> cases b <;>
         simp [zipWord, distCost, distZipCost, distZipLeafCost,
-          inputAHead, inputBHead, outputHead, addressed, writeBit] <;> omega
+          distOperationCost, inputAHead, inputBHead, outputHead, addressed,
+          writeBit] <;> omega
   | succ n ih =>
       obtain ⟨a₀, a₁⟩ := a
       obtain ⟨b₀, b₁⟩ := b
       simp only [zipWord, distCost_append]
       rw [ih a₀ b₀, ih a₁ b₁]
       simp [descendAll, ascendAll, distCost, distZipCost,
-        distZipNodeCost, inputAHead, inputBHead, outputHead, addressed] <;> omega
+        distZipNodeCost, distOperationCost, inputAHead, inputBHead,
+        outputHead, addressed] <;> omega
 
 theorem dist_zipWord_linear_bound (dists : Dists 3) (a b : Tree n) :
     distCost dists (zipWord n a b) ≤
-      (1 + maxDist dists) * 20 * 2 ^ n := by
+      (1 + maxDist dists) * 12 * 2 ^ n := by
   calc
     distCost dists (zipWord n a b) ≤
         (1 + maxDist dists) * actionCost (zipWord n a b) :=
       distCost_le_maxDist dists _
-    _ ≤ (1 + maxDist dists) * (20 * 2 ^ n) :=
+    _ ≤ (1 + maxDist dists) * (12 * 2 ^ n) :=
       Nat.mul_le_mul_left _ (zipWord_linear_bound a b)
-    _ = (1 + maxDist dists) * 20 * 2 ^ n := by
+    _ = (1 + maxDist dists) * 12 * 2 ^ n := by
       simp [Nat.mul_assoc]
 
 def uniformThreeDists : Dists 3 := fun _ => 2

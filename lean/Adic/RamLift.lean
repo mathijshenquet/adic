@@ -66,14 +66,27 @@ def compileActionWord (n : Nat) : ActionWord k → RegisterRamProgram n k
   | [] => []
   | action :: word => normalizedActionRamProgram n action ++ compileActionWord n word
 
+def freeUpCount : ActionWord k → Nat
+  | [] => 0
+  | action :: word =>
+      (match action.operation with | .up => 1 | _ => 0) + freeUpCount word
+
+@[simp] theorem actionCost_add_freeUpCount_cons (action : AddressedOp k)
+    (word : ActionWord k) :
+    actionCost (action :: word) + freeUpCount (action :: word) =
+      actionCost word + freeUpCount word + 1 := by
+  rcases action with ⟨head, operation⟩
+  cases operation <;> simp [freeUpCount, LocalOp.cost] <;> omega
+
 theorem compileActionWord_cost (n : Nat) (word : ActionWord k) :
-    registerRamCost (compileActionWord n word) ≤ 5 * actionCost word := by
+    registerRamCost (compileActionWord n word) ≤
+      5 * (actionCost word + freeUpCount word) := by
   induction word with
-  | nil => simp [compileActionWord, registerRamCost, actionCost]
+  | nil => simp [compileActionWord, registerRamCost, actionCost, freeUpCount]
   | cons action word ih =>
       rw [compileActionWord, registerRamCost_append]
       have haction := normalizedActionRamProgram_cost n action
-      simp only [actionCost, List.length_cons] at ih ⊢
+      rw [actionCost_add_freeUpCount_cons]
       omega
 
 theorem compileActionWord_simulation (word : ActionWord k)
@@ -82,14 +95,15 @@ theorem compileActionWord_simulation (word : ActionWord k)
     ∃ target,
       runRegisterRam (compileActionWord n word) start = some target ∧
         RegisterRep final target ∧
-          registerRamCost (compileActionWord n word) ≤ 5 * actionCost word := by
+          registerRamCost (compileActionWord n word) ≤
+            5 * (actionCost word + freeUpCount word) := by
   induction word generalizing source start with
   | nil =>
       simp only [runActions] at hrun
       injection hrun with equality
       subst source
       exact ⟨start, by simp [compileActionWord, runRegisterRam], hrep,
-        by simp [compileActionWord, registerRamCost, actionCost]⟩
+        by simp [compileActionWord, registerRamCost, actionCost, freeUpCount]⟩
   | cons action word ih =>
       simp only [runActions] at hrun
       cases hstep : actionStep action source with
@@ -112,7 +126,8 @@ theorem ram_program_reverse_simulation :
           ∃ target,
             runRegisterRam (compileActionWord n word) start = some target ∧
               RegisterRep final target ∧
-                registerRamCost (compileActionWord n word) ≤ c * actionCost word := by
+                registerRamCost (compileActionWord n word) ≤
+                  c * (actionCost word + freeUpCount word) := by
   refine ⟨5, ?_⟩
   intro word source final start hrep hrun
   exact compileActionWord_simulation word source final start hrep hrun
