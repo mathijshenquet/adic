@@ -333,12 +333,27 @@ def pointerOfHead (head : Head n) : RamPointer n :=
       omega⟩ }
 
 def registerEncode (active : Fin k) (config : ActionConfig n k) : RegisterRamConfig n k :=
-  { memory := by simpa [RamMemory] using config.memory
+  { memory := asBitRamMemory n config.memory
     accumulator := false
     address := (pointerOfHead (config.heads active)).address
     active := active
     activeDepth := (pointerOfHead (config.heads active)).depth
     pointers := fun pointer => pointerOfHead (config.heads pointer) }
+
+def RegisterRep (source : ActionConfig n k) (target : RegisterRamConfig n k) : Prop :=
+  bitMemory n target.memory = source.memory ∧
+    ∀ pointer, target.pointers pointer = pointerOfHead (source.heads pointer)
+
+theorem registerEncode_rep (active : Fin k) (config : ActionConfig n k) :
+    RegisterRep config (registerEncode active config) := by
+  constructor
+  · simp [registerEncode]
+  · intro pointer
+    rfl
+
+theorem pointerAddress_leaf (cursor : Cursor n 0) :
+    (pointerAddress ⟨0, cursor⟩).toList = cursor.path := by
+  simpa [headPath] using pointerAddress_toList (head := ⟨0, cursor⟩)
 
 @[simp] theorem wordAt_repeatWord (address : RamAddress s) (word : RamWord v) :
     wordAt s (repeatWord s word) address = word := by
