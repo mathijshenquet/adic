@@ -31,3 +31,7 @@ Adic.Dyadic.discrete_gibbs_log_sum
 Adic.Dyadic.touchCost_entropy_lower
 Adic.Dyadic.empiricalFloorLogTotal_le_touchCost
 Adic.Dyadic.ram_program_reverse_simulation
+Adic.Dyadic.adaptiveCost_entropy_upper
+Adic.Dyadic.skewedFour_adaptive_exact
+Adic.Dyadic.skewedFour_static_gibbs_lower
+Adic.Dyadic.adaptive_beats_static
