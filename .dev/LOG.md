@@ -1,5 +1,34 @@
 # adic work log
 
+## 2026-08-10 (close) — target 3 CLOSED both directions; Expo 1 fully green; Expo 2 live
+
+- `track/lean-gibbs` merged: discrete log-sum + entropy lower bound
+  — B4 phase 2 complete both directions (sol, 5m08s, counting/
+  prefix-code route, zero-count heads handled).
+- **Expo 2 published** (`expo/02-weighted-heads.typ`): the weighted
+  model — 8 green pinned claims (Kraft=mounting, weighted zip +
+  [59], entropy achievability + optimality + Gibbs), cliff-gap
+  desk-badged, [72] open-badged.
+- `track/lean-ram-lift` merged (sol, 4m26s): canonicalization
+  between fragments (reset + re-select), terra's per-action theorem
+  reused unchanged, program-level reverse simulation cost ≤ 5·T.
+  **AIP-2 target 3 is CLOSED in both directions.** All of AIP-2's
+  theorem targets (1, 2, 3↔, 4) are now mechanized. Ledger: 32
+  receipts. Expo 1 updated — every claim in it is now lean-backed.
+- Sol+terra collaboration note: terra built the foundation and
+  named the crux honestly; sol designed the invariant and reused
+  terra's theorem unchanged — the seam worked exactly as the table
+  intends.
+- State: sol idle, terra idle. Remaining open ends need either
+  Mathijs (cache-v0 call 2 → phase 3 spec design; Expo/letter
+  corrections; roadmap q2; Letter 2 question; veto 5/7) or fresh
+  design (k-way merge machinery for the cliff witness; letters→expo
+  reformulation queued for Claude). Per drive-progress idle rule:
+  prospecting has effectively run today (cache-v0, expositions
+  drafts landed and adopted); correct action is to wait on Mathijs.
+- **Open with Mathijs**: Expo 1+2 corrections; cache-v0 rev 2 read;
+  roadmap q2; Letter 2 closing question; veto 5/7.
+
 ## 2026-08-10 (cont.) — kraft, entropy-upper, reverse-per-action all merged
 
 - Merged, each independently gate-verified: `track/lean-kraft` (B4
