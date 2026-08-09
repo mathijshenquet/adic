@@ -1,5 +1,38 @@
 # adic work log
 
+## 2026-08-09 (evening) — lean-spike green, merged; Lean-first ratified
+
+- Calibration spike (sol, `track/lean-spike`, spec
+  `.dev/specs/lean-spike.md`): Lean 4.30 into devenv, lake project
+  `lean/`, D_n movement core (paths, zipper cursors, Option-partial
+  moves, words, cost = length) + theorems 1–2 mechanized in **11
+  minutes**, zero sorry, core axioms only. Streaming statement is the
+  strong form: exact left-to-right leaf-visit list, so "each leaf
+  exactly once, in order" is machine-checked; cost closed-form
+  `cost(euler n) + 4 = 4·2^n`. Monoid-action lemmas (`run_append`,
+  `runTrace_append`) landed per AIP-2 §5a.
+- Orchestrator re-verified independently before merge: clean rebuild
+  exit 0, axiom check, sorry-grep, statement fidelity read. Merged to
+  main (`185ab2a`), main gate green.
+- **Calibration verdict**: sol's Lean proficiency confirmed strong
+  (fast, faithful statements, honest receipts + friction journal);
+  Claude's Lean review loop works (statement-fidelity read + own
+  rebuild). Lean-first RATIFIED in roadmap draft (Mathijs ordered the
+  spike as chunk deliverable). Gate updated in AGENTS.md: `lake
+  build` is in.
+- Process friction (minor, recorded): herdr first-prompt swallowed
+  (known); `agent start` needs >70s retry window while direnv builds
+  a new devenv env; sol read a landing-check literally and stopped —
+  re-prompt fixed it.
+- Next (running): `track/lean-machine` — full machine (finite
+  control, k heads, no inter-head observation, read/write) + theorem
+  4 (disjoint-subtree commutation) + tree-metric lower bound, sol in
+  the same warm pane.
+- **Open with Mathijs**: `aips/draft/paper.md` (3 calls); roadmap q2
+  (standalone machine paper timing — its precondition "theorems 1–2
+  mechanized" is now met); veto window on taste call 5 (stuck) and
+  the leaf-order convention (q7, delegated).
+
 ## 2026-08-09 (later) — dyadic machine lands
 
 - **AIP-2 accepted**: the dyadic machine D, D_n per grade

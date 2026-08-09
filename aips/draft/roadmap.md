@@ -66,13 +66,13 @@ the cost lemmas).
 
 ## 4. Open questions
 
-1. **Lean-first?** Make Lean the primary v0 vehicle: the executable
-   Lean definition doubles as the simulator (`#eval` at small
-   grades), eliminating simulator/formalization drift by
-   construction; Rust earns its place when the empirical berry needs
-   throughput. — rec: yes (Mathijs leaned yes, 2026-08-09; ratify
-   here). Consequence: the first agent track becomes "mechanize in
-   Lean", and devenv grows a Lean toolchain.
+1. **Lean-first?** RATIFIED (2026-08-09: Mathijs ordered the Lean
+   spike as this chunk's deliverable; spike landed green same day —
+   see `.dev/specs/lean-spike.md` and `lean/Adic/Dyadic.lean`:
+   theorems 1–2 mechanized, core axioms only). The executable Lean
+   definition doubles as the simulator (`#eval` at small grades);
+   Rust earns its place when the empirical berry needs throughput.
+   devenv carries `pkgs.lean4`; `lake build` joined the gate.
 2. **Standalone machine-model paper:** cut early, or keep as
    monograph chapters until B2 is done? — rec: decide after theorems
    1–2 are mechanized; no work is lost either way.

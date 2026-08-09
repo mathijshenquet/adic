@@ -32,9 +32,12 @@ Lean as a later backend for what falls outside it.
   immediately intuitive — it feeds the DX loop.
 - Decisions live in `aips/` only; don't fork design prose into other
   files.
-- Gate (once code exists): `cargo fmt --check`, warning-denied clippy,
-  `cargo test --workspace`, `typst compile` of the paper. The gate
-  grows with the project; agents never hand-pick what counts as green.
+- Gate: `lake build` in `lean/` (zero sorry, `#print axioms` on
+  stated theorems shows core axioms only); once Rust code exists:
+  `cargo fmt --check`, warning-denied clippy, `cargo test
+  --workspace`; once the paper exists: `typst compile`. The gate
+  grows with the project; agents never hand-pick what counts as
+  green.
 
 ## Session close (orchestrator)
 Append a dated entry to `.dev/LOG.md`: merged work, decisions taken
