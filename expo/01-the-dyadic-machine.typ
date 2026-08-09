@@ -180,10 +180,16 @@ address arithmetic is path navigation — and:
   differ by exactly the logarithm — in one direction only.
 ]
 
-#deskthm(title: "The reverse direction, whole programs")[
-  Lifting the per-action simulation to whole action words needs a
-  compositional invariant on transient register state; desk-level
-  until that lands.
+#leanthm(
+  "Adic.Dyadic.ram_program_reverse_simulation",
+  pin: "32fa4d3c56aa",
+  title: "The reverse direction, whole programs",
+)[
+  And the per-action simulation lifts: every $D$ action word of
+  cost $T$ compiles to a register-RAM run of cost $lt.eq 5T$ that
+  tracks the full configuration. Target 3 of AIP-2 is now closed in
+  both directions: $D$ and the word RAM differ by exactly one
+  logarithm, in exactly one direction — machine-checked.
 ]
 
 = What is deliberately absent
