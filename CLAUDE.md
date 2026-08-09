@@ -20,9 +20,23 @@ Orchestrator notes (Claude only):
   Claude stays orchestrator/designer/reviewer. Micro-fix exception:
   work may be orchestrator-direct whenever the delegation prompt would
   be longer than the fix itself, with buffer.
+- Drive progress (standing mode, Mathijs 2026-08-09): when a track
+  lands and independently verifies green, merge and launch the next
+  deliverable in roadmap order without asking — keep the trunk moving
+  while Mathijs is away. Process problems get raised explicitly and
+  promptly, never silently worked around. Taste calls still queue for
+  Mathijs; progress never waits on ones that don't block it.
 - Worker discipline (herdr launch recipe, watcher + ~10-minute fallback
   heartbeat, steer/queue delivery) lives in the global context — follow
-  it.
+  it. Heartbeat flow, made explicit: while any worker is in flight,
+  keep BOTH a terminal-state watcher (`herdr agent wait --until done
+  --until blocked --until idle`) and a ~10-min fallback timer armed;
+  re-arm the fallback on every wake regardless of wake source; expect
+  stale timers from earlier phases to fire (check which phase a timer
+  belongs to before acting). Verify prompt landing with `agent wait
+  --until working` (more reliable than the refusal check); expect the
+  first prompt after `agent start` to be swallowed, and give `agent
+  start` a >70s retry window while direnv builds a fresh devenv env.
 - Standing grants (Mathijs, 2026-08-09): commit + push to main for
   AIP/docs/LOG work — Mathijs reads on GitHub, so conversation-driven
   doc updates should land there promptly without asking. Merge of
