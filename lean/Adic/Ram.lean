@@ -50,6 +50,18 @@ theorem readAt_wordAt (memory : RamMemory s 0) (address : RamAddress s) :
       | cons bit path =>
           cases bit <;> simp [bitMemory, Tree.readAt, Path.toList, ih] <;> rfl
 
+theorem writeAt_writeWord (memory : RamMemory s 0) (address : RamAddress s) (bit : Bool) :
+    Tree.writeAt s (bitMemory s memory) address.toList bit =
+      some (bitMemory s (writeWord s memory address bit)) := by
+  induction s with
+  | zero => cases address; rfl
+  | succ s ih =>
+      obtain ⟨left, right⟩ := memory
+      cases address with
+      | cons edge path =>
+          cases edge <;>
+            simp [bitMemory, Tree.writeAt, Path.toList, ih] <;> rfl
+
 def leavesUnderPath : (s : Nat) → RamMemory s v → Path s → List Bool
   | 0, memory, .nil => memory.leafBits
   | s + 1, (left, _), .cons false path => leavesUnderPath s left path
