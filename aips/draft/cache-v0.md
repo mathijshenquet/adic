@@ -1,85 +1,98 @@
-# The cached dyadic machine (v0): weighted cursors under Kraft
+# The cached dyadic machine (v0): weighted heads under Kraft — rev 2
+
+Rev 2 (2026-08-09, after Mathijs's corrections): rebuilt on the
+convo's actual model ([55]–[59]), which is sharper than rev 1's
+fringe sketch. Rev 1's "moves inside the fringe are free" mechanism
+is dropped — the convo prices differently and better.
 
 ## 1. The problem
 
-B4 (roadmap): bridge the multi-head dyadic machine to a machine
-with caches — Mathijs's framing, 2026-08-09 — making fast state a
-priced, structural resource rather than a bolted-on table. Convo
-[55]/[57] fixed the shape (weighted cursors under a Kraft/antichain
-capacity constraint, not a recursively accessed cursor tree); [72]–
-[73] left the write-head weight question open. The v0 goal: the
-smallest model in which cached streaming, Kraft feasibility, and
-optimal weight allocation are theorems.
+B4: bridge the multi-head machine to a machine with caches, making
+fast state a priced structural resource. The convo already built
+most of this ([56]: Mathijs's weighted-cursor proposal; [57]: the
+Kraft analysis); this AIP freezes the v0 slice to mechanize.
 
-## 2. Prior work
+## 2. The model (from the convo, with indices)
 
-- **AACS hierarchical memory** — our §2 neighbor in AIP-2; here the
-  hierarchy becomes per-cursor and programmable.
-- **External-memory (I/O) model, cache-oblivious model** — scan
-  N/B, the M/B capacity cliff. The cached machine *derives* the
-  scan bound (target 1) and honestly does not capture the cliff
-  (recorded gap, convo [17]/[57]: Kraft pricing vs cliff pricing).
-- **Register allocation** — k heads ≈ registers was the first
-  analogy ([55]); weights generalize it to registers-plus-cachelines.
-- **Kraft inequality / prefix codes** — antichains of dyadic
-  subtrees are exactly prefix codes; the fast-state budget is a
-  Kraft constraint, connecting allocation to source coding (the
-  road to the entropy chapter).
+- **Down fills, up evicts.** A `down` at level ℓ morally fills the
+  level-ℓ cache; `up` evicts it (Mathijs 2026-08-09; the
+  amortization-as-normalization view of [21] — rewrite down·up → ε
+  — is the same fact equationally). Eviction is therefore *in* the
+  base model already; D's walk IS the cache traffic.
+- **Per-level price c(ℓ).** The base machine prices every level 1
+  (c ≡ 1 — the honest-information price, our current D). The
+  physical variant scales per level: c(ℓ) = 2^(αℓ) with α = 1/2
+  gives random access Θ(√N) — the "memory latency goes as the
+  square root of capacity" lore as a stated model variant, not a
+  patch.
+- **Weighted heads, Kraft budget** ([56]/[57]): every head carries
+  a weight w; the constraint Σᵢ 2^(−wᵢ) ≤ 1 (Kraft) says the heads'
+  fast-state shares — head i gets fraction 2^(−wᵢ) of the caches —
+  form a prefix-free code, i.e. an antichain of mount slots in the
+  fast-state block. The physical picture: a head's share is an
+  aligned window, cache-line-style (power-of-2 floor boundaries,
+  not centered — Mathijs). The formal mechanics: every move of a
+  weight-w head pays a surcharge, cost 1 + w — its address depth in
+  the implicit fast-state tree ([57]; no tree is walked, the weight
+  *is* the address). Within-stream amortization survives with the
+  multiplicative (1 + w).
+- **No overlapping heads** (Mathijs 2026-08-09): shares are
+  disjoint (the antichain condition); no dynamic cache-sharing
+  optimization — that would make everything non-local, and [57]
+  records why half-measures there are treacherous (adversarial
+  sharing breaks classic bounds). Static disjoint shares keep every
+  bound provable and sound.
+- **Size-weighted refinement** ([57] correction 1, noted for v1):
+  a depth-d head's state costs ~d, so the honest constraint is
+  Σ sᵢ·2^(−wᵢ) ≤ S_fast — the (grade, depth) antichain. v0
+  mechanizes pure Kraft; the size refinement falls out when heads
+  are literally mounted in a fast-state block.
 
-## 3. Recommendation
+## 3. Theorem targets
 
-**No new machine: a weighted cost semantics on D.** Each head i
-carries a weight w_i (its *fringe*: the cached window of height w_i
-around its focus). Moves inside the fringe cost 0; a move crossing
-a height-j boundary above the fringe costs (j − w_i)-ish — v0
-charges fringe *refill* at boundary crossing, which implicitly
-prices maintenance. Cost remains a homomorphism on action words —
-the plain machine is the special case w = 0, and every existing
-theorem survives as the w = 0 fiber.
+1. *Weighted streaming*: the scan/zip/copy bounds survive weighting
+   with factor (1 + w) — e.g. weighted zip at w = 2 per head
+   (Kraft: 3·2^(−2) = 3/4 ≤ 1, the convo's own worked example
+   [59]).
+2. *Entropy bound* ([57]): touch frequencies p, weights
+   wᵢ = ⌈log 1/pᵢ⌉ → cost ≤ n·(H(p) + 1); matching Shannon/Kraft
+   lower bound: no weight assignment beats the empirical entropy
+   per touch. (Precedent: biased search trees, Bent–Sleator–Tarjan;
+   dynamic reweighting = dynamic Huffman is v3.)
+3. *The Kraft-vs-cliff witness* ([57]'s honest retraction, upgraded
+   to a theorem): k-way merge under Kraft weights costs n log n for
+   every k — the tradeoff cancels exactly, so the model provably
+   does NOT award the external-memory multi-way win. This is the
+   sharpest statement of the missing eviction/capacity axis, and
+   proving it keeps us honest: Kraft pricing never under-charges
+   ([938]: pessimism is the right failure mode for a verifier).
+4. *√-latency variant*: under c(ℓ) = 2^(ℓ/2), random access costs
+   Θ(√N) and streaming stays amortized O(1)-per-leaf up to the
+   level-price sum — the physical-lore pricing as theorems.
 
-**Capacity**: a weight assignment is admissible iff
-Σ_i 2^{w_i} ≤ 2^m — fast memory of grade m; normalized,
-Σ 2^{w_i − m} ≤ 1: Kraft.
+## 4. Remaining taste calls
 
-**Theorem targets** (each falsifiable against `#eval`):
-
-1. *Cached scan*: fringe w makes a full scan cost Θ(2^{n−w}) — the
-   external-memory scan bound N/B with B = 2^w, derived not
-   assumed. (The odometer sum with the first w levels zeroed.)
-2. *Kraft feasibility*: admissible weight assignments correspond
-   exactly to antichain/prefix-code realizations of fast state.
-3. *Optimal allocation*: for concurrent streams with rates r_i,
-   total cost Σ r_i·2^{−w_i} under Kraft is minimized by weights
-   proportional to log-rates; corollary: zip's write head gets
-   exactly one extra fringe level (resolves [72]–[73]).
-4. *Bridge*: plain D simulates weighted D with overhead equal to
-   fringe maintenance; positioning against the I/O model follows.
-
-## 4. Open questions (taste calls for Mathijs)
-
-1. **Fringe shape.** Subtree window below/around the focus, or a
-   path window along the root-to-focus spine? — rec: the height-w
-   window around the focus (subtree fringe): it makes target 1 the
-   clean telescoping sum and matches cache lines (spatial
-   neighborhoods), while a spine window re-prices random access
-   instead of streaming — less aligned with what caches do.
-2. **Two-axis tower.** Is fast memory m a second grade — machines
-   M_{n,m}, a two-parameter tower — or a per-program constant? —
-   rec: second grade axis. It matches "the hierarchy made
-   programmable" (AIP-2 §2 on AACS), scales to multi-level caches
-   as iterated grading, and keeps uniformity: one program, all
-   (n, m).
-3. **Eviction stays out.** Confirm the M/B cliff (capacity misses,
-   thrashing) remains a documented non-goal for v0. — rec: yes;
-   the Kraft-vs-cliff seam is the honest boundary of the model.
-4. **Refill pricing.** Charge (j − w) at a height-j crossing (pure
-   refill), or j (full walk, fringe only saves the low levels)? —
-   rec: (j − w): it is what block transfer does, and it makes the
-   w = 0 fiber exactly the old cost.
+1. (was rev 1's q1/q3/q4 — all resolved by Mathijs: aligned
+   window picture; eviction = up, in-model; down fills, no separate
+   refill charge.)
+2. **Level-price scope**: mechanize c ≡ 1 weighted model first and
+   state the √-variant (target 4) desk-level, or mechanize the
+   general c(ℓ) machinery at once? — rec: c ≡ 1 first; general
+   c(ℓ) is a re-parameterization of one lemma layer, cheap to add
+   after the weighted layer exists. (This replaces rev 1's
+   "two-axis tower" question, which dissolves: the Kraft budget is
+   normalized to 1, no separate fast-memory grade in v0.)
+3. **[72] stays open, now precisely**: zip's write head — equal
+   *touch* frequency says w = 2 like the readers ([59]); double
+   *data* rate says a bigger share. The tension is exactly
+   touch-priced Kraft vs size-weighted Kraft (§2 last bullet), so
+   the answer belongs to the size refinement, not to v0 guesswork.
+   — rec: record, defer to the size-weighted v1.
 
 ## 5. Sequencing
 
-Design calls above gate only the mechanization track
-(weighted-cost + cached-scan in Lean, next sol slot after fvec).
-The Kraft letter (prospective index no. 6) follows the calls. The
-empirical `#eval` harness is independent and can run any time.
+Mechanization track (after Mathijs reads this rev): weighted cost
+(1 + w surcharge) on action words + Kraft feasibility + weighted
+streaming (target 1), then entropy bound (target 2), then the
+cliff witness (target 3). Independent of the expositions/receipts
+line.
