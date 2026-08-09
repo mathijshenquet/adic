@@ -30,3 +30,4 @@ Adic.Dyadic.kraft_logDeficit_bound
 Adic.Dyadic.discrete_gibbs_log_sum
 Adic.Dyadic.touchCost_entropy_lower
 Adic.Dyadic.empiricalFloorLogTotal_le_touchCost
+Adic.Dyadic.ram_program_reverse_simulation
