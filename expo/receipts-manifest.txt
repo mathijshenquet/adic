@@ -19,3 +19,4 @@ Adic.Dyadic.weighted_zipWord
 Adic.Dyadic.weightedZipCost_closed
 Adic.Dyadic.weighted_zipWord_linear_bound
 Adic.Dyadic.uniformThreeWeights_kraft
+Adic.Dyadic.ram_action_simulation
