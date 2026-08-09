@@ -6,3 +6,4 @@ import Adic.Zip
 import Adic.Copy
 import Adic.Ram
 import Adic.Weighted
+import Adic.Entropy
