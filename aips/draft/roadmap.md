@@ -19,12 +19,12 @@ the cost lemmas).
   composition. Cheapest berry, most juice; everything downstream
   consumes it. By-products: paper chapters 1–2, optionally a
   standalone machine-model paper.
-- **B4 — Kraft/cursor-weight accounting** (convo [55], [57]). The
+- **B4 — Kraft/cursor-distance accounting** (convo [55], [57]). The
   seam between the alloc-less TM-like model and the multi-cursor +
   alloc model that sits pleasingly close to real machines. Statable
-  at machine level (weighted heads, fast-state budget) — needs B2's
+  at machine level (heads at a distance, fast-state budget) — needs B2's
   machine, not the calculus or an elaborator. Highest novelty per
-  unit work; known open-theory risk (write-head weighting, convo
+  unit work; known open-theory risk (write-head distance, convo
   [72]–[73]).
 - **B3 — a checked complexity claim on ordinary-looking code.** "The
   compiler proved my complexity claim": direct-style mergesort or

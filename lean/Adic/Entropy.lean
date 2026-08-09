@@ -1,14 +1,14 @@
-import Adic.Weighted
+import Adic.Distance
 
 namespace Adic.Dyadic
 
-def touchCount {k : Nat} : List (Fin k) → Weights k
+def touchCount {k : Nat} : List (Fin k) → Dists k
   | [] => fun _ => 0
   | touched :: rest => fun head =>
       (if head = touched then 1 else 0) + touchCount rest head
 
-def touchCost (weights : Weights k) (touches : List (Fin k)) : Nat :=
-  (touches.map fun head => 1 + weights head).sum
+def touchCost (dists : Dists k) (touches : List (Fin k)) : Nat :=
+  (touches.map fun head => 1 + dists head).sum
 
 theorem finSum_mul_right (values : Fin k → Nat) (factor : Nat) :
     finSum (fun head => values head * factor) = finSum values * factor := by
@@ -45,56 +45,56 @@ theorem touchCount_le_length (touches : List (Fin k)) (head : Fin k) :
       simp only [touchCount, List.length_cons]
       split <;> omega
 
-theorem finSum_touchCount_mul (weights : Weights k) (touches : List (Fin k)) :
-    finSum (fun head => touchCount touches head * weights head) =
-      (touches.map weights).sum := by
+theorem finSum_touchCount_mul (dists : Dists k) (touches : List (Fin k)) :
+    finSum (fun head => touchCount touches head * dists head) =
+      (touches.map dists).sum := by
   induction touches with
   | nil => simp [touchCount]
   | cons touched rest ih =>
       change finSum (fun head =>
-        ((if head = touched then 1 else 0) + touchCount rest head) * weights head) =
-          weights touched + (rest.map weights).sum
+        ((if head = touched then 1 else 0) + touchCount rest head) * dists head) =
+          dists touched + (rest.map dists).sum
       calc
         finSum (fun head =>
-            ((if head = touched then 1 else 0) + touchCount rest head) * weights head) =
+            ((if head = touched then 1 else 0) + touchCount rest head) * dists head) =
             finSum (fun head =>
-              (if head = touched then weights head else 0) +
-                touchCount rest head * weights head) := by
+              (if head = touched then dists head else 0) +
+                touchCount rest head * dists head) := by
           apply finSum_congr
           intro head
           split <;> simp_all [Nat.add_mul]
-        _ = finSum (fun head => if head = touched then weights head else 0) +
-              finSum (fun head => touchCount rest head * weights head) :=
+        _ = finSum (fun head => if head = touched then dists head else 0) +
+              finSum (fun head => touchCount rest head * dists head) :=
           finSum_add _ _
-        _ = weights touched + (rest.map weights).sum := by
+        _ = dists touched + (rest.map dists).sum := by
           rw [finSum_single, ih]
 
-theorem touchCost_counts (weights : Weights k) (touches : List (Fin k)) :
-    touchCost weights touches =
-      touches.length + finSum (fun head => touchCount touches head * weights head) := by
+theorem touchCost_counts (dists : Dists k) (touches : List (Fin k)) :
+    touchCost dists touches =
+      touches.length + finSum (fun head => touchCount touches head * dists head) := by
   rw [finSum_touchCount_mul]
   induction touches with
   | nil => rfl
   | cons touched rest ih =>
       simp only [touchCost, List.map_cons, List.sum_cons, List.length_cons]
-      change (rest.map fun head => 1 + weights head).sum =
-        rest.length + (rest.map weights).sum at ih
+      change (rest.map fun head => 1 + dists head).sum =
+        rest.length + (rest.map dists).sum at ih
       omega
 
-theorem weightedCost_eq_touchCost (weights : Weights k) (word : ActionWord k) :
-    weightedCost weights word = touchCost weights (word.map fun operation => operation.head) := by
-  simp [weightedCost, touchCost, List.map_map, Function.comp_def]
+theorem distCost_eq_touchCost (dists : Dists k) (word : ActionWord k) :
+    distCost dists word = touchCost dists (word.map fun operation => operation.head) := by
+  simp [distCost, touchCost, List.map_map, Function.comp_def]
 
 /-- The exact natural ceiling of `log₂(total / count)` for positive inputs.
 The predecessor quotient avoids truncating the ratio before taking the ceiling. -/
-def inverseFrequencyWeight (total count : Nat) : Nat :=
+def inverseFrequencyDist (total count : Nat) : Nat :=
   if total ≤ count then 0 else Nat.log2 ((total - 1) / count) + 1
 
-theorem inverseFrequencyWeight_spec {total count : Nat}
+theorem inverseFrequencyDist_spec {total count : Nat}
     (htotal : 0 < total) (hcount : 0 < count) :
-    total ≤ count * 2 ^ inverseFrequencyWeight total count := by
+    total ≤ count * 2 ^ inverseFrequencyDist total count := by
   by_cases hsmall : total ≤ count
-  · simp [inverseFrequencyWeight, hsmall]
+  · simp [inverseFrequencyDist, hsmall]
   · let quotient := (total - 1) / count
     have hquotient : 0 < quotient := by
       apply (Nat.le_div_iff_mul_le hcount).2
@@ -110,19 +110,19 @@ theorem inverseFrequencyWeight_spec {total count : Nat}
           rw [Nat.mul_add, Nat.mul_one, Nat.mul_comm count quotient]
     have hquotientPower : quotient + 1 ≤ 2 ^ (Nat.log2 quotient + 1) := by
       omega
-    simp only [inverseFrequencyWeight, hsmall, if_false]
+    simp only [inverseFrequencyDist, hsmall, if_false]
     exact Nat.le_trans htotalRound (Nat.mul_le_mul_left count hquotientPower)
 
-theorem inverseFrequencyWeight_minimal {total count weight : Nat}
+theorem inverseFrequencyDist_minimal {total count dist : Nat}
     (htotal : 0 < total) (hcount : 0 < count) :
-    inverseFrequencyWeight total count ≤ weight ↔ total ≤ count * 2 ^ weight := by
+    inverseFrequencyDist total count ≤ dist ↔ total ≤ count * 2 ^ dist := by
   constructor
-  · intro hweight
-    exact Nat.le_trans (inverseFrequencyWeight_spec htotal hcount)
-      (Nat.mul_le_mul_left count (Nat.pow_le_pow_right (by decide) hweight))
+  · intro hdist
+    exact Nat.le_trans (inverseFrequencyDist_spec htotal hcount)
+      (Nat.mul_le_mul_left count (Nat.pow_le_pow_right (by decide) hdist))
   · intro hcapacity
     by_cases hsmall : total ≤ count
-    · simp [inverseFrequencyWeight, hsmall]
+    · simp [inverseFrequencyDist, hsmall]
     · let quotient := (total - 1) / count
       have hquotient : quotient ≠ 0 := by
         apply Nat.ne_of_gt
@@ -131,22 +131,22 @@ theorem inverseFrequencyWeight_minimal {total count weight : Nat}
         omega
       have hfloor : quotient * count ≤ total - 1 :=
         Nat.div_mul_le_self _ _
-      have hstrict : quotient < 2 ^ weight := by
-        have hmul : quotient * count < 2 ^ weight * count := calc
+      have hstrict : quotient < 2 ^ dist := by
+        have hmul : quotient * count < 2 ^ dist * count := calc
           quotient * count ≤ total - 1 := hfloor
           _ < total := by omega
-          _ ≤ count * 2 ^ weight := hcapacity
-          _ = 2 ^ weight * count := Nat.mul_comm _ _
+          _ ≤ count * 2 ^ dist := hcapacity
+          _ = 2 ^ dist * count := Nat.mul_comm _ _
         exact Nat.lt_of_mul_lt_mul_right hmul
-      have hlog : Nat.log2 quotient < weight :=
+      have hlog : Nat.log2 quotient < dist :=
         (Nat.log2_lt hquotient).2 hstrict
-      simpa [inverseFrequencyWeight, hsmall, quotient] using hlog
+      simpa [inverseFrequencyDist, hsmall, quotient] using hlog
 
-theorem inverseFrequencyWeight_le_log2_div_add_one {total count : Nat}
+theorem inverseFrequencyDist_le_log2_div_add_one {total count : Nat}
     (htotal : 0 < total) (hcount : 0 < count) :
-    inverseFrequencyWeight total count ≤ Nat.log2 (total / count) + 1 := by
+    inverseFrequencyDist total count ≤ Nat.log2 (total / count) + 1 := by
   by_cases hsmall : total ≤ count
-  · simp [inverseFrequencyWeight, hsmall]
+  · simp [inverseFrequencyDist, hsmall]
   · have hquotient : (total - 1) / count ≠ 0 := by
       apply Nat.ne_of_gt
       apply (Nat.le_div_iff_mul_le hcount).2
@@ -162,79 +162,79 @@ theorem inverseFrequencyWeight_le_log2_div_add_one {total count : Nat}
     have hlog : Nat.log2 ((total - 1) / count) ≤ Nat.log2 (total / count) := by
       apply (Nat.le_log2 hratio).2
       exact Nat.le_trans (Nat.log2_self_le hquotient) hdivision
-    simp [inverseFrequencyWeight, hsmall]
+    simp [inverseFrequencyDist, hsmall]
     omega
 
-def empiricalWeights (touches : List (Fin k)) : Weights k := fun head =>
-  inverseFrequencyWeight touches.length (touchCount touches head)
+def empiricalDists (touches : List (Fin k)) : Dists k := fun head =>
+  inverseFrequencyDist touches.length (touchCount touches head)
 
 def empiricalFloorLogTotal (touches : List (Fin k)) : Nat :=
   finSum fun head =>
     touchCount touches head * Nat.log2 (touches.length / touchCount touches head)
 
-theorem empiricalWeights_kraft (touches : List (Fin k))
+theorem empiricalDists_kraft (touches : List (Fin k))
     (hnonempty : 0 < touches.length)
     (hpositive : ∀ head, 0 < touchCount touches head) :
-    KraftOk (empiricalWeights touches) := by
-  let weights := empiricalWeights touches
-  let width := maxWeight weights
+    KraftOk (empiricalDists touches) := by
+  let dists := empiricalDists touches
+  let width := maxDist dists
   have hpoint : ∀ head,
-      touches.length * 2 ^ (width - weights head) ≤
+      touches.length * 2 ^ (width - dists head) ≤
         touchCount touches head * 2 ^ width := by
     intro head
-    have hfrequency := inverseFrequencyWeight_spec hnonempty (hpositive head)
-    have hweight : weights head ≤ width := weight_le_maxWeight weights head
-    have hscaled := Nat.mul_le_mul_right (2 ^ (width - weights head)) hfrequency
+    have hfrequency := inverseFrequencyDist_spec hnonempty (hpositive head)
+    have hdist : dists head ≤ width := dist_le_maxDist dists head
+    have hscaled := Nat.mul_le_mul_right (2 ^ (width - dists head)) hfrequency
     calc
-      touches.length * 2 ^ (width - weights head) ≤
-          (touchCount touches head * 2 ^ weights head) *
-            2 ^ (width - weights head) := hscaled
+      touches.length * 2 ^ (width - dists head) ≤
+          (touchCount touches head * 2 ^ dists head) *
+            2 ^ (width - dists head) := hscaled
       _ = touchCount touches head * 2 ^ width := by
-        rw [show (touchCount touches head * 2 ^ weights head) *
-            2 ^ (width - weights head) =
+        rw [show (touchCount touches head * 2 ^ dists head) *
+            2 ^ (width - dists head) =
               touchCount touches head *
-                (2 ^ (width - weights head) * 2 ^ weights head) by ac_rfl]
-        rw [Nat.pow_sub_mul_pow 2 hweight]
+                (2 ^ (width - dists head) * 2 ^ dists head) by ac_rfl]
+        rw [Nat.pow_sub_mul_pow 2 hdist]
   have hscaledMass :
-      touches.length * kraftMassAt width weights ≤ touches.length * 2 ^ width := by
+      touches.length * kraftMassAt width dists ≤ touches.length * 2 ^ width := by
     calc
-      touches.length * kraftMassAt width weights =
+      touches.length * kraftMassAt width dists =
           finSum (fun head =>
-            touches.length * 2 ^ (width - weights head)) := by
+            touches.length * 2 ^ (width - dists head)) := by
         rw [kraftMassAt, finSum_mul_left]
       _ ≤ finSum (fun head => touchCount touches head * 2 ^ width) :=
         finSum_mono hpoint
       _ = finSum (touchCount touches) * 2 ^ width :=
         finSum_mul_right _ _
       _ = touches.length * 2 ^ width := by rw [finSum_touchCount]
-  change kraftMassAt width weights ≤ 2 ^ width
+  change kraftMassAt width dists ≤ 2 ^ width
   exact Nat.le_of_mul_le_mul_left hscaledMass hnonempty
 
 theorem touchCost_empirical_exact (touches : List (Fin k)) :
-    touchCost (empiricalWeights touches) touches =
+    touchCost (empiricalDists touches) touches =
       touches.length + finSum (fun head =>
         touchCount touches head *
-          inverseFrequencyWeight touches.length (touchCount touches head)) := by
+          inverseFrequencyDist touches.length (touchCount touches head)) := by
   exact touchCost_counts _ _
 
 theorem touchCost_empirical_entropy_bound (touches : List (Fin k))
     (hnonempty : 0 < touches.length)
     (hpositive : ∀ head, 0 < touchCount touches head) :
-    touchCost (empiricalWeights touches) touches ≤
+    touchCost (empiricalDists touches) touches ≤
       empiricalFloorLogTotal touches + 2 * touches.length := by
   have hpoint : ∀ head,
       touchCount touches head *
-          inverseFrequencyWeight touches.length (touchCount touches head) ≤
+          inverseFrequencyDist touches.length (touchCount touches head) ≤
         touchCount touches head *
           (Nat.log2 (touches.length / touchCount touches head) + 1) := by
     intro head
     exact Nat.mul_le_mul_left _
-      (inverseFrequencyWeight_le_log2_div_add_one hnonempty (hpositive head))
+      (inverseFrequencyDist_le_log2_div_add_one hnonempty (hpositive head))
   rw [touchCost_empirical_exact]
   calc
     touches.length + finSum (fun head =>
         touchCount touches head *
-          inverseFrequencyWeight touches.length (touchCount touches head)) ≤
+          inverseFrequencyDist touches.length (touchCount touches head)) ≤
         touches.length + finSum (fun head =>
           touchCount touches head *
             (Nat.log2 (touches.length / touchCount touches head) + 1)) :=
@@ -253,9 +253,9 @@ theorem touchCost_empirical_entropy_bound (touches : List (Fin k))
       omega
 
 #print axioms touchCost_counts
-#print axioms weightedCost_eq_touchCost
-#print axioms inverseFrequencyWeight_minimal
-#print axioms empiricalWeights_kraft
+#print axioms distCost_eq_touchCost
+#print axioms inverseFrequencyDist_minimal
+#print axioms empiricalDists_kraft
 #print axioms touchCost_empirical_exact
 #print axioms touchCost_empirical_entropy_bound
 

@@ -2,21 +2,21 @@ import Adic.Zip
 
 namespace Adic.Dyadic
 
-abbrev Weights (k : Nat) := Fin k → Nat
+abbrev Dists (k : Nat) := Fin k → Nat
 
-def maxWeight : {k : Nat} → Weights k → Nat
+def maxDist : {k : Nat} → Dists k → Nat
   | 0, _ => 0
-  | k + 1, weights =>
-      max (weights 0) (maxWeight fun head : Fin k => weights head.succ)
+  | k + 1, dists =>
+      max (dists 0) (maxDist fun head : Fin k => dists head.succ)
 
-theorem weight_le_maxWeight (weights : Weights k) (head : Fin k) :
-    weights head ≤ maxWeight weights := by
+theorem dist_le_maxDist (dists : Dists k) (head : Fin k) :
+    dists head ≤ maxDist dists := by
   induction k with
   | zero => exact Fin.elim0 head
   | succ k ih =>
       refine Fin.cases ?_ (fun tail => ?_) head
       · exact Nat.le_max_left _ _
-      · exact Nat.le_trans (ih (fun i => weights i.succ) tail) (Nat.le_max_right _ _)
+      · exact Nat.le_trans (ih (fun i => dists i.succ) tail) (Nat.le_max_right _ _)
 
 def finSum : {k : Nat} → (Fin k → Nat) → Nat
   | 0, _ => 0
@@ -78,121 +78,121 @@ theorem dvd_finSum (divisor : Nat) (values : Fin k → Nat)
       simp only [finSum]
       exact Nat.dvd_add (h 0) (ih (fun head => values head.succ) fun head => h head.succ)
 
-def kraftMassAt (width : Nat) (weights : Weights k) : Nat :=
-  finSum fun head => 2 ^ (width - weights head)
+def kraftMassAt (width : Nat) (dists : Dists k) : Nat :=
+  finSum fun head => 2 ^ (width - dists head)
 
-def KraftOk (weights : Weights k) : Prop :=
-  kraftMassAt (maxWeight weights) weights ≤ 2 ^ maxWeight weights
+def KraftOk (dists : Dists k) : Prop :=
+  kraftMassAt (maxDist dists) dists ≤ 2 ^ maxDist dists
 
-def ComesBefore (weights : Weights k) (left right : Fin k) : Prop :=
-  weights left < weights right ∨
-    weights left = weights right ∧ left.val < right.val
+def ComesBefore (dists : Dists k) (left right : Fin k) : Prop :=
+  dists left < dists right ∨
+    dists left = dists right ∧ left.val < right.val
 
-instance (weights : Weights k) (left right : Fin k) :
-    Decidable (ComesBefore weights left right) := by
+instance (dists : Dists k) (left right : Fin k) :
+    Decidable (ComesBefore dists left right) := by
   unfold ComesBefore
   infer_instance
 
-theorem comesBefore_irrefl (weights : Weights k) (head : Fin k) :
-    ¬ComesBefore weights head head := by
+theorem comesBefore_irrefl (dists : Dists k) (head : Fin k) :
+    ¬ComesBefore dists head head := by
   simp [ComesBefore]
 
-theorem comesBefore_trans (weights : Weights k) {first second third : Fin k}
-    (hfirst : ComesBefore weights first second)
-    (hsecond : ComesBefore weights second third) :
-    ComesBefore weights first third := by
+theorem comesBefore_trans (dists : Dists k) {first second third : Fin k}
+    (hfirst : ComesBefore dists first second)
+    (hsecond : ComesBefore dists second third) :
+    ComesBefore dists first third := by
   simp only [ComesBefore] at hfirst hsecond ⊢
   omega
 
-theorem comesBefore_total (weights : Weights k) {left right : Fin k}
+theorem comesBefore_total (dists : Dists k) {left right : Fin k}
     (hne : left ≠ right) :
-    ComesBefore weights left right ∨ ComesBefore weights right left := by
+    ComesBefore dists left right ∨ ComesBefore dists right left := by
   have hval : left.val ≠ right.val := by
     intro equality
     exact hne (Fin.ext equality)
   simp only [ComesBefore]
   omega
 
-def blockAt (width : Nat) (weights : Weights k) (head : Fin k) : Nat :=
-  2 ^ (width - weights head)
+def blockAt (width : Nat) (dists : Dists k) (head : Fin k) : Nat :=
+  2 ^ (width - dists head)
 
-def priorMass (width : Nat) (weights : Weights k) (selected : Fin k) : Nat :=
-  finSum fun head => if ComesBefore weights head selected then blockAt width weights head else 0
+def priorMass (width : Nat) (dists : Dists k) (selected : Fin k) : Nat :=
+  finSum fun head => if ComesBefore dists head selected then blockAt width dists head else 0
 
-theorem priorMass_add_block_le_mass (width : Nat) (weights : Weights k)
+theorem priorMass_add_block_le_mass (width : Nat) (dists : Dists k)
     (selected : Fin k) :
-    priorMass width weights selected + blockAt width weights selected ≤
-      kraftMassAt width weights := by
+    priorMass width dists selected + blockAt width dists selected ≤
+      kraftMassAt width dists := by
   let before : Fin k → Nat := fun head =>
-    if ComesBefore weights head selected then blockAt width weights head else 0
+    if ComesBefore dists head selected then blockAt width dists head else 0
   let singleton : Fin k → Nat := fun head =>
-    if head = selected then blockAt width weights head else 0
-  have hpoint : ∀ head, before head + singleton head ≤ blockAt width weights head := by
+    if head = selected then blockAt width dists head else 0
+  have hpoint : ∀ head, before head + singleton head ≤ blockAt width dists head := by
     intro head
-    by_cases hbefore : ComesBefore weights head selected
+    by_cases hbefore : ComesBefore dists head selected
     · have hne : head ≠ selected := by
         intro equality
         subst head
-        exact comesBefore_irrefl weights selected hbefore
+        exact comesBefore_irrefl dists selected hbefore
       simp [before, singleton, hbefore, hne]
     · by_cases heq : head = selected
       · subst head
         simp [before, singleton, comesBefore_irrefl]
       · simp [before, singleton, hbefore, heq]
   calc
-    priorMass width weights selected + blockAt width weights selected =
+    priorMass width dists selected + blockAt width dists selected =
         finSum before + finSum singleton := by
       simp [priorMass, before, singleton, finSum_single]
     _ = finSum (fun head => before head + singleton head) :=
       (finSum_add before singleton).symm
-    _ ≤ finSum (blockAt width weights) := finSum_mono hpoint
-    _ = kraftMassAt width weights := rfl
+    _ ≤ finSum (blockAt width dists) := finSum_mono hpoint
+    _ = kraftMassAt width dists := rfl
 
-theorem priorMass_order (width : Nat) (weights : Weights k) {left right : Fin k}
-    (hbefore : ComesBefore weights left right) :
-    priorMass width weights left + blockAt width weights left ≤
-      priorMass width weights right := by
+theorem priorMass_order (width : Nat) (dists : Dists k) {left right : Fin k}
+    (hbefore : ComesBefore dists left right) :
+    priorMass width dists left + blockAt width dists left ≤
+      priorMass width dists right := by
   let throughLeft : Fin k → Nat := fun head =>
-    (if ComesBefore weights head left then blockAt width weights head else 0) +
-      (if head = left then blockAt width weights head else 0)
+    (if ComesBefore dists head left then blockAt width dists head else 0) +
+      (if head = left then blockAt width dists head else 0)
   let beforeRight : Fin k → Nat := fun head =>
-    if ComesBefore weights head right then blockAt width weights head else 0
+    if ComesBefore dists head right then blockAt width dists head else 0
   have hpoint : ∀ head, throughLeft head ≤ beforeRight head := by
     intro head
-    by_cases hhead : ComesBefore weights head left
-    · have htrans := comesBefore_trans weights hhead hbefore
+    by_cases hhead : ComesBefore dists head left
+    · have htrans := comesBefore_trans dists hhead hbefore
       have hne : head ≠ left := by
         intro equality
         subst head
-        exact comesBefore_irrefl weights left hhead
+        exact comesBefore_irrefl dists left hhead
       simp [throughLeft, beforeRight, hhead, htrans, hne]
     · by_cases heq : head = left
       · subst head
         simp [throughLeft, beforeRight, hbefore,
-          comesBefore_irrefl weights left]
+          comesBefore_irrefl dists left]
       · simp [throughLeft, beforeRight, hhead, heq]
   calc
-    priorMass width weights left + blockAt width weights left =
+    priorMass width dists left + blockAt width dists left =
         finSum (fun head =>
-          if ComesBefore weights head left then blockAt width weights head else 0) +
-          finSum (fun head => if head = left then blockAt width weights head else 0) := by
+          if ComesBefore dists head left then blockAt width dists head else 0) +
+          finSum (fun head => if head = left then blockAt width dists head else 0) := by
       simp [priorMass, finSum_single]
     _ = finSum throughLeft := by
       rw [finSum_add]
     _ ≤ finSum beforeRight := finSum_mono hpoint
-    _ = priorMass width weights right := rfl
+    _ = priorMass width dists right := rfl
 
-theorem block_dvd_priorMass (weights : Weights k) (selected : Fin k)
-    (hwidth : weights selected ≤ width) :
-    blockAt width weights selected ∣ priorMass width weights selected := by
+theorem block_dvd_priorMass (dists : Dists k) (selected : Fin k)
+    (hwidth : dists selected ≤ width) :
+    blockAt width dists selected ∣ priorMass width dists selected := by
   unfold priorMass
   apply dvd_finSum
   intro head
-  by_cases hbefore : ComesBefore weights head selected
-  · have hweight : weights head ≤ weights selected := by
+  by_cases hbefore : ComesBefore dists head selected
+  · have hdist : dists head ≤ dists selected := by
       simp only [ComesBefore] at hbefore
       omega
-    have hexponent : width - weights selected ≤ width - weights head := by omega
+    have hexponent : width - dists selected ≤ width - dists head := by omega
     simp [hbefore, blockAt]
     exact Nat.pow_dvd_pow 2 hexponent
   · simp [hbefore]
@@ -288,9 +288,9 @@ theorem scaled_start_bounds_of_prefix {stem path : List Bool} (width : Nat)
         (pathValue stem *
           (2 ^ (width - (stem.length + suffix.length)) * 2 ^ suffix.length))
 
-structure Mounting (weights : Weights k) where
+structure Mounting (dists : Dists k) where
   path : Fin k → List Bool
-  length_path : ∀ head, (path head).length = weights head
+  length_path : ∀ head, (path head).length = dists head
   injective_path : Function.Injective path
   incomparable_path : ∀ {left right}, left ≠ right →
     PrefixIncomparable (path left) (path right)
@@ -425,116 +425,116 @@ theorem kraft_bound_paths (paths : List (List Bool))
               rw [pathMass_split paths hnonempty, Nat.pow_succ]
               omega
 
-def canonicalMountPath (weights : Weights k) (head : Fin k) : List Bool :=
-  binaryPath (weights head)
-    (priorMass (maxWeight weights) weights head /
-      blockAt (maxWeight weights) weights head)
+def canonicalMountPath (dists : Dists k) (head : Fin k) : List Bool :=
+  binaryPath (dists head)
+    (priorMass (maxDist dists) dists head /
+      blockAt (maxDist dists) dists head)
 
-@[simp] theorem canonicalMountPath_length (weights : Weights k) (head : Fin k) :
-    (canonicalMountPath weights head).length = weights head := by
+@[simp] theorem canonicalMountPath_length (dists : Dists k) (head : Fin k) :
+    (canonicalMountPath dists head).length = dists head := by
   simp [canonicalMountPath]
 
-theorem canonicalMountPath_start (weights : Weights k) (hKraft : KraftOk weights)
+theorem canonicalMountPath_start (dists : Dists k) (hKraft : KraftOk dists)
     (head : Fin k) :
-    pathValue (canonicalMountPath weights head) *
-        blockAt (maxWeight weights) weights head =
-      priorMass (maxWeight weights) weights head := by
-  let width := maxWeight weights
-  let block := blockAt width weights head
-  let start := priorMass width weights head
+    pathValue (canonicalMountPath dists head) *
+        blockAt (maxDist dists) dists head =
+      priorMass (maxDist dists) dists head := by
+  let width := maxDist dists
+  let block := blockAt width dists head
+  let start := priorMass width dists head
   let code := start / block
-  have hwidth : weights head ≤ width := weight_le_maxWeight weights head
-  have hdvd : block ∣ start := block_dvd_priorMass weights head hwidth
+  have hwidth : dists head ≤ width := dist_le_maxDist dists head
+  have hdvd : block ∣ start := block_dvd_priorMass dists head hwidth
   have hstart : code * block = start := by
     exact Nat.div_mul_cancel hdvd
   have hend : start + block ≤ 2 ^ width := by
-    exact Nat.le_trans (priorMass_add_block_le_mass width weights head) hKraft
-  have hblockPower : block * 2 ^ weights head = 2 ^ width := by
+    exact Nat.le_trans (priorMass_add_block_le_mass width dists head) hKraft
+  have hblockPower : block * 2 ^ dists head = 2 ^ width := by
     exact Nat.pow_sub_mul_pow 2 hwidth
-  have hmul : block * (code + 1) ≤ block * 2 ^ weights head := by
+  have hmul : block * (code + 1) ≤ block * 2 ^ dists head := by
     calc
       block * (code + 1) = start + block := by
         rw [Nat.mul_add, Nat.mul_one, Nat.mul_comm block code, hstart]
       _ ≤ 2 ^ width := hend
-      _ = block * 2 ^ weights head := hblockPower.symm
+      _ = block * 2 ^ dists head := hblockPower.symm
   have hblockPositive : 0 < block := by
     exact Nat.two_pow_pos _
-  have hcode : code < 2 ^ weights head := by
+  have hcode : code < 2 ^ dists head := by
     have := Nat.le_of_mul_le_mul_left hmul hblockPositive
     omega
-  have hvalue : pathValue (canonicalMountPath weights head) = code := by
+  have hvalue : pathValue (canonicalMountPath dists head) = code := by
     exact pathValue_binaryPath hcode
   rw [hvalue]
   exact hstart
 
-theorem canonicalMountPath_incomparable (weights : Weights k) (hKraft : KraftOk weights)
+theorem canonicalMountPath_incomparable (dists : Dists k) (hKraft : KraftOk dists)
     {left right : Fin k} (hne : left ≠ right) :
-    PrefixIncomparable (canonicalMountPath weights left)
-      (canonicalMountPath weights right) := by
-  have hleftWidth : weights left ≤ maxWeight weights := weight_le_maxWeight weights left
-  have hrightWidth : weights right ≤ maxWeight weights := weight_le_maxWeight weights right
-  have hleftStart := canonicalMountPath_start weights hKraft left
-  have hrightStart := canonicalMountPath_start weights hKraft right
-  rcases comesBefore_total weights hne with hbefore | hbefore
-  · have horder := priorMass_order (maxWeight weights) weights hbefore
+    PrefixIncomparable (canonicalMountPath dists left)
+      (canonicalMountPath dists right) := by
+  have hleftWidth : dists left ≤ maxDist dists := dist_le_maxDist dists left
+  have hrightWidth : dists right ≤ maxDist dists := dist_le_maxDist dists right
+  have hleftStart := canonicalMountPath_start dists hKraft left
+  have hrightStart := canonicalMountPath_start dists hKraft right
+  rcases comesBefore_total dists hne with hbefore | hbefore
+  · have horder := priorMass_order (maxDist dists) dists hbefore
     constructor
     · intro hprefix
-      have hbounds := scaled_start_bounds_of_prefix (maxWeight weights)
+      have hbounds := scaled_start_bounds_of_prefix (maxDist dists)
         (by simpa using hleftWidth) (by simpa using hrightWidth) hprefix
       simp only [canonicalMountPath_length] at hbounds
-      rw [show 2 ^ (maxWeight weights - weights left) =
-          blockAt (maxWeight weights) weights left by rfl,
-        show 2 ^ (maxWeight weights - weights right) =
-          blockAt (maxWeight weights) weights right by rfl,
+      rw [show 2 ^ (maxDist dists - dists left) =
+          blockAt (maxDist dists) dists left by rfl,
+        show 2 ^ (maxDist dists - dists right) =
+          blockAt (maxDist dists) dists right by rfl,
         hleftStart, hrightStart] at hbounds
       omega
     · intro hprefix
-      have hbounds := scaled_start_bounds_of_prefix (maxWeight weights)
+      have hbounds := scaled_start_bounds_of_prefix (maxDist dists)
         (by simpa using hrightWidth) (by simpa using hleftWidth) hprefix
       simp only [canonicalMountPath_length] at hbounds
-      rw [show 2 ^ (maxWeight weights - weights left) =
-          blockAt (maxWeight weights) weights left by rfl,
-        show 2 ^ (maxWeight weights - weights right) =
-          blockAt (maxWeight weights) weights right by rfl,
+      rw [show 2 ^ (maxDist dists - dists left) =
+          blockAt (maxDist dists) dists left by rfl,
+        show 2 ^ (maxDist dists - dists right) =
+          blockAt (maxDist dists) dists right by rfl,
         hleftStart, hrightStart] at hbounds
-      have hpositive : 0 < blockAt (maxWeight weights) weights left := Nat.two_pow_pos _
+      have hpositive : 0 < blockAt (maxDist dists) dists left := Nat.two_pow_pos _
       omega
-  · have horder := priorMass_order (maxWeight weights) weights hbefore
+  · have horder := priorMass_order (maxDist dists) dists hbefore
     constructor
     · intro hprefix
-      have hbounds := scaled_start_bounds_of_prefix (maxWeight weights)
+      have hbounds := scaled_start_bounds_of_prefix (maxDist dists)
         (by simpa using hleftWidth) (by simpa using hrightWidth) hprefix
       simp only [canonicalMountPath_length] at hbounds
-      rw [show 2 ^ (maxWeight weights - weights left) =
-          blockAt (maxWeight weights) weights left by rfl,
-        show 2 ^ (maxWeight weights - weights right) =
-          blockAt (maxWeight weights) weights right by rfl,
+      rw [show 2 ^ (maxDist dists - dists left) =
+          blockAt (maxDist dists) dists left by rfl,
+        show 2 ^ (maxDist dists - dists right) =
+          blockAt (maxDist dists) dists right by rfl,
         hleftStart, hrightStart] at hbounds
-      have hpositive : 0 < blockAt (maxWeight weights) weights right := Nat.two_pow_pos _
+      have hpositive : 0 < blockAt (maxDist dists) dists right := Nat.two_pow_pos _
       omega
     · intro hprefix
-      have hbounds := scaled_start_bounds_of_prefix (maxWeight weights)
+      have hbounds := scaled_start_bounds_of_prefix (maxDist dists)
         (by simpa using hrightWidth) (by simpa using hleftWidth) hprefix
       simp only [canonicalMountPath_length] at hbounds
-      rw [show 2 ^ (maxWeight weights - weights left) =
-          blockAt (maxWeight weights) weights left by rfl,
-        show 2 ^ (maxWeight weights - weights right) =
-          blockAt (maxWeight weights) weights right by rfl,
+      rw [show 2 ^ (maxDist dists - dists left) =
+          blockAt (maxDist dists) dists left by rfl,
+        show 2 ^ (maxDist dists - dists right) =
+          blockAt (maxDist dists) dists right by rfl,
         hleftStart, hrightStart] at hbounds
       omega
 
-def mountingOfKraft {weights : Weights k} (hKraft : KraftOk weights) :
-    Mounting weights := by
+def mountingOfKraft {dists : Dists k} (hKraft : KraftOk dists) :
+    Mounting dists := by
   refine {
-    path := canonicalMountPath weights
-    length_path := canonicalMountPath_length weights
+    path := canonicalMountPath dists
+    length_path := canonicalMountPath_length dists
     injective_path := ?_
-    incomparable_path := canonicalMountPath_incomparable weights hKraft
+    incomparable_path := canonicalMountPath_incomparable dists hKraft
   }
   intro left right equality
   by_cases heq : left = right
   · exact heq
-  · have hdisjoint := canonicalMountPath_incomparable weights hKraft heq
+  · have hdisjoint := canonicalMountPath_incomparable dists hKraft heq
     exact False.elim (hdisjoint.1 (equality ▸ List.prefix_refl _))
 
 theorem pairwise_ofFn_of_ne (values : Fin k → α) (relation : α → α → Prop)
@@ -555,21 +555,21 @@ theorem pairwise_ofFn_of_ne (values : Fin k → α) (relation : α → α → Pr
         intro equality
         exact hne (Fin.succ_inj.mp equality)
 
-theorem mounting_paths_pairwise {weights : Weights k} (mounting : Mounting weights) :
+theorem mounting_paths_pairwise {dists : Dists k} (mounting : Mounting dists) :
     (List.ofFn mounting.path).Pairwise PrefixIncomparable :=
   pairwise_ofFn_of_ne mounting.path PrefixIncomparable mounting.incomparable_path
 
-theorem kraft_of_mounting {weights : Weights k} (mounting : Mounting weights) :
-    KraftOk weights := by
+theorem kraft_of_mounting {dists : Dists k} (mounting : Mounting dists) :
+    KraftOk dists := by
   let paths := List.ofFn mounting.path
-  have hdepth : ∀ path ∈ paths, path.length ≤ maxWeight weights := by
+  have hdepth : ∀ path ∈ paths, path.length ≤ maxDist dists := by
     intro path hpath
     obtain ⟨head, equality⟩ := List.mem_ofFn.mp hpath
     rw [← equality, mounting.length_path]
-    exact weight_le_maxWeight weights head
+    exact dist_le_maxDist dists head
   have hbound := kraft_bound_paths paths hdepth (mounting_paths_pairwise mounting)
-  have hmass : pathMass (maxWeight weights) paths =
-      kraftMassAt (maxWeight weights) weights := by
+  have hmass : pathMass (maxDist dists) paths =
+      kraftMassAt (maxDist dists) dists := by
     rw [pathMass, List.map_ofFn, ← finSum_eq_sum_ofFn]
     apply finSum_congr
     intro head
@@ -577,10 +577,10 @@ theorem kraft_of_mounting {weights : Weights k} (mounting : Mounting weights) :
   rw [hmass] at hbound
   exact hbound
 
-theorem kraft_iff_mounting (weights : Weights k) :
-    KraftOk weights ↔
+theorem kraft_iff_mounting (dists : Dists k) :
+    KraftOk dists ↔
       ∃ paths : Fin k → List Bool,
-        (∀ head, (paths head).length = weights head) ∧
+        (∀ head, (paths head).length = dists head) ∧
           Function.Injective paths ∧
             ∀ {left right}, left ≠ right →
               PrefixIncomparable (paths left) (paths right) := by
@@ -597,107 +597,107 @@ theorem kraft_iff_mounting (weights : Weights k) :
       incomparable_path := hincomparable
     }
 
-def weightedCost (weights : Weights k) (word : ActionWord k) : Nat :=
-  (word.map fun operation => 1 + weights operation.head).sum
+def distCost (dists : Dists k) (word : ActionWord k) : Nat :=
+  (word.map fun operation => 1 + dists operation.head).sum
 
-@[simp] theorem weightedCost_nil (weights : Weights k) :
-    weightedCost weights [] = 0 := rfl
+@[simp] theorem distCost_nil (dists : Dists k) :
+    distCost dists [] = 0 := rfl
 
-@[simp] theorem weightedCost_cons (weights : Weights k) (operation : AddressedOp k)
+@[simp] theorem distCost_cons (dists : Dists k) (operation : AddressedOp k)
     (word : ActionWord k) :
-    weightedCost weights (operation :: word) =
-      1 + weights operation.head + weightedCost weights word := rfl
+    distCost dists (operation :: word) =
+      1 + dists operation.head + distCost dists word := rfl
 
-@[simp] theorem weightedCost_append (weights : Weights k) (first second : ActionWord k) :
-    weightedCost weights (first ++ second) =
-      weightedCost weights first + weightedCost weights second := by
-  simp [weightedCost]
+@[simp] theorem distCost_append (dists : Dists k) (first second : ActionWord k) :
+    distCost dists (first ++ second) =
+      distCost dists first + distCost dists second := by
+  simp [distCost]
 
-theorem weightedCost_zero (word : ActionWord k) :
-    weightedCost (fun _ => 0) word = actionCost word := by
+theorem distCost_zero (word : ActionWord k) :
+    distCost (fun _ => 0) word = actionCost word := by
   induction word with
   | nil => rfl
   | cons operation word ih =>
       simpa [actionCost, Nat.add_comm] using congrArg Nat.succ ih
 
-theorem weightedCost_le_maxWeight (weights : Weights k) (word : ActionWord k) :
-    weightedCost weights word ≤ (1 + maxWeight weights) * actionCost word := by
+theorem distCost_le_maxDist (dists : Dists k) (word : ActionWord k) :
+    distCost dists word ≤ (1 + maxDist dists) * actionCost word := by
   induction word with
   | nil => simp [actionCost]
   | cons operation word ih =>
-      have hhead : 1 + weights operation.head ≤ 1 + maxWeight weights :=
-        Nat.add_le_add_left (weight_le_maxWeight weights operation.head) 1
-      rw [weightedCost_cons]
+      have hhead : 1 + dists operation.head ≤ 1 + maxDist dists :=
+        Nat.add_le_add_left (dist_le_maxDist dists operation.head) 1
+      rw [distCost_cons]
       calc
-        1 + weights operation.head + weightedCost weights word ≤
-            (1 + maxWeight weights) +
-              (1 + maxWeight weights) * actionCost word :=
+        1 + dists operation.head + distCost dists word ≤
+            (1 + maxDist dists) +
+              (1 + maxDist dists) * actionCost word :=
           Nat.add_le_add hhead ih
-        _ = (1 + maxWeight weights) * actionCost (operation :: word) := by
+        _ = (1 + maxDist dists) * actionCost (operation :: word) := by
           simp [actionCost, Nat.mul_add, Nat.add_comm]
 
-def weightedZipLeafCost (weights : Weights 3) : Nat :=
-  8 + weights inputAHead + weights inputBHead + 6 * weights outputHead
+def distZipLeafCost (dists : Dists 3) : Nat :=
+  8 + dists inputAHead + dists inputBHead + 6 * dists outputHead
 
-def weightedZipNodeCost (weights : Weights 3) : Nat :=
-  12 + 4 * (weights inputAHead + weights inputBHead + weights outputHead)
+def distZipNodeCost (dists : Dists 3) : Nat :=
+  12 + 4 * (dists inputAHead + dists inputBHead + dists outputHead)
 
-def weightedZipCost (weights : Weights 3) : Nat → Nat
-  | 0 => weightedZipLeafCost weights
-  | n + 1 => 2 * weightedZipCost weights n + weightedZipNodeCost weights
+def distZipCost (dists : Dists 3) : Nat → Nat
+  | 0 => distZipLeafCost dists
+  | n + 1 => 2 * distZipCost dists n + distZipNodeCost dists
 
-theorem weightedZipCost_closed (weights : Weights 3) (n : Nat) :
-    weightedZipCost weights n =
-      weightedZipLeafCost weights * 2 ^ n +
-        weightedZipNodeCost weights * (2 ^ n - 1) := by
+theorem distZipCost_closed (dists : Dists 3) (n : Nat) :
+    distZipCost dists n =
+      distZipLeafCost dists * 2 ^ n +
+        distZipNodeCost dists * (2 ^ n - 1) := by
   induction n with
-  | zero => simp [weightedZipCost]
+  | zero => simp [distZipCost]
   | succ n ih =>
-      rw [weightedZipCost, ih, Nat.pow_succ]
+      rw [distZipCost, ih, Nat.pow_succ]
       have hpositive : 1 ≤ 2 ^ n := Nat.two_pow_pos n
       have hsub : 2 ^ n * 2 - 1 = 2 * (2 ^ n - 1) + 1 := by omega
       rw [hsub]
       simp [Nat.mul_add, Nat.add_mul, Nat.mul_assoc, Nat.mul_comm,
         Nat.add_comm, Nat.add_left_comm]
 
-theorem weighted_zipWord (weights : Weights 3) (a b : Tree n) :
-    weightedCost weights (zipWord n a b) = weightedZipCost weights n := by
+theorem dist_zipWord (dists : Dists 3) (a b : Tree n) :
+    distCost dists (zipWord n a b) = distZipCost dists n := by
   induction n with
   | zero =>
       cases a <;> cases b <;>
-        simp [zipWord, weightedCost, weightedZipCost, weightedZipLeafCost,
+        simp [zipWord, distCost, distZipCost, distZipLeafCost,
           inputAHead, inputBHead, outputHead, addressed, writeBit] <;> omega
   | succ n ih =>
       obtain ⟨a₀, a₁⟩ := a
       obtain ⟨b₀, b₁⟩ := b
-      simp only [zipWord, weightedCost_append]
+      simp only [zipWord, distCost_append]
       rw [ih a₀ b₀, ih a₁ b₁]
-      simp [descendAll, ascendAll, weightedCost, weightedZipCost,
-        weightedZipNodeCost, inputAHead, inputBHead, outputHead, addressed] <;> omega
+      simp [descendAll, ascendAll, distCost, distZipCost,
+        distZipNodeCost, inputAHead, inputBHead, outputHead, addressed] <;> omega
 
-theorem weighted_zipWord_linear_bound (weights : Weights 3) (a b : Tree n) :
-    weightedCost weights (zipWord n a b) ≤
-      (1 + maxWeight weights) * 20 * 2 ^ n := by
+theorem dist_zipWord_linear_bound (dists : Dists 3) (a b : Tree n) :
+    distCost dists (zipWord n a b) ≤
+      (1 + maxDist dists) * 20 * 2 ^ n := by
   calc
-    weightedCost weights (zipWord n a b) ≤
-        (1 + maxWeight weights) * actionCost (zipWord n a b) :=
-      weightedCost_le_maxWeight weights _
-    _ ≤ (1 + maxWeight weights) * (20 * 2 ^ n) :=
+    distCost dists (zipWord n a b) ≤
+        (1 + maxDist dists) * actionCost (zipWord n a b) :=
+      distCost_le_maxDist dists _
+    _ ≤ (1 + maxDist dists) * (20 * 2 ^ n) :=
       Nat.mul_le_mul_left _ (zipWord_linear_bound a b)
-    _ = (1 + maxWeight weights) * 20 * 2 ^ n := by
+    _ = (1 + maxDist dists) * 20 * 2 ^ n := by
       simp [Nat.mul_assoc]
 
-def uniformThreeWeights : Weights 3 := fun _ => 2
+def uniformThreeDists : Dists 3 := fun _ => 2
 
-theorem uniformThreeWeights_kraft : KraftOk uniformThreeWeights := by
-  simp [KraftOk, kraftMassAt, maxWeight, uniformThreeWeights, finSum]
+theorem uniformThreeDists_kraft : KraftOk uniformThreeDists := by
+  simp [KraftOk, kraftMassAt, maxDist, uniformThreeDists, finSum]
 
-#print axioms weightedCost_append
-#print axioms weightedCost_zero
+#print axioms distCost_append
+#print axioms distCost_zero
 #print axioms kraft_iff_mounting
-#print axioms weighted_zipWord
-#print axioms weightedZipCost_closed
-#print axioms weighted_zipWord_linear_bound
-#print axioms uniformThreeWeights_kraft
+#print axioms dist_zipWord
+#print axioms distZipCost_closed
+#print axioms dist_zipWord_linear_bound
+#print axioms uniformThreeDists_kraft
 
 end Adic.Dyadic

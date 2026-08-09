@@ -32,7 +32,7 @@ up to.
 - Skeleton chapters: (1) the dyadic machine; (2) simulation and basic
   cost theorems; (3) graded towers — types without infinities; (4) the
   calculus and cost soundness (initiality + adequacy); (5) worked
-  examples: FVec, zip, mergesort, transpose; (6) cursor weights, Kraft
+  examples: FVec, zip, mergesort, transpose; (6) cursor distances, Kraft
   accounting, entropy bounds; (7) related work.
 - Standing rule: every accepted AIP eventually has a home in the paper;
   "not yet absorbed into the paper" is a tracked state, not a silence.

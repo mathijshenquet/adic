@@ -194,7 +194,7 @@ address arithmetic is path navigation — and:
 
 = What is deliberately absent
 
-No caches (weighted heads under a Kraft budget are the next layer —
+No caches (heads at a distance under a Kraft budget are the next layer —
 cache-v0 draft), no eviction or capacity cliffs (recorded gap:
 Kraft pricing is not cliff pricing), no allocation, no capabilities
 (they arrive as the calculus above, the machine stays algebra-free),
