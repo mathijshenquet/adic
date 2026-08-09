@@ -23,3 +23,14 @@ cannibalizes freely.
 
 Every expo must compile (gate). Modeled on composix's tours: prose
 pinned to checked artifacts, drift structurally impossible.
+
+Regenerate the receipt ledger before compiling expositions:
+
+```sh
+(cd lean && lake exe receipts) && typst compile expo/style-demo.typ
+```
+
+The generator hashes the exact rendered statement with FNV-1a-64 over
+UTF-8 and keeps the first 12 lowercase hexadecimal characters. Lean
+Core/Std does not provide SHA-256; spelling out this fallback keeps the
+pin stable across runs and platforms without an external executable.

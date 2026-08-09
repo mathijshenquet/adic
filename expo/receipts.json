@@ -1,0 +1,65 @@
+[{"statement":
+  "theorem streaming (n : Nat) :\n  cost (euler n) ≤ 4 * 2 ^ n ∧\n    run (euler n) (rootHead n) = some (rootHead n) ∧\n      leafVisits (euler n) (rootHead n) = some (leftToRightLeaves n) ∧\n        (leftToRightLeaves n).length = 2 ^ n",
+  "name": "Adic.Dyadic.streaming",
+  "hash": "da2cf6d93911",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem random_access {n : Nat} (p : Path n) :\n  ∃ final,\n    run (descend p) (rootHead n) = some final ∧\n      leafPosition final = some p.toList ∧ cost (descend p) = n",
+  "name": "Adic.Dyadic.random_access",
+  "hash": "90d693624072",
+  "axioms": ["propext"]},
+ {"statement":
+  "theorem movement_cost_lower_bound {n : Nat} (word : Word)\n  (source target : Head n) (hrun : run word source = some target) :\n  treeDistance source target ≤ cost word",
+  "name": "Adic.Dyadic.movement_cost_lower_bound",
+  "hash": "a9dd1cc5c5b7",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem movement_cost_realizable {n : Nat} (source target : Head n) :\n  ∃ word, run word source = some target ∧ cost word = treeDistance source target",
+  "name": "Adic.Dyadic.movement_cost_realizable",
+  "hash": "441789e92c57",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem random_access_optimal {n : Nat} (p : Path n) (word : Word)\n  (final : Head n) (hrun : run word (rootHead n) = some final)\n  (hleaf : leafPosition final = some p.toList) : n ≤ cost word",
+  "name": "Adic.Dyadic.random_access_optimal",
+  "hash": "384959b54737",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem disjoint_subtree_commute {n k : Nat} (config : ActionConfig n k)\n  (left right : AddressedOp k) (leftHead rightHead : Fin k)\n  (leftRegion rightRegion : List Bool) (hleftHead : left.head = leftHead)\n  (hrightHead : right.head = rightHead) (hheads : leftHead ≠ rightHead)\n  (hdisjoint : PrefixIncomparable leftRegion rightRegion)\n  (hinvariant :\n    RegionsInvariant config leftHead rightHead leftRegion rightRegion) :\n  runActions [left, right] config = runActions [right, left] config ∧\n    actionCost [left, right] = actionCost [right, left]",
+  "name": "Adic.Dyadic.disjoint_subtree_commute",
+  "hash": "26b242dea9bb",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem disjoint_subtree_interleaving {k n : Nat}\n  {left right first second : ActionWord k} (leftHead rightHead : Fin k)\n  (leftRegion rightRegion : List Bool) (hheads : leftHead ≠ rightHead)\n  (hdisjoint : PrefixIncomparable leftRegion rightRegion)\n  (hleft : ConfinedWord left leftHead leftRegion)\n  (hright : ConfinedWord right rightHead rightRegion)\n  (hfirst : Interleaving left right first)\n  (hsecond : Interleaving left right second) (config : ActionConfig n k)\n  (hinvariant :\n    RegionsInvariant config leftHead rightHead leftRegion rightRegion) :\n  runActions first config = runActions second config ∧\n    actionCost first = actionCost second",
+  "name": "Adic.Dyadic.disjoint_subtree_interleaving",
+  "hash": "c0fe61356058",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem zipWord_correct {n : Nat} (a b : Tree n) (output : Tree (n + 1)) :\n  runActions (zipWord n a b) (zipStart a b output) =\n    some (zipStart a b (interleave n a b))",
+  "name": "Adic.Dyadic.zipWord_correct",
+  "hash": "14348ba5db73",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem zipWord_cost {n : Nat} (a b : Tree n) :\n  actionCost (zipWord n a b) = zipCost n",
+  "name": "Adic.Dyadic.zipWord_cost",
+  "hash": "197f534c6425",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem zipWord_shape_independent {n : Nat} (a b a' b' : Tree n) :\n  actionShape (zipWord n a b) = actionShape (zipWord n a' b')",
+  "name": "Adic.Dyadic.zipWord_shape_independent",
+  "hash": "34026f02398d",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem copyWord_correct {n : Nat} (source destination : Tree n) :\n  runActions (copyWord n source) (copyStart source destination) =\n    some (copyStart source source)",
+  "name": "Adic.Dyadic.copyWord_correct",
+  "hash": "9cd2a7078d61",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem doublingCopyTotal_linear_bound (c : Nat) :\n  doublingCopyTotal c ≤ 20 * 2 ^ c",
+  "name": "Adic.Dyadic.doublingCopyTotal_linear_bound",
+  "hash": "7bf1eddaf4cc",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem ram_program_simulation {s v : Nat} (program : RamProgram s)\n  (config : RamConfig s v) :\n  ∃ scratch',\n    runActions (compileProgram program config) (simulatorStart config) =\n        some (encodedConfig (runRam program config) scratch') ∧\n      ScratchRepresents (runRam program config) scratch' ∧\n        actionCost (compileProgram program config) ≤\n          10 * ramCost program * (s + 2 ^ v)",
+  "name": "Adic.Dyadic.ram_program_simulation",
+  "hash": "ae500d06e278",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]}]

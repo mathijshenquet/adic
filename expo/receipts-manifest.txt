@@ -1,0 +1,14 @@
+# AIP-4 receipt ledger. One fully-qualified Lean theorem per line.
+Adic.Dyadic.streaming
+Adic.Dyadic.random_access
+Adic.Dyadic.movement_cost_lower_bound
+Adic.Dyadic.movement_cost_realizable
+Adic.Dyadic.random_access_optimal
+Adic.Dyadic.disjoint_subtree_commute
+Adic.Dyadic.disjoint_subtree_interleaving
+Adic.Dyadic.zipWord_correct
+Adic.Dyadic.zipWord_cost
+Adic.Dyadic.zipWord_shape_independent
+Adic.Dyadic.copyWord_correct
+Adic.Dyadic.doublingCopyTotal_linear_bound
+Adic.Dyadic.ram_program_simulation
