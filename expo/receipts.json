@@ -156,4 +156,34 @@
   "theorem ram_program_reverse_simulation {k n : Nat} :\n  ∃ c,\n    ∀ (word : ActionWord k) (source final : ActionConfig n k)\n      (start : RegisterRamConfig n k),\n      RegisterRep source start →\n        runActions word source = some final →\n          ∃ target,\n            runRegisterRam (compileActionWord n word) start = some target ∧\n              RegisterRep final target ∧\n                registerRamCost (compileActionWord n word) ≤\n                  c * (actionCost word + freeUpCount word)",
   "name": "Adic.Dyadic.ram_program_reverse_simulation",
   "hash": "0124d398ce8d",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem cost_isCocycle {n : Nat} : IsCocycle fun word x => cost word",
+  "name": "Adic.Dyadic.cost_isCocycle",
+  "hash": "de7f0a86ae70",
+  "axioms": ["propext"]},
+ {"statement":
+  "theorem symCost_isCocycle {n : Nat} : IsCocycle fun word x => symCost word",
+  "name": "Adic.Dyadic.symCost_isCocycle",
+  "hash": "6c6740c39016",
+  "axioms": ["propext"]},
+ {"statement":
+  "theorem exchange_append {n : Nat} {f g : Word → Head n → Nat}\n  {potential : Head n → Nat} (hf : IsCocycle f) (hg : IsCocycle g)\n  (exchange : Exchange f g potential) (first second : Word)\n  (head middle final : Head n) (hfirst : run first head = some middle)\n  (hsecond : run second middle = some final) :\n  f (first ++ second) head + potential head =\n    g (first ++ second) head + potential final",
+  "name": "Adic.Dyadic.exchange_append",
+  "hash": "268b4f2c8e46",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem freeUp_exchange {n : Nat} (word : Word) (head final : Head n)\n  (hrun : run word head = some final) :\n  2 * cost word + depth head = symCost word + depth final",
+  "name": "Adic.Dyadic.freeUp_exchange",
+  "hash": "0dc16bd7115b",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem freeUp_exchange_form {n : Nat} :\n  Exchange (fun word x => 2 * cost word) (fun word x => symCost word) depth",
+  "name": "Adic.Dyadic.freeUp_exchange_form",
+  "hash": "7c1898923481",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem freeUp_safety_bound {n : Nat} (word : Word) (head final : Head n)\n  (hrun : run word head = some final) :\n  symCost word ≤ 2 * cost word + depth head",
+  "name": "Adic.Dyadic.freeUp_safety_bound",
+  "hash": "04916a62de94",
   "axioms": ["Quot.sound", "propext"]}]

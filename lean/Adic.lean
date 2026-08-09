@@ -9,3 +9,4 @@ import Adic.RamLift
 import Adic.Distance
 import Adic.Entropy
 import Adic.Gibbs
+import Adic.Cocycle

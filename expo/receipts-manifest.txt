@@ -31,3 +31,9 @@ Adic.Dyadic.discrete_gibbs_log_sum
 Adic.Dyadic.touchCost_entropy_lower
 Adic.Dyadic.empiricalFloorLogTotal_le_touchCost
 Adic.Dyadic.ram_program_reverse_simulation
+Adic.Dyadic.cost_isCocycle
+Adic.Dyadic.symCost_isCocycle
+Adic.Dyadic.exchange_append
+Adic.Dyadic.freeUp_exchange
+Adic.Dyadic.freeUp_exchange_form
+Adic.Dyadic.freeUp_safety_bound
