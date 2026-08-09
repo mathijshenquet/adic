@@ -20,6 +20,36 @@ def writeWord : (s : Nat) → RamMemory s v → RamAddress s → RamWord v → R
   | s + 1, (left, right), .cons true path, word =>
       (left, writeWord s right path word)
 
+def bitMemory : (s : Nat) → RamMemory s 0 → Tree s
+  | 0, memory => memory
+  | s + 1, (left, right) => (bitMemory s left, bitMemory s right)
+
+def asBitRamMemory : (s : Nat) → Tree s → RamMemory s 0
+  | 0, memory => memory
+  | s + 1, (left, right) => (asBitRamMemory s left, asBitRamMemory s right)
+
+@[simp] theorem bitMemory_asBitRamMemory (memory : Tree s) :
+    bitMemory s (asBitRamMemory s memory) = memory := by
+  induction s with
+  | zero => rfl
+  | succ s ih => obtain ⟨left, right⟩ := memory; simp [bitMemory, asBitRamMemory, ih]
+
+@[simp] theorem asBitRamMemory_bitMemory (memory : RamMemory s 0) :
+    asBitRamMemory s (bitMemory s memory) = memory := by
+  induction s with
+  | zero => rfl
+  | succ s ih => obtain ⟨left, right⟩ := memory; simp [bitMemory, asBitRamMemory, ih]
+
+theorem readAt_wordAt (memory : RamMemory s 0) (address : RamAddress s) :
+    Tree.readAt s (bitMemory s memory) address.toList = some (wordAt s memory address) := by
+  induction s with
+  | zero => cases address; rfl
+  | succ s ih =>
+      obtain ⟨left, right⟩ := memory
+      cases address with
+      | cons bit path =>
+          cases bit <;> simp [bitMemory, Tree.readAt, Path.toList, ih] <;> rfl
+
 def leavesUnderPath : (s : Nat) → RamMemory s v → Path s → List Bool
   | 0, memory, .nil => memory.leafBits
   | s + 1, (left, _), .cons false path => leavesUnderPath s left path
