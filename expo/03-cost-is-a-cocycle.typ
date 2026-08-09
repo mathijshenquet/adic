@@ -144,10 +144,13 @@ word-only cost, its state-dependence absorbable into a potential.
   $Phi(c_0) - Phi(c_0) = 0$); equal counts make $h$ agree; but the
   sparse walk pays $Theta(m n)$ in write-backs (every up on an
   isolated dirty path pays, both passes) against the dense walk's
-  $Theta(m + n)$ (each region edge dirty-crossed once; padding is
-  clean and pays nothing). Take $m = n$: the gap $Theta(n^2)$ vs
-  $Theta(n)$ is unbounded — contradiction. Remaining bookkeeping:
-  the exact `down0`/`down1`/`up` padding counts; elementary.
+  $Theta(m + n)$ (each region edge dirty-crossed once; the padding
+  pays its downs — which $h$ sees equally on both sides — but its
+  ups are clean and free). With $m = Theta(n)$ the totals are
+  $4m n + 2m$ against $2m n + 2m + Theta(m+n)$: an unexplained
+  $Theta(n^2)$ gap — contradiction. The exact padding counts are
+  written out in AIP-5 §2; the gap is precisely the sparse walk's
+  dirty ups against the padding's clean ones.
 ]
 
 So — modulo that bookkeeping — it is a theorem, not a slogan:

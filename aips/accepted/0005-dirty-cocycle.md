@@ -127,15 +127,40 @@ rev).** Two steps:
    clean movement whose dirty cost equals its letter cost, so the
    *gap* survives. Contradiction.
 
-What remains for desk-proved status: bookkeeping that the padding
-can equalize `down0`/`down1`/`up` counts exactly while staying
-clean and returning to the root — tedious, elementary.
 **Executed 2026-08-10**: the argument is written out in Expo 3
 (with the erase-pass refinement that makes both walks genuine
 loops at one configuration $c_0$, killing $\delta\Phi$ exactly —
 sparse writes 1s then restores 0s; dense sweeps and erases; both
 end root/clean/all-zero) and the claim is re-badged desk-proved
-there. It is now a very concrete mechanization target.
+there. The padding bookkeeping, exactly:
+
+Take $m = 2^k$ with $m = \Theta(n)$. *Sparse walk*: $2m$ round
+trips (write pass + erase pass) to leaves in the left half chosen
+with balanced addresses ($n/2$ each of `down0`/`down1` per path),
+none inside the block; each trip pays $n$ downs + $1$ write + $n$
+*dirty* ups, independent of the other trips. Totals: downs
+$2mn$ (split $mn/mn$), ups $2mn$, writes $2m$; dirty cost
+$4mn + 2m$. *Dense walk*: the leftmost $2^k$-leaf block, entered
+by `down0`$^{\,n-k}$; one Euler sweep per pass writes/erases every
+leaf, crossing each block edge down once and up once
+($2^k - 1$ left edges, $2^k - 1$ right). Core totals: downs
+$2[(n-k) + 2^{k+1} - 2]$, writes $2m$, write-backs
+$2[2^{k+1} - 2 + n - k] = \Theta(m + n)$. *Padding*: the letter
+deficits $\Delta_0, \Delta_1 > 0$ (and $\Delta_U = \Delta_0 +
+\Delta_1$ automatically, since both walks individually balance
+downs against ups) are spent as $\Delta_1$ clean excursions into
+the never-written right half — each `down1`, then some `down0`s,
+then ups back to root, depth $\le n$; capacity
+$\Delta_1 (n-1) \ge \Delta_0$ holds with room. Padding pays its
+downs but its ups are clean and free. Grand totals on equal letter
+counts: sparse $4mn + 2m$ versus dense-plus-padding
+$2mn + 2m + \Theta(m+n)$ — the gap $2mn - \Theta(m+n) =
+\Theta(n^2)$ is exactly the sparse walk's dirty ups against the
+padding's clean ones. No $h$ (equal counts) and no $\Phi$ (equal
+endpoints) can see the difference. $\square$
+
+The claim is thus desk-proved in full; the mechanization target
+(AIP-5 §3) inherits a completely explicit witness.
 *Pro of doing it now:* the argument only uses the clean movement
 model plus the dirty `up` rule — it is robust to most call-2
 pricing details (any pricing where isolated write-backs pay
