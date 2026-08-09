@@ -169,10 +169,21 @@ address arithmetic is path navigation — and:
   charge for it.
 ]
 
-#deskthm(title: "The reverse direction")[
-  A RAM simulates $D_n$ with constant-factor overhead (addresses as
-  words, moves as shifts). Mechanization in progress; until it
-  lands, this direction is desk-level.
+#leanthm(
+  "Adic.Dyadic.ram_action_simulation",
+  pin: "faf9a8c8b649",
+  title: "The reverse direction, per action",
+)[
+  Conversely, a fixed-register word RAM simulates each $D$ action
+  in at most a constant number of instructions (three suffice):
+  addresses as padded words, moves as shifts. So the two models
+  differ by exactly the logarithm — in one direction only.
+]
+
+#deskthm(title: "The reverse direction, whole programs")[
+  Lifting the per-action simulation to whole action words needs a
+  compositional invariant on transient register state; desk-level
+  until that lands.
 ]
 
 = What is deliberately absent
