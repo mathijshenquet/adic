@@ -1,5 +1,42 @@
 # adic work log
 
+## 2026-08-10 (night) — free-up MERGED; adaptive wall repaired; cocycle-framework launched; padding proof completed
+
+- **`track/free-up-refresh` MERGED** (terra, ~15 min): the parked
+  retrofit `3c0149f` ported onto post-rename main. All 7 changed
+  pins re-read at merge (streaming 4·2^n→2·2^n; metric layer →
+  directed descent distance; copy 20→12, RAM sim 10→6 constants;
+  dist-zip explicit closed form; reverse sim bound now counts
+  freeUpCount honestly). Gate independently re-run green in
+  worktree AND on main post-merge. Up is now free in the
+  mechanization; AIP-2 amendment fully implemented. Stale
+  worktrees/branches cleaned (lean-spike, eval-harness,
+  lean-free-up).
+- **AIP-5 §2 completed by Claude**: padding bookkeeping written
+  out in full (m=2^k=Θ(n), balanced sparse addresses, leftmost
+  block, right-half clean excursions; totals 4mn+2m vs
+  2mn+2m+Θ(m+n)) — the nontriviality theorem is desk-proved with
+  NO remaining caveats; the gap is exactly dirty ups vs clean ups
+  on equal letter counts. Expo 3 updated.
+- **adaptive-entropy: exemplary sol wall + orchestrator repair.**
+  Wall: spec demanded remounting all heads with block
+  empiricalDists on single-support blocks — Kraft-infeasible
+  (zero-count heads get distance 1; mass 1+3/2>1; the positivity
+  hypothesis is load-bearing). Decision (Claude, spec-bug fix):
+  option (c) — skewed-positive witness blocks (dominant head
+  q−(k−1), all others 1); empiricalDists untouched, global counts
+  exactly uniform, separation ≈2n vs ≥n(1+log k). Sol continuing
+  (round 2, watcher re-armed).
+- **`track/cocycle-framework` launched** (terra, fresh pane):
+  exchange-form cocycle predicate, homomorphism examples, the
+  free-up identity 2·cost+Φ = symCost+Φ∘run with Φ=depth by word
+  induction, receipts + Expo 3's first badge flip desk→lean.
+- Heartbeat protocol explicitly requested by Mathijs mid-turn:
+  fallback re-armed on every wake since (currently armed).
+- In flight: adaptive-entropy (sol, round 2), cocycle-framework
+  (terra), mergesort-expo (sol), empirical-berry (sol),
+  campbell-renyi (sol).
+
 ## 2026-08-10 (late) — slots 1–3 decided; roadmap rev 2; dirty direction endorsed; Euclidean variants decided
 
 - **AIP-5 ACCEPTED** (dirty-cocycle → `aips/accepted/0005-…`):
