@@ -69,6 +69,11 @@ def fromList : (bits : List Bool) → Path bits.length
   | nil => rfl
   | cons bit bits ih => simp [fromList, Path.toList, ih]
 
+@[simp] theorem toList_cast (equality : n = m) (path : Path n) :
+    (cast (congrArg Path equality) path).toList = path.toList := by
+  subst m
+  rfl
+
 theorem toList_injective : Function.Injective (@toList n) := by
   intro left right heq
   induction n with
@@ -229,12 +234,15 @@ theorem actionRamProgram_cost (n : Nat) (action : AddressedOp k) :
   rcases action with ⟨head, operation⟩
   cases operation <;> simp [actionRamProgram, registerRamCost]
 
-def pointerAddress (head : Head n) : RamAddress n :=
-  cast (congrArg Path (by
+theorem pointerBits_length (head : Head n) :
+    (List.replicate head.1 false ++ headPath head).length = n := by
     rw [List.length_append, List.length_replicate]
     calc
       head.1 + (headPath head).length = (headPath head).length + head.1 := Nat.add_comm _ _
-      _ = n := headPath_length head))
+      _ = n := headPath_length head
+
+def pointerAddress (head : Head n) : RamAddress n :=
+  cast (congrArg Path (pointerBits_length (n := n) head))
     (Path.fromList (List.replicate head.1 false ++ headPath head))
 
 def pointerOfHead (head : Head n) : RamPointer n :=
