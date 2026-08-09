@@ -12,3 +12,4 @@ Adic.Dyadic.zipWord_shape_independent
 Adic.Dyadic.copyWord_correct
 Adic.Dyadic.doublingCopyTotal_linear_bound
 Adic.Dyadic.ram_program_simulation
+Adic.Dyadic.ram_action_simulation

@@ -62,4 +62,9 @@
   "theorem ram_program_simulation {s v : Nat} (program : RamProgram s)\n  (config : RamConfig s v) :\n  ∃ scratch',\n    runActions (compileProgram program config) (simulatorStart config) =\n        some (encodedConfig (runRam program config) scratch') ∧\n      ScratchRepresents (runRam program config) scratch' ∧\n        actionCost (compileProgram program config) ≤\n          10 * ramCost program * (s + 2 ^ v)",
   "name": "Adic.Dyadic.ram_program_simulation",
   "hash": "ae500d06e278",
-  "axioms": ["Classical.choice", "Quot.sound", "propext"]}]
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem ram_action_simulation {k n : Nat} :\n  ∃ c,\n    ∀ (action : AddressedOp k) (config next : ActionConfig n k),\n      actionStep action config = some next →\n        ∃ target,\n          runRegisterRam (actionRamProgram n action)\n                (registerEncode action.head config) =\n              some target ∧\n            RegisterRep next target ∧\n              registerRamCost (actionRamProgram n action) ≤ c",
+  "name": "Adic.Dyadic.ram_action_simulation",
+  "hash": "faf9a8c8b649",
+  "axioms": ["Quot.sound", "propext"]}]
