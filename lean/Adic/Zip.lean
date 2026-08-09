@@ -69,10 +69,10 @@ def inputAHead : Fin 3 := ⟨0, by omega⟩
 def inputBHead : Fin 3 := ⟨1, by omega⟩
 def outputHead : Fin 3 := ⟨2, by omega⟩
 
-def addressed (head : Fin 3) (operation : LocalOp) : AddressedOp 3 :=
+def addressed (head : Fin k) (operation : LocalOp) : AddressedOp k :=
   ⟨head, operation⟩
 
-def writeBit (head : Fin 3) (bit : Bool) : AddressedOp 3 :=
+def writeBit (head : Fin k) (bit : Bool) : AddressedOp k :=
   addressed head (if bit then .write1 else .write0)
 
 inductive OperationShape where
