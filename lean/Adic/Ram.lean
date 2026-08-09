@@ -355,6 +355,27 @@ theorem pointerAddress_leaf (cursor : Cursor n 0) :
     (pointerAddress ⟨0, cursor⟩).toList = cursor.path := by
   simpa [headPath] using pointerAddress_toList (head := ⟨0, cursor⟩)
 
+theorem pointerOfHead_down (bit : Bool) (cursor : Cursor (n + 1) (remaining + 1)) :
+    { address := Path.shiftLeft (n + 1) (pointerOfHead ⟨remaining + 1, cursor⟩).address bit
+      depth := ⟨(pointerOfHead ⟨remaining + 1, cursor⟩).depth.val + 1, by
+        simp only [pointerOfHead, Fin.val_mk, headPath]
+        have hlength := headPath_length (⟨remaining + 1, cursor⟩ : Head (n + 1))
+        simp [headPath] at hlength
+        omega⟩ } =
+      pointerOfHead ⟨remaining, if bit then Cursor.right cursor else Cursor.left cursor⟩ := by
+  congr
+  · exact pointerAddress_down bit cursor
+  · cases bit <;> simp [pointerOfHead, headPath, Cursor.path_left, Cursor.path_right]
+
+theorem pointerOfHead_up (bit : Bool) (cursor : Cursor (n + 1) (remaining + 1)) :
+    { address := Path.shiftRight (n + 1)
+        (pointerOfHead ⟨remaining, if bit then Cursor.right cursor else Cursor.left cursor⟩).address
+      depth := ⟨(pointerOfHead ⟨remaining, if bit then Cursor.right cursor else Cursor.left cursor⟩).depth.val - 1,
+        by omega⟩ } = pointerOfHead ⟨remaining + 1, cursor⟩ := by
+  congr
+  · exact pointerAddress_up bit cursor
+  · cases bit <;> simp [pointerOfHead, headPath, Cursor.path_left, Cursor.path_right]
+
 @[simp] theorem wordAt_repeatWord (address : RamAddress s) (word : RamWord v) :
     wordAt s (repeatWord s word) address = word := by
   induction s with
