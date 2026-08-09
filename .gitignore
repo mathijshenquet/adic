@@ -1,0 +1,22 @@
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# Rust
+target/
+
+# nix build outputs
+result
+result-*
+
+# agent worktrees
+.worktrees/
+
+# local tooling
+.claude/
+.vscode
+.idea
