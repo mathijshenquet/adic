@@ -83,8 +83,8 @@ $cal(C) arrow.r B M arrow.r B NN$ through $pi$: functors on $B M$
 are monoid homomorphisms into $(NN, +)$, the static prices;
 functors on $cal(C)$ are the state-dependent ones. "Cost ignores
 state" stops being a property you check equation by equation and
-becomes a shape — does the functor factor? — and the conjecture
-below will say that write-back cost fails to factor even after
+becomes a shape — does the functor factor? — and the desk theorem
+below says that write-back cost fails to factor even after
 correction by a coboundary.
 
 = Coboundaries are potential functions
@@ -115,7 +115,7 @@ cleanest representative of your class.
   induction on words.
 ]
 
-= Bandwidth is (conjecturally) a nontrivial class
+= Bandwidth is a nontrivial class (desk-proved)
 
 Now the dirty model: `down` fills, a clean `up` discards for free,
 a dirty `up` pays its write-back. This cocycle reads one bit of
@@ -123,18 +123,35 @@ local state, so it is *not* a homomorphism. The sharp question is
 whether it is secretly trivial — cohomologous to some
 word-only cost, its state-dependence absorbable into a potential.
 
-#openclaim(title: "The write-back cocycle is not cohomologous to any homomorphism")[
-  No potential $Phi$ and word-homomorphism $h$ satisfy
-  $"cost"_"dirty" = h + delta Phi$. Witness shape: $m$ isolated
-  single-bit writes cost $Theta(m dot n)$ in write-backs, while
-  the same multiset of operations arranged as one dense
-  $2^k$-block write costs $Theta(2^k)$ — dirtiness *coalesces*.
-  Equal word content, unboundedly different cost, comparable
-  endpoints: no boundary term can absorb the gap.
+#deskthm(title: "The write-back cocycle is not cohomologous to any homomorphism")[
+  No word-homomorphism $h$ and potential $Phi$ satisfy
+  $"cost"_"dirty" = h + delta Phi$. _Desk argument (upgraded from
+  an open claim, 2026-08-10; AIP-5 §2)._ (i) $B NN$ is
+  *commutative*, so any homomorphism factors through the
+  abelianization: $h$ sees only a word's letter counts — how many
+  `down0`s, `down1`s, `up`s, `write`s — nothing of their order.
+  (ii) Build two *closed* walks at the same configuration $c_0$
+  (root, clean tree, all-zero store) with equal letter counts.
+  The sparse walk makes $m$ isolated round trips to depth-$n$
+  leaves writing 1s, then repeats them writing 0s back — store
+  restored, every path flushed. The dense walk writes a $2^k$-leaf
+  block ($2^k = m$) in one streaming sweep and erases it likewise,
+  then *pads* with clean write-free excursions in an untouched
+  subtree until every letter count matches — always solvable in
+  root-returning chunks of depth $lt.eq n$, since each walk
+  individually balances downs against ups. (iii) Identical
+  endpoints kill $delta Phi$ *exactly* (both boundary terms are
+  $Phi(c_0) - Phi(c_0) = 0$); equal counts make $h$ agree; but the
+  sparse walk pays $Theta(m n)$ in write-backs (every up on an
+  isolated dirty path pays, both passes) against the dense walk's
+  $Theta(m + n)$ (each region edge dirty-crossed once; padding is
+  clean and pays nothing). Take $m = n$: the gap $Theta(n^2)$ vs
+  $Theta(n)$ is unbounded — contradiction. Remaining bookkeeping:
+  the exact `down0`/`down1`/`up` padding counts; elementary.
 ]
 
-If this holds — and the witness makes it hard to doubt — it is a
-theorem worth framing: *bandwidth cannot be statically priced.*
+So — modulo that bookkeeping — it is a theorem, not a slogan:
+*bandwidth cannot be statically priced.*
 Latency-like costs (addressing, movement, mount distance) are
 homomorphisms; write-back cost is genuinely history-dependent, and
 the cohomological language says so exactly. That real machines

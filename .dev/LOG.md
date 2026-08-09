@@ -2,6 +2,36 @@
 
 ## 2026-08-10 (late) — slots 1–3 decided; roadmap rev 2; dirty direction endorsed; Euclidean variants decided
 
+- **AIP-5 ACCEPTED** (dirty-cocycle → `aips/accepted/0005-…`):
+  Mathijs ratified all recommendations. Classification (§4):
+  first activated as contained sol track, then same-turn put
+  DORMANT by Mathijs (wait for theory to crystallize) — spec
+  `.dev/specs/local-classes.md` stays ready.
+- **Fan-out authorized** (Mathijs: up to ~8 parallel, sol freely).
+  FIVE tracks launched (all prompts verified `working`; watchers
+  + 10-min fallback armed): terra on `track/free-up-refresh`
+  (land the parked free-up retrofit `3c0149f` on post-rename
+  main — accepted-AIP open end, prerequisite for the cocycle
+  framework); sol ×4 on `track/adaptive-entropy` (Shannon move 1:
+  block re-mounting = entropy rate + rotating-source separation
+  witness, statement design in spec), `track/mergesort-expo`
+  (Expo 4, desk-proved ladder item 3), `track/empirical-berry`
+  (Rust enters: pointer-chase/streaming/write-asymmetry bench +
+  dimension-slope measurement + report), `track/campbell-renyi`
+  (desk verification of level-prices↦Rényi; also answers
+  Mathijs's two new questions: Expo-2-at-k-dimensions — Kraft
+  stays, entropy turns Rényi — and which price schedules are
+  well-behaved: streaming-summability boundary = tape at s=1,
+  doubling condition, Rényi/Kolmogorov–Nagumo axiomatics for why
+  exponential schedules are canonical).
+- **Expo 3 upgraded (Claude)**: the nontriviality claim is now
+  DESK-PROVED — erase-pass construction makes both witness walks
+  loops at one configuration (δΦ dies exactly), commutativity
+  argument kills h; only down0/down1/up padding counts remain
+  (elementary). Section retitled; AIP-5 §2 updated. Queued next:
+  cocycle-framework Lean track (after free-up lands), move-2
+  universal mounting, C=1 paragraph (bundled with Expo 2
+  corrections).
 - dirty-cocycle rev 2 (Mathijs asked for full AIP form with
   pros/cons): two NEW results while writing — (a) commutativity of
   Bℕ forces homomorphisms to see only letter counts, giving a

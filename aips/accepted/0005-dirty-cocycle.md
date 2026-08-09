@@ -129,10 +129,13 @@ rev).** Two steps:
 
 What remains for desk-proved status: bookkeeping that the padding
 can equalize `down0`/`down1`/`up` counts exactly while staying
-clean and returning to the root — tedious, elementary. The
-conjecture should be re-badged from "unformalized" to
-"desk-proved" once this is written out, and it is then a very
-concrete mechanization target.
+clean and returning to the root — tedious, elementary.
+**Executed 2026-08-10**: the argument is written out in Expo 3
+(with the erase-pass refinement that makes both walks genuine
+loops at one configuration $c_0$, killing $\delta\Phi$ exactly —
+sparse writes 1s then restores 0s; dense sweeps and erases; both
+end root/clean/all-zero) and the claim is re-badged desk-proved
+there. It is now a very concrete mechanization target.
 *Pro of doing it now:* the argument only uses the clean movement
 model plus the dirty `up` rule — it is robust to most call-2
 pricing details (any pricing where isolated write-backs pay
