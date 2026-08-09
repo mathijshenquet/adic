@@ -88,6 +88,16 @@
 // Ordinary running mathematics needs no box — prose and $math$ as
 // usual. Boxes are for *claims the reader might want to audit*.
 
+// Definition: first-class expo content (AIP-4 §4.5), deliberately
+// boxless and badge-free — a definition claims nothing.
+#let defn(title: none, body) = block(above: 1.0em, below: 1.0em, {
+  text(weight: "bold")[Definition]
+  if title != none { text(weight: "bold", [ (#title)]) }
+  text(weight: "bold")[.]
+  h(4pt)
+  body
+})
+
 #let expo(number, title, date, body) = {
   set page(width: 168mm, height: auto, margin: (x: 18mm, y: 16mm))
   set text(size: 10.5pt)

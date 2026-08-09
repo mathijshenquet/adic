@@ -78,3 +78,12 @@ next to letters.
    Expo 1 ("The dyadic machine") after. Claude writes expos with
    its own hand; Mathijs corrects rather than pre-approves
    ("ik corrigeer ipv accordeer").
+5. **Definitions are first-class** (AMENDED, Mathijs 2026-08-10):
+   expos should present the *objects* — definitions, notation, the
+   model's ingredients — as ordinary mathematical prose, not only
+   the theorems. Definitions carry no badge and need no Lean
+   backing: they claim nothing, they set the stage; every *claim*
+   about them keeps its badge discipline. `expo/lib.typ` provides
+   `#defn` for a consistent light visual (no box — boxes stay
+   reserved for auditable claims). Applies to all new expos;
+   existing expos get a definitions retrofit pass.

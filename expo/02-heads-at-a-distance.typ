@@ -11,20 +11,63 @@ silicon. This exposition adds that competition to $D$ as a *priced,
 structural* resource — no cache simulator, no eviction model: one
 inequality and one surcharge.
 
+= The objects
+
+#defn(title: "touch sequence")[
+  A *touch sequence* over $k$ heads is a finite word
+  $t = t_1 dots t_n$ with $t_j in {1, dots, k}$: the $j$-th
+  operation touches head $t_j$. Write $c_i$ for the number of
+  touches of head $i$, so $sum_i c_i = n$.
+]
+
+#defn(title: "distance assignment")[
+  A *distance assignment* is a function $d : {1, dots, k} arrow.r NN$;
+  $d_i$ is the depth at which head $i$ is mounted in an implicit
+  binary *fast-state tree*. Its *Kraft mass* is $sum_i 2^(-d_i)$,
+  and $d$ is *admissible* when the mass is at most $1$.
+]
+
+#defn(title: "mounting")[
+  A *mounting* realizing $d$ assigns heads injectively to binary
+  paths, head $i$ to a path of length exactly $d_i$, any two paths
+  prefix-incomparable. Prefix-incomparability is dyadic
+  disjointness: the subtrees below two mount slots never overlap,
+  so shares cannot alias. No mounted tree is ever walked — the
+  distance *is* the address; the tree exists so that "only so much
+  fits nearby" is a theorem rather than a metaphor.
+]
+
+#defn(title: "touch cost")[
+  Under an assignment $d$, a touch sequence costs
+  $ "touchCost"(d, t) = sum_(j=1)^(n) (1 + d_(t_j))
+    = n + sum_i c_i d_i : $
+  every touch pays its unit plus the walk to its head's slot.
+]
+
+#defn(title: "empirical distances and entropy")[
+  For a sequence with every $c_i > 0$, the *empirical
+  (inverse-frequency) distances* are $d_i = ceil(log_2 (n \/ c_i))$.
+  The *empirical entropy*, in count form, is
+  $sum_i c_i log_2 (n \/ c_i)$ — that is $n dot H(hat(p))$ for the
+  empirical frequencies $hat(p)_i = c_i \/ n$.
+]
+
+None of these carries a receipt: definitions claim nothing, they
+set the stage (AIP-4). Every *claim* about them below carries its
+badge.
+
 = The model
 
-Every head $i$ is mounted at a distance $d_i in NN$. Two rules
-(cache-v0, after convo [55]–[59]):
+Two rules give the objects their teeth (cache-v0, after convo
+[55]–[59]):
 
-+ *Budget.* An assignment is admissible iff
-  $sum_i 2^(-d_i) lt.eq 1$ — the Kraft inequality. Only so much fits
-  nearby: head $i$ occupies the fraction $2^(-d_i)$ of fast state,
-  and the shares are disjoint (no overlap between heads, by design:
-  overlap is what makes sharing models treacherous).
++ *Budget.* Only admissible assignments are allowed. Only so much
+  fits nearby: head $i$ occupies the fraction $2^(-d_i)$ of fast
+  state, and the shares are disjoint by prefix-incomparability —
+  overlap is what makes sharing models treacherous.
 + *Surcharge.* Every paid operation of head $i$ costs $1 + d_i$;
-  `up` remains free because it acquires no address bit. The distance
-  is the head's address depth in an implicit
-  fast-state tree. A hot head is near and therefore cheaper to touch.
+  `up` remains free because it acquires no address bit. A hot head
+  is near and therefore cheaper to touch.
 
 The plain machine is the fiber $d equiv 0$:
 
