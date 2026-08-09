@@ -81,7 +81,26 @@ as configuration:
   tree;
 - **control** — the current state of P.
 
-Instructions, each costing 1, each addressing one head:
+Instructions, each addressing one head. Cost: every instruction
+costs 1 EXCEPT `up`, which is free (AMENDED, Mathijs 2026-08-10 —
+"cost = address bits acquired"):
+
+- *Safety*: every `up` consumes a previously paid `down` (you can
+  only ascend where you descended), so total moves ≤ 2·cost +
+  initial depth — cost stays within a factor 2 of step count; the
+  potential is the current depth.
+- *Physical reading*: `down` fills a cache level (paid
+  acquisition), `up` evicts a clean line (free discard). Dirty
+  eviction/write-back is not modeled in v0 — noted for the cache
+  layer.
+- *Payoff*: streaming becomes exactly Σᵢ (1 + v₂(i)) — the odometer
+  identity without the factor 2; random access is exactly n; the
+  movement metric becomes the directed descent distance
+  |b| − |lcp(a,b)|, which is the honest asymmetry (descending is
+  the priced act); and "pay per address bit" aligns the base
+  machine with the Kraft/entropy layer.
+
+The instructions:
 
 - `up`, `down0`, `down1` — move the head along an edge. Partial: `up`
   at the root and `down` at a leaf are stuck. Stuckness is to be
