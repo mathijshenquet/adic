@@ -124,7 +124,7 @@ simulator):
 4. *Locality composition*: cost of a program using heads confined to
    disjoint subtrees is invariant under interleaving.
 
-## 4. Open questions
+## 4. Taste calls (all decided 2026-08-09)
 
 1. **Name and letter.** DECIDED (Mathijs, 2026-08-09): **the dyadic
    machine**, written D, D_n per grade. Prior-work scan: "dyadic
@@ -142,34 +142,47 @@ simulator):
    p-ary generalization is a related-work remark. "adic" remains the
    name of the language/discipline, which honestly covers both limits
    of the tower (§2).
-2. **Bits or words at leaves?** — rec: bits. Words (`uint_k` as a
+2. **Bits or words at leaves?** DECIDED (Mathijs, 2026-08-09): bits —
+   invariant and clean. Words (`uint_k` as a
    grade-k subtree) are calculus-level derived structure; putting them
    in the machine would smuggle in a preferred word size, the exact u64
    move adic exists to refuse.
-3. **How many heads in v0?** — rec: k fixed per program, with no
-   inter-head observation (§5c). k = 1 gives the cleanest theorems,
+3. **How many heads in v0?** DECIDED (Mathijs, 2026-08-09): k fixed
+   per program, with no inter-head observation (§5c). k = 1 gives the cleanest theorems,
    but zip/merge need 2 (convo [52]) and theorem 4 is *about*
    multiple heads (with k = 1 it is vacuous); making k part of P
    costs nothing in the metatheory. Single-head would also punish
    two-stream operations real machines do cheaply — the multi-tape-TM
    precedent: the single-tape quadratic overhead is universally read
    as artifact, not fidelity.
-4. **May a head rest at internal nodes?** — rec: yes (zipper-style);
-   movement is the only interaction there, data lives at leaves only.
+4. **May a head rest at internal nodes?** DECIDED (Mathijs,
+   2026-08-09): yes (zipper-style); movement is the only interaction
+   there, data lives at leaves only.
 5. **Stuck vs total.** Make moves total with self-loops, or leave them
-   stuck/undefined? — rec: stuck. Keeps the machine's equational
-   presentation small; totality is the calculus' job (convo [13]: the
-   v1 concrete core is total).
+   stuck/undefined? DECIDED (2026-08-09, rec adopted after in-session
+   explanation): stuck. Keeps the machine's equational presentation
+   small — no laws about what `up`-at-root "does" — and the calculus
+   statically excludes these programs anyway, so theorems take a "run
+   succeeds" hypothesis (§5e); totality is the calculus' job (convo
+   [13]: the v1 concrete core is total).
 6. **A `swap` instruction** (exchange focused subtree with held
-   subtree)? Convo [31]'s `swap_cap` suggests it eventually — rec: not
-   in v0; it belongs to the capability layer.
-7. **Leaf-order convention (endianness).** Convo [3] chose
-   little-endian zero-padding so grade inclusions commute with
-   arithmetic (docs/convo.md:48); the odometer/streaming analysis at
-   theorem 1 lives in the MSB-first order, where consecutive
-   addresses are usually tree-near (while 2-adically far). The
-   machine spec must fix its leaf-order convention explicitly; this
-   touches the `join`-adjacency open question (convo [13]).
+   subtree)? DECIDED (Mathijs, 2026-08-09): not in v0 — YAGNI until
+   needed; convo [31]'s `swap_cap` suggests it eventually, in the
+   capability layer.
+7. **Leaf-order convention (endianness).** DECIDED (2026-08-09,
+   delegated to Claude): the apparent tension between convo [3]'s
+   little-endian choice (docs/convo.md:48) and theorem 1's MSB-first
+   odometer analysis dissolves by separating two layers. (i)
+   *Metatheory*: leaves are numbered in left-to-right tree order —
+   paths read MSB-first — which is where the streaming/odometer/
+   boundary-spike theorems quantify; growth embeds the old tree as
+   child 0 of a new root, preserving leaf addresses. (ii) *Data
+   layout*: stored numerals, including addresses-as-data, are
+   little-endian in that order (LSB at the leftmost leaf, per convo
+   [3]), keeping successor uniform across grades. The layers do not
+   conflict: theorems quantify over tree order; the uniformity
+   requirement constrains data layout only. The `join`-adjacency
+   question (convo [13]) stays open at the calculus level.
 
 ## 5. Addendum: designed for proof (2026-08-09)
 

@@ -1,5 +1,30 @@
 # adic work log
 
+## 2026-08-09 (later) — dyadic machine lands
+
+- **AIP-2 accepted**: the dyadic machine D, D_n per grade
+  (`aips/accepted/0002-dyadic-machine-v0.md`). All seven taste calls
+  decided (Mathijs; leaf-order delegated to Claude): bits at leaves,
+  k heads fixed per program with no inter-head observation,
+  internal-node rest allowed, stuck semantics, no swap in v0,
+  two-layer leaf-order convention (tree-order numbering for
+  metatheory, little-endian data layout). Designed-for-proof
+  addendum (§5) added same day: monoid-action presentation,
+  recursive memory T(n+1)=T(n)×T(n), cost via tree metric,
+  closed-form totals. Odometer insight recorded at theorem 1:
+  streaming = adding-machine fact, kinship with Vershik.
+- Name scan done (H-machine rejected, adic machine soft-rejected);
+  "adic" stays the language/discipline name.
+- New draft in inbox: `aips/draft/roadmap.md` — berries + sequencing;
+  asks ratification of Lean-first (Lean def doubles as v0 simulator).
+- Standing grant recorded in CLAUDE.md: commit+push to main for
+  AIP/docs/LOG work without asking. Gitsitter-amend pitfall recorded
+  there too.
+- **Open with Mathijs**: roadmap draft (ratify Lean-first + machine
+  paper timing), `aips/draft/paper.md` (3 calls).
+- **Open for agents**: once Lean-first is ratified — Lean toolchain
+  into devenv, then mechanize D_n + theorems 1–2 per AIP-2 §5.
+
 ## 2026-08-09 — project born
 
 - Founding conversation imported from claude.ai ("Dependently typed
