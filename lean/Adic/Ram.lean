@@ -241,9 +241,39 @@ theorem pointerBits_length (head : Head n) :
       head.1 + (headPath head).length = (headPath head).length + head.1 := Nat.add_comm _ _
       _ = n := headPath_length head
 
+def paddedAddress (bits : List Bool) (n : Nat) (hbits : bits.length = n) : RamAddress n :=
+  cast (congrArg Path hbits) (Path.fromList bits)
+
+theorem paddedAddress_toList (bits : List Bool) (n : Nat) (hbits : bits.length = n) :
+    Path.toList (n := n) (paddedAddress bits n hbits) = bits := by
+  subst n
+  simp [paddedAddress]
+
 def pointerAddress (head : Head n) : RamAddress n :=
-  cast (congrArg Path (pointerBits_length (n := n) head))
-    (Path.fromList (List.replicate head.1 false ++ headPath head))
+  paddedAddress (List.replicate head.1 false ++ headPath head) n
+    (pointerBits_length (n := n) head)
+
+theorem pointerAddress_toList (head : Head n) :
+    Path.toList (n := n) (pointerAddress (n := n) head) =
+      List.replicate head.1 false ++ headPath head := by
+  exact paddedAddress_toList _ _ _
+
+theorem pointerAddress_down (bit : Bool) (cursor : Cursor (n + 1) (remaining + 1)) :
+    Path.shiftLeft (n + 1) (pointerAddress ⟨remaining + 1, cursor⟩) bit =
+      pointerAddress ⟨remaining, if bit then Cursor.right cursor else Cursor.left cursor⟩ := by
+  apply Path.toList_injective
+  rw [Path.toList_shiftLeft, pointerAddress_toList, pointerAddress_toList]
+  cases bit <;>
+    simp [headPath, Cursor.path_left, Cursor.path_right, List.append_assoc]
+
+theorem pointerAddress_up (bit : Bool) (cursor : Cursor (n + 1) (remaining + 1)) :
+    Path.shiftRight (n + 1)
+        (pointerAddress ⟨remaining, if bit then Cursor.right cursor else Cursor.left cursor⟩) =
+      pointerAddress ⟨remaining + 1, cursor⟩ := by
+  apply Path.toList_injective
+  rw [Path.toList_shiftRight, pointerAddress_toList, pointerAddress_toList]
+  cases bit <;>
+    simp [headPath, Cursor.path_left, Cursor.path_right, List.replicate_succ]
 
 def pointerOfHead (head : Head n) : RamPointer n :=
   { address := pointerAddress head
