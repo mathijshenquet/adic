@@ -1,5 +1,36 @@
 # adic work log
 
+## 2026-08-10 (late) — slots 1–3 decided; roadmap rev 2; dirty direction endorsed; Euclidean variants decided
+
+- Mathijs slotted the three proposed steps onto the todo list:
+  **(1) Shannon move 1** (block-adaptive re-mounting = entropy
+  rate; Claude spec → sol), **(2) mergesort ledger entry**
+  (desk-first; terra after spec), **(3) empirical berry** (Rust
+  bench pointer-chasing vs streaming + the dimension measurement:
+  hierarchy latency/capacity slope estimates the machine's ambient
+  dimension). Not yet launched — specs to be cut next work window.
+- **Euclidean variants decided** (Mathijs): after the C = 1
+  paragraph, immediately do c(ℓ) = 2^(ℓ/2) and 2^(ℓ/3) (k = 2, 3)
+  as first-class variants. Campbell/Rényi is their entropy story.
+- **Dirty model: direction endorsed** (Mathijs — cocycles stay
+  categorically clean, cohomology links a plus). Open questions
+  collected in `aips/draft/dirty-cocycle.md` (ℕ-coefficients,
+  local-class classification, two-trees unification, gauge choice,
+  c(ℓ) interaction incl. write-amplification anchor, RAM
+  correspondence, write entropy). Pricing details stay with
+  Mathijs at cache-v0 call 2.
+- Docs landed: `roadmap.md` rev 2 (B2 done, B4 phases 1–2 done,
+  ladder zip ✓ FVec ✓, B4′ Shannon programme folded in, slots
+  recorded, q2 flagged ripe); shannon-programme §2 folklore
+  anchors (SRAM √area, hierarchy slope 0.3–0.5 → dimension 2–3,
+  Rent's rule p = 1 − 1/d, holographic area law, Kleiber/WBE
+  rhyme incl. the d/(d+1) = k/(k+1) coincidence, fractal dial,
+  write amplification); cache-v0 §4b status + §5 sequencing
+  updated. cache-v0 keeps its handle (content already renamed by
+  the sweep).
+- **Open with Mathijs**: cache-v0 call 2; roadmap q2 (now ripe);
+  Expo 1+2 corrections; Letter 2 closing question; veto 5/7.
+
 ## 2026-08-10 (eve) — Kraft "weight" → "distance" decided (recovered from session tail); Expo 3 corrections applied
 
 - **Terminology decision (Mathijs, previous session tail — was

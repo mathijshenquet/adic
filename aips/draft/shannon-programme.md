@@ -67,6 +67,55 @@ name.
   entropy is the $c \equiv 1$ fiber. Candidate later target once
   $c(\ell) \ne 1$ enters the mechanization.
 
+### Folklore anchors: how storage cost scales with size (2026-08-10)
+
+Collected on Mathijs's question — the empirical/folklore scaling
+laws the geometry section should be able to absorb or predict:
+
+- **On-chip SRAM**: access time of a memory array grows like the
+  square root of its area (decode + wordline/bitline flight; the
+  wire-delay lore of Ho–Mai–Horowitz, and CACTI-style models) —
+  $k = 2$, measured.
+- **The hierarchy slope**: back-of-envelope L1→DRAM: capacity
+  $\times \sim 10^6$, latency $\times \sim 10^2$ — log-log slope
+  $\approx 0.3$–$0.5$, i.e. an *empirical ambient dimension
+  between 2 and 3* (2D dies, 3D-ish packaging). Turned around:
+  measuring the latency/capacity slope of a real machine estimates
+  its dimension $s$ in the $c(\ell) = 2^{\ell/s}$ dial. This joins
+  the empirical berry as a concrete measurement.
+- **Rent's rule**: terminals vs gates $T = t\,g^p$ with empirical
+  $p \approx 0.5$–$0.75$; wire-length models tie $p$ to layout
+  dimension via $p = 1 - 1/d$. Rent's exponent is boundary/
+  bisection scaling of real circuits — the hardware twin of the
+  boundary spike (how much addressing crosses a subtree cut).
+- **The physical endpoint (decorative)**: the Bekenstein/
+  holographic bound says maximal storage in a region scales with
+  boundary *area*, not volume — the ultimate storage law is the
+  $k = 2$ variant. Area law, not volume law, at the bottom of
+  physics.
+- **The metabolic rhyme (desk — possibly numerology until
+  derived)**: Kleiber's law $B \propto M^{3/4}$; West–Brown–
+  Enquist derive the quarter powers from *optimal space-filling
+  hierarchical supply trees* with invariant terminal units — an
+  object structurally ours (a tree serving a $d$-volume under a
+  budget). Their exponent shape $d/(d+1)$ at $d = 3$ coincides
+  with our Rényi order $k/(k+1)$ at $k = 3$; both drop out of
+  Lagrange over geometric tree levels. The mammal heartbeat
+  invariant ($\sim 10^9$ per life, rate $\propto M^{-1/4}$ ×
+  lifespan $\propto M^{1/4}$) is the amortized form. Open desk
+  question: is WBE a Campbell-type coding theorem in disguise?
+- **Fractal dial**: $c(\ell) = 2^{\ell/s}$ realizes ball growth
+  $r^s$ for any real $s > 0$ — non-integer $s$ is an honest
+  fractal ambient dimension, $s \to \infty$ recovers the
+  hyperbolic/informational case. Dimension is a continuous model
+  parameter, and the folklore above estimates where real hardware
+  sits on the dial.
+- **Write-side folklore** (for the dirty model, see
+  `dirty-cocycle.md`): SSD/flash write amplification and the
+  random-vs-sequential write gap are dirty coalescing observed in
+  the wild — the sparse–dense asymmetry is their theorem-shaped
+  form.
+
 ## 3. Move 1 — sources with memory (entropy rate; the dynamic frontier)
 
 Shannon's immediate next step: real sources are not i.i.d.; the

@@ -104,9 +104,12 @@ than in the distance layer** ("writes twice the data" becomes "pays
 write-backs"), no Kraft choice needed. Pricing principle behind
 the whole family: free is admissible exactly for
 potential-consuming operations (up consumes depth); read/write/
-down can repeat in place and must stay paid. Status: Mathijs
-thinking it over; the unconditional-free-up retrofit lands first
-(it is the read-only fiber of this model, nothing is thrown away).
+down can repeat in place and must stay paid. Status (updated
+2026-08-10): *direction endorsed* by Mathijs — the cocycle reading
+(Expo 3) stays categorically clean and yields cohomology links;
+open design questions collected in `aips/draft/dirty-cocycle.md`;
+pricing details remain his call at call 2. The
+unconditional-free-up retrofit landed first (read-only fiber).
 
 ## 5. Sequencing
 
@@ -114,4 +117,10 @@ Mechanization track (after Mathijs reads this rev): the 1 + d cost
 on action words + Kraft feasibility + distance-aware
 streaming (target 1), then entropy bound (target 2), then the
 cliff witness (target 3). Independent of the expositions/receipts
-line.
+line. Targets 1–2 are DONE (2026-08-10; Expo 2).
+
+Decided 2026-08-10 (Mathijs): after the C = 1 identity paragraph,
+do the Euclidean variants *immediately* — c(ℓ) = 2^(ℓ/2) and
+2^(ℓ/3) (k = 2, 3) as first-class variants next to c ≡ 1, not a
+distant v1 nicety. Their entropy story is Campbell/Rényi
+(shannon-programme §2); folklore anchors ibid.

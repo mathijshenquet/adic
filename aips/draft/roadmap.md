@@ -1,4 +1,9 @@
-# Roadmap: the berries and their sequencing
+# Roadmap: the berries and their sequencing — rev 2
+
+Rev 2 (2026-08-10): refreshed after B2 completed and B4 phases 1–2
+landed; folds in the Shannon programme
+(`aips/draft/shannon-programme.md`) and the decisions of 2026-08-10
+(slots 1–3, Euclidean variants, dirty-model direction).
 
 ## 1. The problem
 
@@ -7,95 +12,91 @@ This AIP names the target outputs ("berries", session 2026-08-09),
 their dependency structure, and a sequence, so tracks can be cut
 against it instead of re-derived per session.
 
-## 2. The berries
+## 2. The berries — status
 
-Landing dyadic-machine-v0 is not a berry but the trunk: every berry
-below
-consumes its artifacts (the machine definition, the mechanization,
-the cost lemmas).
+Landing dyadic-machine-v0 was the trunk; it is landed and
+mechanized.
 
-- **B2 — the theorem trio.** dyadic-machine-v0 §3's targets: streaming
-  O(1), random access at depth, honest-log simulations, locality
-  composition. Cheapest berry, most juice; everything downstream
-  consumes it. By-products: paper chapters 1–2, optionally a
-  standalone machine-model paper.
-- **B4 — Kraft/cursor-distance accounting** (convo [55], [57]). The
-  seam between the alloc-less TM-like model and the multi-cursor +
-  alloc model that sits pleasingly close to real machines. Statable
-  at machine level (heads at a distance, fast-state budget) — needs B2's
-  machine, not the calculus or an elaborator. Highest novelty per
-  unit work; known open-theory risk (write-head distance, convo
-  [72]–[73]).
-- **B3 — a checked complexity claim on ordinary-looking code.** "The
-  compiler proved my complexity claim": direct-style mergesort or
-  transpose with an optional `@ O(n log n)` annotation the checker
-  accepts or turns into a precise goal. Longest pole — needs G, the
-  capability calculus, a minimal elaborator. Horizon deliverable:
-  dated, not dropped; B2 and B4 tell us what the demo should claim.
-- **B6 — the strong claim**: the graded hierarchical machine is the
-  *right* abstract model for reasoning about computation. Not a
-  separate deliverable but the thesis of the monograph; its evidence
-  is B2 (robust and honest — the log lives where RAM lies), B4
-  (correspondence with real machines: cursor pressure ≈ registers /
-  cache lines), and an **empirical berry**: a few discriminating
-  cases where the model predicts real performance better than RAM
-  does (pointer-chasing vs streaming is the classic). Small and
-  cheap once a simulator exists; rhetorically outsized.
-- The **live paper** with its claims ledger (desk-proved /
-  simulator-checked / mechanized) is the basket, not a berry — per
-  the paper AIP.
+- **B2 — the theorem trio. DONE** (2026-08-10): streaming,
+  random access + optimality, locality composition, RAM
+  simulations in *both* directions (target 3 closed). 32 receipts;
+  Expo 1 carries it fully lean-backed. By-product decision still
+  open: standalone machine-model paper (q2 below, now ripe).
+- **B4 — Kraft/distance accounting. Phases 1–2 DONE**
+  (kraft_iff_mounting both directions, distance zip, entropy
+  achievability + Gibbs converse; Expo 2 "Heads at a distance").
+  Remaining: phase 3 cliff witness (needs k-way merge machinery +
+  cache-v0 call 2), size-aware distances (v1), [72] — which may
+  resolve in the dirty layer instead (cache-v0 §4b).
+- **B4′ — the Shannon programme** (new, successor line to B4):
+  the entropy pair is the source coding theorem; the programme is
+  the *combinatorial half of information theory, mechanized*
+  (shannon-programme §7). Concrete berries: move 1 (block-adaptive
+  re-mounting = entropy rate — SLOTTED), move 2 (universal
+  mounting), the C = 1 paragraph (free), Campbell/Rényi under
+  level prices (with the Euclidean variants below).
+- **Geometry variants** (decided 2026-08-10): after the C = 1
+  identity, do the Euclidean variants *immediately* — c(ℓ) =
+  2^(ℓ/2) and 2^(ℓ/3) (k = 2, 3) as first-class model variants
+  next to c ≡ 1, not a distant v1 nicety. The level-price dial is
+  a choice of ambient dimension (hyperbolic at c ≡ 1, k-Euclidean
+  at 2^(ℓ/k), fractal at non-integer exponent); folklore anchors
+  in shannon-programme §2.
+- **Dirty model** (direction endorsed by Mathijs 2026-08-10 — the
+  cocycle reading stays categorically clean and buys cohomology):
+  design questions collected in `aips/draft/dirty-cocycle.md`;
+  mechanization targets are Expo 3's three badge claims. Pricing
+  details stay a Mathijs call (cache-v0 call 2).
+- **B3 — a checked complexity claim on ordinary-looking code.**
+  Unchanged horizon deliverable — needs the calculus and a minimal
+  elaborator; B2 and B4 now tell us what the demo should claim.
+- **B6 — the strong claim.** Thesis of the monograph; its evidence
+  is B2 (done), B4 (largely done), and the **empirical berry —
+  SLOTTED**: Rust microbench of discriminating cases
+  (pointer-chasing vs streaming) against model predictions, plus
+  the dimension measurement: the log-log latency/capacity slope of
+  a real memory hierarchy estimates the machine's ambient
+  dimension (expected between 2 and 3; shannon-programme §2).
+- The **live paper** with its claims ledger remains the basket;
+  the expo series is its front-porch and already carries the
+  receipt mechanism.
 
-### Worked-examples ladder (2026-08-09)
+### Worked-examples ladder
 
-The convo's discriminating examples, split by axis: their *cost*
-side is cheap now (programs written directly as machine words; the
-bounds are corollaries of B2's lemmas) and stress-tests AIP-2 before
-the calculus exists; their *correctness* side waits for the calculus
-(decode maps are what it is for — raw-machine correctness proofs
-would be redone).
+1. **zip** — DONE (mechanized, incl. distance zip + [59]).
+2. **FVec push/copy** — DONE (copyWord, doubling copy closed form).
+3. **mergesort** — SLOTTED: desk-proved honest cost
+   (Θ(N·w·log N) bit-cost) as a badged expo/ledger entry first;
+   Lean later.
+4. **transpose** — queued (desk-level layout/boundary-spike study).
 
-1. **zip** (convo [52]–[59]) — first real machine program with a
-   proven cost bound; first genuine use of theorem 4 (two input
-   heads + write head); feeds B4's write-head question [72].
-2. **FVec push/copy** ([14]–[21]) — telescoping doubling copy;
-   also a two-stream program.
-3. **mergesort** — desk-proved honest cost (Θ(N·w·log N) bit-cost)
-   in the ledger first; Lean later.
-4. **transpose** — desk-proved layout/boundary-spike study; ledger
-   first.
+Calculus-tier (deferred): splay, union-find, path-copying RB tree,
+real-time queue.
 
-Calculus-tier (deferred, do not start at machine level): splay,
-union-find ([22]–[35]), path-copying red-black tree, real-time
-queue ([37]).
+## 3. Sequence (current slots, decided 2026-08-10)
 
-## 3. Recommendation (sequence)
+1. **Shannon move 1** — block-adaptive re-mounting achieves the
+   entropy rate. Claude designs the statement + lemma ladder, sol
+   executes. Flagship next theorem.
+2. **Mergesort ledger entry** — desk-first per the ladder;
+   terra-shaped after a short spec. Independent axis, runs
+   parallel to 1.
+3. **Empirical berry** — Rust bench + dimension measurement;
+   sol-shaped after design. Rust earns its place here.
+4. Then: C = 1 paragraph bundled into the Expo 2 correction round;
+   Euclidean variants k = 2, 3 (+ Campbell/Rényi as their entropy
+   story); dirty-model design → mechanization track (Expo 3's
+   badges).
 
-1. **Land dyadic-machine-v0** — the remaining taste calls (name is
-   decided: the dyadic machine, D_n) plus the designed-for-proof
-   addendum (§5 there). Everything waits on this.
-2. **In parallel after landing:** mechanize the machine definition
-   plus theorems 1–2 in Lean (straight structural inductions);
-   desk-prove the simulation theorems with ledger status; start the
-   paper skeleton and claims ledger (per the paper AIP: chapter 1
-   transcribes the machine AIP).
-3. **Branch B first, deliberately off the "logical" order:** the
-   multi-cursor/alloc layer + Kraft accounting (B4) and the
-   empirical berry, *before* the full calculus branch toward B3.
-   Rationale: highest novelty per unit work, no elaborator needed,
-   and B2 + B4 + empirics already carry the strong claim — a
-   publishable story while the calculus grows. Hedge: if B4 stalls
-   on open theory, falling back to the calculus branch is loss-free
-   because step 2's artifacts are already done.
+Blocked on Mathijs: cache-v0 call 2 (unlocks phase 3 cliff +
+dirty pricing details); Expo 1+2 corrections; Letter 2 closing
+question; veto 5/7.
 
 ## 4. Open questions
 
-1. **Lean-first?** RATIFIED (2026-08-09: Mathijs ordered the Lean
-   spike as this chunk's deliverable; spike landed green same day —
-   see `.dev/specs/lean-spike.md` and `lean/Adic/Dyadic.lean`:
-   theorems 1–2 mechanized, core axioms only). The executable Lean
-   definition doubles as the simulator (`#eval` at small grades);
-   Rust earns its place when the empirical berry needs throughput.
-   devenv carries `pkgs.lean4`; `lake build` joined the gate.
+1. **Lean-first?** RATIFIED (2026-08-09; spike landed same day).
+   The executable Lean definition doubles as the simulator; Rust
+   enters with the empirical berry (slot 3).
 2. **Standalone machine-model paper:** cut early, or keep as
-   monograph chapters until B2 is done? — rec: decide after theorems
-   1–2 are mechanized; no work is lost either way.
+   monograph chapters? The stated decision point ("after theorems
+   1–2 are mechanized") is passed — **ripe for Mathijs**.
