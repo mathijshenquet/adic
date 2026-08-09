@@ -102,4 +102,34 @@
   "theorem ram_action_simulation {k n : Nat} :\n  ∃ c,\n    ∀ (action : AddressedOp k) (config next : ActionConfig n k),\n      actionStep action config = some next →\n        ∃ target,\n          runRegisterRam (actionRamProgram n action)\n                (registerEncode action.head config) =\n              some target ∧\n            RegisterRep next target ∧\n              registerRamCost (actionRamProgram n action) ≤ c",
   "name": "Adic.Dyadic.ram_action_simulation",
   "hash": "faf9a8c8b649",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem touchCost_counts {k : Nat} (weights : Weights k)\n  (touches : List (Fin k)) :\n  touchCost weights touches =\n    touches.length + finSum fun head => touchCount touches head * weights head",
+  "name": "Adic.Dyadic.touchCost_counts",
+  "hash": "900dca2ca31b",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem weightedCost_eq_touchCost {k : Nat} (weights : Weights k)\n  (word : ActionWord k) :\n  weightedCost weights word =\n    touchCost weights (List.map (fun operation => operation.head) word)",
+  "name": "Adic.Dyadic.weightedCost_eq_touchCost",
+  "hash": "031c86de1eeb",
+  "axioms": ["propext"]},
+ {"statement":
+  "theorem inverseFrequencyWeight_minimal {total count weight : Nat}\n  (htotal : 0 < total) (hcount : 0 < count) :\n  inverseFrequencyWeight total count ≤ weight ↔ total ≤ count * 2 ^ weight",
+  "name": "Adic.Dyadic.inverseFrequencyWeight_minimal",
+  "hash": "480396e26f83",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem empiricalWeights_kraft {k : Nat} (touches : List (Fin k))\n  (hnonempty : 0 < touches.length)\n  (hpositive : ∀ (head : Fin k), 0 < touchCount touches head) :\n  KraftOk (empiricalWeights touches)",
+  "name": "Adic.Dyadic.empiricalWeights_kraft",
+  "hash": "d692acac2be1",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem touchCost_empirical_exact {k : Nat} (touches : List (Fin k)) :\n  touchCost (empiricalWeights touches) touches =\n    touches.length +\n      finSum fun head =>\n        touchCount touches head *\n          inverseFrequencyWeight touches.length (touchCount touches head)",
+  "name": "Adic.Dyadic.touchCost_empirical_exact",
+  "hash": "a7bac3bcd91a",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem touchCost_empirical_entropy_bound {k : Nat} (touches : List (Fin k))\n  (hnonempty : 0 < touches.length)\n  (hpositive : ∀ (head : Fin k), 0 < touchCount touches head) :\n  touchCost (empiricalWeights touches) touches ≤\n    empiricalFloorLogTotal touches + 2 * touches.length",
+  "name": "Adic.Dyadic.touchCost_empirical_entropy_bound",
+  "hash": "457dac133f84",
   "axioms": ["Quot.sound", "propext"]}]

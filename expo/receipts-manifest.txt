@@ -20,3 +20,9 @@ Adic.Dyadic.weightedZipCost_closed
 Adic.Dyadic.weighted_zipWord_linear_bound
 Adic.Dyadic.uniformThreeWeights_kraft
 Adic.Dyadic.ram_action_simulation
+Adic.Dyadic.touchCost_counts
+Adic.Dyadic.weightedCost_eq_touchCost
+Adic.Dyadic.inverseFrequencyWeight_minimal
+Adic.Dyadic.empiricalWeights_kraft
+Adic.Dyadic.touchCost_empirical_exact
+Adic.Dyadic.touchCost_empirical_entropy_bound
