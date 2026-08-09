@@ -28,7 +28,10 @@ evaporates).
   chunks of the paper, so they get real typesetting; each letter
   must `typst compile` — part of the gate). English by default (the
   repo's language; the live conversation is Dutch — letters are its
-  distillate). Compiled PDFs are gitignored.
+  distillate). Compiled PDFs are committed alongside the sources
+  (Mathijs, 2026-08-10: he reads them on GitHub) — recompile
+  whenever the `.typ` changes; the gate compiles anyway, so a stale
+  PDF is a review-visible diff, not silent drift.
 - Register: a letter argues, proposes, and is allowed to be wrong
   out loud. It is never the record. AIPs stay the decision record;
   the paper stays the theory record.
