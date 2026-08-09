@@ -132,4 +132,24 @@
   "theorem touchCost_empirical_entropy_bound {k : Nat} (touches : List (Fin k))\n  (hnonempty : 0 < touches.length)\n  (hpositive : ∀ (head : Fin k), 0 < touchCount touches head) :\n  touchCost (empiricalWeights touches) touches ≤\n    empiricalFloorLogTotal touches + 2 * touches.length",
   "name": "Adic.Dyadic.touchCost_empirical_entropy_bound",
   "hash": "457dac133f84",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem kraft_logDeficit_bound {k : Nat} (total : Nat)\n  (counts : Fin k → Nat) (weights : Weights k) (hKraft : KraftOk weights) :\n  (finSum fun head =>\n      counts head * ((total / counts head).log2 - weights head)) ≤\n    total",
+  "name": "Adic.Dyadic.kraft_logDeficit_bound",
+  "hash": "5f7a8f9c6bab",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem discrete_gibbs_log_sum {k : Nat} (total : Nat)\n  (counts : Fin k → Nat) (weights : Weights k) (htotal : finSum counts = total)\n  (hKraft : KraftOk weights) :\n  floorLogTotal total counts ≤ weightedCountTotal counts weights + total",
+  "name": "Adic.Dyadic.discrete_gibbs_log_sum",
+  "hash": "02a7eba433b8",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem touchCost_entropy_lower {k : Nat} (weights : Weights k)\n  (touches : List (Fin k)) (hKraft : KraftOk weights) :\n  touches.length + empiricalFloorLogTotal touches ≤\n    touchCost weights touches + touches.length",
+  "name": "Adic.Dyadic.touchCost_entropy_lower",
+  "hash": "f52ccc2b3713",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem empiricalFloorLogTotal_le_touchCost {k : Nat} (weights : Weights k)\n  (touches : List (Fin k)) (hKraft : KraftOk weights) :\n  empiricalFloorLogTotal touches ≤ touchCost weights touches",
+  "name": "Adic.Dyadic.empiricalFloorLogTotal_le_touchCost",
+  "hash": "25cf50098a1d",
   "axioms": ["Quot.sound", "propext"]}]

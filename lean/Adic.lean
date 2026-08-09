@@ -7,3 +7,4 @@ import Adic.Copy
 import Adic.Ram
 import Adic.Weighted
 import Adic.Entropy
+import Adic.Gibbs
