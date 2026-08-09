@@ -19,15 +19,56 @@ results: the cost model is *structural* — streaming cheapness and
 logarithmic random access are theorems about the tree's geometry,
 not assumptions about a memory controller.
 
+= The objects
+
+#defn(title: "memory")[
+  At grade $n$, memory is the complete binary tree of depth $n$
+  with one bit at each of its $2^n$ leaves. A *position* is a
+  bit-path from the root ($|p| lt.eq n$); a leaf is a position of
+  length exactly $n$, and its path *is* its address. There is no
+  other state: no registers, no counters, nothing beside the tree.
+]
+
+#defn(title: "head")[
+  A *head* is a cursor at a position, carrying its breadcrumbs —
+  the path it descended. A machine has $k$ heads driven by one
+  fixed finite control; an instruction addresses one head and sees
+  only the control state and that head's local view (the bit under
+  it, at a leaf). Heads cannot observe one another.
+]
+
+#defn(title: "words and runs")[
+  The instructions are `up`, `down0`, `down1`, and, at a leaf,
+  `read` and `write0`/`write1`. A *word* is a finite sequence of
+  instructions; a *run* is its (partial) execution from a
+  configuration — partial because a word may be inapplicable
+  (`up` at the root, `down` at a leaf). Words act on
+  configurations as a partial monoid action: concatenation is
+  sequencing.
+]
+
+#defn(title: "cost")[
+  Every `down`, `read`, and `write` costs $1$; `up` is free — it
+  acquires no address bit (AIP-2, amended). The cost of a word is
+  the sum over its letters, so cost is a homomorphism on words:
+  *cost = acquired address bits*. The *directed distance* from
+  position $a$ to $b$ is
+  $d_("down")(a,b) = |b| - |"lcp"(a,b)|$ —
+  only the descent after the common prefix is charged.
+]
+
+#defn(title: "the tower")[
+  One program runs uniformly at every grade; nothing in the
+  control may depend on $n$. The 2-adic valuation $v_2(i)$ — the
+  number of trailing zero bits of $i$ — measures carry propagation
+  and will govern streaming cost.
+]
+
 = Movement and cost
 
-A run is a word of instructions; its cost counts acquired address
-bits, not bookkeeping ascents. Movement
-composes as a monoid action, and every cost statement below is a
-closed-form total over a concrete word (no potentials, no credits).
-Positions are bit-paths; the directed distance from $a$ to $b$ is
-$d_("down")(a,b) = |b| - |"lcp"(a,b)|$: only the descent after their
-common prefix is charged.
+A run's cost counts acquired address bits, not bookkeeping
+ascents, and every cost statement below is a closed-form total
+over a concrete word (no potentials, no credits).
 
 #leanthm(
   "Adic.Dyadic.random_access",
