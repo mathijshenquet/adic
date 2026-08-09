@@ -8,5 +8,6 @@
     pkgs.typst
     pkgs.cargo-watch
     pkgs.jq
+    pkgs.pandoc
   ];
 }

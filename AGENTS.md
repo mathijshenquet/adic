@@ -32,6 +32,12 @@ Lean as a later backend for what falls outside it.
   immediately intuitive — it feeds the DX loop.
 - Decisions live in `aips/` only; don't fork design prose into other
   files.
+- AIP drafts render to a PDF next to the source (Mathijs reads the
+  math as PDF): after editing `aips/**/<f>.md`, regenerate with
+  `pandoc <f>.md --pdf-engine=typst -V mainfont="Libertinus Serif"
+  -V monofont="DejaVu Sans Mono" -o <f>.pdf` and commit both. Use
+  `\text{…}` (not `\mathrm{…}`) for upright words in math — the
+  typst conversion garbles the latter.
 - Gate: `lake build` in `lean/` (zero sorry, `#print axioms` on
   stated theorems shows core axioms only); every `letters/*.typ`
   compiles (`typst compile`); once Rust code exists: `cargo fmt

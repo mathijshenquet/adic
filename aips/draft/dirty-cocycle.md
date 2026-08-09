@@ -13,7 +13,7 @@ refinement; candidate in-machine resolution of [72]).
 The action category $\mathcal C$ has configurations as objects and
 pairs $(w, c)$ as morphisms (Grothendieck construction of the word
 action); a cost model is a functor $\mathcal C \to B\mathbb N$,
-i.e. a function $\mathrm{cost}_c(w)$ obeying the cocycle law.
+i.e. a function $\text{cost}_c(w)$ obeying the cocycle law.
 Word-only costs (homomorphisms) are the functors that factor
 through the projection $\pi : \mathcal C \to BM$; coboundaries
 $\delta\Phi$ are the potential functions of amortized analysis;
@@ -31,10 +31,10 @@ priced. Everything below is the design space around that.
 coefficients: a coboundary $(\delta\Phi)_c(w) = \Phi(c \cdot w) -
 \Phi(c)$ subtracts, and goes negative whenever the potential
 drops. Our costs are ℕ-valued — the machine cannot pay $-1$ — so
-"$\mathrm{cost}' = \mathrm{cost} + \delta\Phi$" is, read
+"$\text{cost}' = \text{cost} + \delta\Phi$" is, read
 literally, an equation between an ℕ-thing and a ℤ-thing. Expo 3
-dodged this once by doubling ($2\,\mathrm{cost}_{\text{free}} =
-\mathrm{cost}_{\text{sym}} + \delta\Phi$, everything ℕ). The
+dodged this once by doubling ($2\,\text{cost}_{\text{free}} =
+\text{cost}_{\text{sym}} + \delta\Phi$, everything ℕ). The
 question is what the honest general framework is, because Lean
 will force a choice.
 
@@ -53,7 +53,7 @@ Int-coercions infect every statement.
 **Option B — exchange form (recommended).** Never write
 $\delta\Phi$ alone; state cohomology equations in the rearranged,
 subtraction-free form
-$$\mathrm{cost}'_c(w) + \Phi(c) \;=\; \mathrm{cost}_c(w) + \Phi(c \cdot w).$$
+$$\text{cost}'_c(w) + \Phi(c) \;=\; \text{cost}_c(w) + \Phi(c \cdot w).$$
 This is exactly Tarjan's amortized-analysis identity (amortized +
 potential-before = actual + potential-after): **ℕ-valued
 cohomology in exchange form is not exotic — it is what amortized
@@ -96,7 +96,7 @@ closed-walk (holonomy) comparisons for class-separation results;
 ## 2. The nontriviality conjecture — and a near-proof
 
 **Background.** Expo 3, open claim: no homomorphism $h$ and
-potential $\Phi$ give $\mathrm{cost}_{\text{dirty}} = h +
+potential $\Phi$ give $\text{cost}_{\text{dirty}} = h +
 \delta\Phi$. Witness shape: $m$ isolated single-bit writes pay
 $\Theta(mn)$ in write-backs; the same write volume as one dense
 block pays $\Theta(2^k)$ — dirtiness coalesces.
@@ -137,8 +137,8 @@ to redo, but not free.
 ## 3. The badge worklist: what to mechanize when
 
 **Background.** Expo 3 carries three badges: the free-up
-representative identity ($2\,\mathrm{cost}_{\text{free}} =
-\mathrm{cost}_{\text{sym}} + \delta\Phi$, desk), the sparse–dense
+representative identity ($2\,\text{cost}_{\text{free}} =
+\text{cost}_{\text{sym}} + \delta\Phi$, desk), the sparse–dense
 asymmetry (desk), the nontriviality conjecture (open; upgraded by
 §2).
 
@@ -253,7 +253,7 @@ berry now (cheap, independent).
 **Background + a small observation.** Every write-back pays for an
 edge that some `down` filled, and each filled edge writes back at
 most once per fill; so total dirty surcharge ≤ total downs, i.e.
-$\mathrm{cost}_{\text{dirty}} \le 2 \cdot \mathrm{cost}_{\text{clean}}$.
+$\text{cost}_{\text{dirty}} \le 2 \cdot \text{cost}_{\text{clean}}$.
 Magnitudes are within a factor 2; the simulations (≤ 5·T etc.)
 survive with adjusted constants.
 *Pro:* a cheap theorem, worth a receipt, and it sharpens the
@@ -274,7 +274,7 @@ clustering* — coalescing is geometric.
 **The observation:** the dirty cost of writing a set $S$ of leaves
 is, up to constants, the number of edges of the dyadic closure of
 $S$ — that is
-$$\mathrm{cost}_{\text{write}}(S) \;\approx\; \sum_{\ell} N_\ell(S),$$
+$$\text{cost}_{\text{write}}(S) \;\approx\; \sum_{\ell} N_\ell(S),$$
 where $N_\ell(S)$ counts the distinct level-$\ell$ ancestors of
 $S$. But $N_\ell$ *is the box count of $S$ at scale $2^{-\ell}$*:
 the write cost of a set is its summed **box-counting profile**,

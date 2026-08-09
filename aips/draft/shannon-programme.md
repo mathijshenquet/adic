@@ -145,7 +145,7 @@ adic-native of the four: an **online re-mounting rule** (move-to-
 front-style promotion in the fast-state tree) competitive with the
 best static mounting in hindsight. cache-v0's promotion rules are
 embryonically this — the machine's LZ. Candidate: online rule with
-cost $\le c \cdot \mathrm{OPT}_{\text{static}} + O(\cdot)$.
+cost $\le c \cdot \text{OPT}_{\text{static}} + O(\cdot)$.
 
 ## 5. Move 3 — the machine is a unit-capacity channel
 
