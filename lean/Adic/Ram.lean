@@ -208,6 +208,15 @@ def setPointer (pointers : Fin k → RamPointer n) (pointer : Fin k) (value : Ra
     Fin k → RamPointer n :=
   fun queried => if queried = pointer then value else pointers queried
 
+@[simp] theorem setPointer_same (pointers : Fin k → RamPointer n) (pointer : Fin k)
+    (value : RamPointer n) : setPointer pointers pointer value pointer = value := by
+  simp [setPointer]
+
+@[simp] theorem setPointer_ne (pointers : Fin k → RamPointer n) (pointer other : Fin k)
+    (value : RamPointer n) (hne : other ≠ pointer) :
+    setPointer pointers pointer value other = pointers other := by
+  simp [setPointer, hne]
+
 structure RegisterRamConfig (n k : Nat) where
   memory : RamMemory n 0
   accumulator : Bool
