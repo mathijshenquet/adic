@@ -1,5 +1,16 @@
 # adic work log
 
+## 2026-08-09 (night, cont.) — paper draft deferred into letters
+
+- Mathijs: with AIP-3, the paper draft's calls dissolve/defer — he
+  writes the paper himself when it's time. `aips/draft/paper.md` →
+  `aips/deferred/paper.md` (annotated); the intended chapter
+  structure now lives as the prospective index in
+  `letters/README.md`; AIP-3 records the disposition. The three
+  paper calls leave Mathijs's queue.
+- **Open with Mathijs** (current): roadmap q2 (machine-paper
+  timing), Letter 1, veto window 5/7.
+
 ## 2026-08-09 (night) — lean-machine green, merged; zip launched
 
 - `track/lean-machine` (sol, 28 min, 1604 lines): full machine

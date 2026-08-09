@@ -1,5 +1,13 @@
 # The paper as organizing artifact
 
+> DEFERRED (Mathijs, 2026-08-09): the paper is Mathijs's to write —
+> that authorship is essential (AIP-3) — so this draft's three calls
+> dissolve until he starts. The intended chapter structure lives on
+> as the letters' prospective index (`letters/README.md`). The
+> claims-ledger idea survives in spirit: mechanized claims are
+> self-documenting in `lean/`; a ledger file appears with the first
+> claim that is desk-proved only.
+
 ## 1. The problem
 
 adic's ambition is a coherent abstraction — machine, graded towers,

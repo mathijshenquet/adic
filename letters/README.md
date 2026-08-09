@@ -22,3 +22,22 @@ Ground rules (AIP-3):
 Precedents, and the company we like to keep: the Grothendieck–Serre
 correspondence; Bell Labs technical memoranda, out of which Shannon's
 paper grew; the MIT AI Memos.
+
+## Prospective index
+
+The deferred paper skeleton (`aips/deferred/paper.md`) maps onto
+planned letters. A hunting map, not a contract — letters remain
+correspondence, and the paper (Mathijs's) will cut its own chapters:
+
+1. *The dyadic machine* — Letter 1 (machine, both limits of the
+   tower, streaming = odometer); more as the definition settles.
+2. *Simulation and basic cost theorems* — awaits the simulation
+   track (AIP-2 target 3).
+3. *Graded towers: types without infinities* — planned.
+4. *The calculus and cost soundness* — planned, after the calculus
+   AIP.
+5. *Worked examples* — Letter 2 expected (zip and the oblivious
+   schedule); then FVec, mergesort, transpose.
+6. *Cursor weights, Kraft accounting, entropy* — planned with B4;
+   includes the write-head weight question [72].
+7. *Related work* — accumulates in AIP §2 sections meanwhile.

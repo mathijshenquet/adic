@@ -34,3 +34,12 @@ evaporates).
   letters.
 - Replies: Mathijs replies in chat, in the margins, or — if he
   likes — with letters of his own in the same directory.
+
+## 4. Disposition of the paper draft (2026-08-09)
+
+With this AIP accepted, the paper AIP draft defers (moved to
+`aips/deferred/paper.md`): its calls (Typst vs LaTeX, title,
+skeleton timing) become relevant only when Mathijs starts writing.
+Until then the intended chapter structure is carried by the letters
+— see the prospective index in `letters/README.md`. `typst compile`
+joins the gate when `paper/` exists, as already recorded.
