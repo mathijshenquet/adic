@@ -1,5 +1,31 @@
 # adic work log
 
+## 2026-08-10 (eve) — Kraft "weight" → "distance" decided (recovered from session tail); Expo 3 corrections applied
+
+- **Terminology decision (Mathijs, previous session tail — was
+  recorded nowhere durable until now): rename the Kraft parameter
+  $w_i$ from *weight* to *distance* $d_i$.** Rationale: "weight"
+  collides with the literature we cite (Huffman coding, biased
+  search trees / Bent–Sleator–Tarjan) where weight = *frequency* —
+  heavy = hot = cheap — while our $w$ is mount-path depth, the
+  opposite polarity. "Distance" reads correctly: far = expensive;
+  the entropy theorem becomes "frequent heads get small distance";
+  the $1+d$ surcharge is travel time, not a fee; Kraft
+  $sum 2^{-d_i} <= 1$ becomes geometry — "only so much fits
+  nearby", hot is near. Unifier: with free-up (cost = acquired
+  address bits) every cost in the system is a distance in a dyadic
+  tree — data tree for memory, fast-state tree for heads; one cost
+  notion, two trees. Mathijs: "zeker rewriten naar distance — het
+  is ook mijn intuïtie, dat ding op afstand d."
+- Execution is an OPEN work item (not yet slotted): expo 2 prose,
+  Lean naming (`weightedCost` etc.), cache-v0 doc all still say
+  weight. Good terra-shaped rename track when capacity frees.
+- Expo 3 corrections from the same tail applied + pushed this
+  session: Grothendieck construction explicit (morphisms are pairs
+  $(w,c)$; cocycle law = functoriality), $"cost"_c (w)$ component
+  notation, factorization picture "static ⇔ factors through
+  $pi : cal(C) -> B M$".
+
 ## 2026-08-10 (close) — target 3 CLOSED both directions; Expo 1 fully green; Expo 2 live
 
 - `track/lean-gibbs` merged: discrete log-sum + entropy lower bound

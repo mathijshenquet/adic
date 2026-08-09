@@ -44,14 +44,17 @@ $(NN, +, 0)$. A cost model is a functor
 $ "cost" : cal(C) arrow.r B NN. $
 
 Because a morphism of $cal(C)$ *is* a pair, a cost model is forced
-to be a function of pairs $(w, c)$ — the notation below is functor
-application, nothing ad hoc — and functoriality over the
-composition law above unpacks to exactly two laws:
+to be a function of pairs; write $"cost"_c (w)$ for its value on
+the morphism $(w, c)$ — subscript the source, nothing ad hoc.
+Functoriality over the composition law above unpacks to exactly
+two laws:
 
-$ "cost"("id") = 0, quad
-  "cost"(w_1 w_2, c) = "cost"(w_1, c) + "cost"(w_2, c dot w_1). $
+$ "cost"("id"_c) = 0, quad
+  "cost"_c (w_1 w_2) = "cost"_c (w_1) + "cost"_(c dot w_1) (w_2). $
 
-The second is the *cocycle law* — the name comes from group
+The shifted subscript is not an extra axiom — it only records that
+the second arrow of the composite starts where the first one
+landed. The second law is the *cocycle law* — the name comes from group
 cohomology (for a group action the category of elements *is* the
 translation groupoid, and functions with this law are its
 1-cocycles) and from ergodic theory,
@@ -72,13 +75,25 @@ functoriality extends it uniquely. The real cleanliness boundary
 was never "cost ignores state"; it is "cost reads only the local
 observation, from a finite table."
 
+*Static prices are a factorization.* The Grothendieck construction
+comes with a projection $pi : cal(C) arrow.r B M$,
+$(w, c) arrow.r.bar w$ — forget the state, keep the word. A cost
+model is word-only precisely when it factors as
+$cal(C) arrow.r B M arrow.r B NN$ through $pi$: functors on $B M$
+are monoid homomorphisms into $(NN, +)$, the static prices;
+functors on $cal(C)$ are the state-dependent ones. "Cost ignores
+state" stops being a property you check equation by equation and
+becomes a shape — does the functor factor? — and the conjecture
+below will say that write-back cost fails to factor even after
+correction by a coboundary.
+
 = Coboundaries are potential functions
 
 Inside the cocycles live two distinguished classes. A cocycle is a
-*homomorphism* when it factors through the free monoid — cost
-blind to state; the base machine and the mount-distance surcharge
-both live here. And a cocycle is a *coboundary* when it is
-$delta Phi (w, c) = Phi(c dot w) - Phi(c)$ for a potential $Phi$
+*homomorphism* when it factors through $pi$ — cost blind to state;
+the base machine and the mount-distance surcharge both live here.
+And a cocycle is a *coboundary* when it is
+$(delta Phi)_c (w) = Phi(c dot w) - Phi(c)$ for a potential $Phi$
 on configurations. Coboundaries are cohomology's "trivial"
 cocycles — and they are exactly the potential functions of
 amortized analysis. Two cost models differing by a coboundary
