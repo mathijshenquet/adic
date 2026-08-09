@@ -20,12 +20,29 @@ Orchestrator notes (Claude only):
   Claude stays orchestrator/designer/reviewer. Micro-fix exception:
   work may be orchestrator-direct whenever the delegation prompt would
   be longer than the fix itself, with buffer.
-- Drive progress (standing mode, Mathijs 2026-08-09): when a track
-  lands and independently verifies green, merge and launch the next
-  deliverable in roadmap order without asking — keep the trunk moving
-  while Mathijs is away. Process problems get raised explicitly and
-  promptly, never silently worked around. Taste calls still queue for
-  Mathijs; progress never waits on ones that don't block it.
+- Drive-progress (imported from composix 2026-08-09; activated
+  standing by Mathijs same day). It grants *direction*-autonomy,
+  never *decision*-autonomy: new design decisions stay joint, all
+  work lands through the normal track/gate/merge discipline, and
+  every launch is announced in chat as it starts.
+  1. **Open ends first**: any accepted-AIP or recorded open end not
+     implemented, in-flight, or explicitly slotted with a reason →
+     implement or schedule it. Blockers are surfaced, never silently
+     queued. Slots stay filled within capacity (binding constraints:
+     shared axes at gate time + genuinely independent work items).
+  2. **Dry → prospect once**: when no open ends remain, do ONE
+     codebase/design sweep for unblockers and land findings as
+     `aips/draft/` entries (linked to Mathijs by full GitHub URL).
+     Drafts are the only output — prospecting never starts
+     implementation on its own authority.
+  - Idle-state: step 1 empty and step 2 already run since the last
+    merge → the correct action is nothing; say so and wait. Every
+    merge re-arms one sweep.
+- Worker out-clause (Mathijs, 2026-08-09): every spec and every
+  substantial prompt to a worker explicitly offers the out —
+  "running into problems → say so and stop"; an honest
+  wall/blocked report is a valued deliverable, never a failure.
+  Never write a prompt that only defines success.
 - Worker discipline (herdr launch recipe, watcher + ~10-minute fallback
   heartbeat, steer/queue delivery) lives in the global context — follow
   it. Heartbeat flow, made explicit: while any worker is in flight,
