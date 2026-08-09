@@ -20,21 +20,41 @@ It is not, and this exposition says precisely what replaces it.
 
 = The cocycle law is functoriality
 
-Form the *action category* $cal(C)$ of the machine: objects are
-configurations, a morphism $c arrow.r c dot w$ is a runnable word
-$w$. Let $B NN$ be the one-object category with morphisms
+The machine's semantics is a (partial) action of the word monoid
+$M$ on the set of configurations. A monoid is a one-object
+category $B M$, and the action is a functor $B M arrow.r "Set"$:
+the single object goes to the configuration set, each word to its
+(partial) transition function. The *action category* $cal(C)$ is
+the Grothendieck construction — the category of elements — of this
+functor. Unwinding the definition: objects are configurations, and
+a morphism out of $c$ is *not* a bare word but a pair $(w, c)$ — a
+word runnable at $c$, welded to the configuration it runs from —
+with target $c dot w$ and composition
+
+$ (w_2, c dot w_1) compose (w_1, c) = (w_1 w_2, c). $
+
+The welding is the entire content of the construction: "the same
+word from a different configuration" becomes a *different
+morphism*, which is exactly the room a state-dependent cost needs
+to live in.
+
+Now let $B NN$ be the one-object category with morphisms
 $(NN, +, 0)$. A cost model is a functor
 
-$ "cost" : cal(C) arrow.r B NN, $
+$ "cost" : cal(C) arrow.r B NN. $
 
-and functoriality unpacks to exactly two laws:
+Because a morphism of $cal(C)$ *is* a pair, a cost model is forced
+to be a function of pairs $(w, c)$ — the notation below is functor
+application, nothing ad hoc — and functoriality over the
+composition law above unpacks to exactly two laws:
 
 $ "cost"("id") = 0, quad
   "cost"(w_1 w_2, c) = "cost"(w_1, c) + "cost"(w_2, c dot w_1). $
 
 The second is the *cocycle law* — the name comes from group
-cohomology (for a group action, functions with this law are the
-1-cocycles of the translation groupoid) and from ergodic theory,
+cohomology (for a group action the category of elements *is* the
+translation groupoid, and functions with this law are its
+1-cocycles) and from ergodic theory,
 where "cocycles over a dynamical system" are classical — including,
 pleasingly, cocycles over Vershik's adic transformations: the
 odometer keeps finding us.
