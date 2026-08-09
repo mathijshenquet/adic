@@ -1,0 +1,148 @@
+# The Shannon programme: what the entropy theorem opens
+
+Draft (2026-08-10, Claude, from a design conversation with Mathijs).
+Status: roadmap material — no decisions taken, ordering suggested at
+the end. Terminology follows the weight→distance rename (LOG
+2026-08-10 eve; execution in flight on `track/distance-rename`).
+
+## 1. The identification, made exact
+
+Expo 2's entropy pair is not *like* Shannon's noiseless coding
+theorem — it *is* that theorem, in machine clothing:
+
+| coding theory                    | machine                            |
+| -------------------------------- | ---------------------------------- |
+| symbol                           | head                               |
+| codeword length $\ell_i$         | distance $d_i$ (mount depth)       |
+| Kraft $\sum 2^{-\ell_i} \le 1$   | a mounting exists (antichain)      |
+| codebook                         | mounting                           |
+| message                          | access sequence                    |
+| Shannon–Fano $\lceil \log 1/p_i \rceil$ | achievability distances (receipt) |
+| source-coding converse           | Gibbs lower bound (receipt)        |
+
+The achievability assignment $d_i = \lceil \log 1/\hat p_i \rceil$
+is literally the Shannon–Fano code of 1948. (Huffman would be the
+exact integer optimum — gain strictly less than one level; worth a
+one-line remark in Expo 2, not a target.)
+
+Shannon's paper continues past this point in a famously deliberate
+order. Each of his next moves has a machine analogue, and together
+they read as a chapter order for the paper.
+
+## 2. Which space does the machine live in? (the "distance" objection)
+
+Objection (Mathijs): *distance* only reads honestly if you accept
+exponentially much room at radius $d$ — no Euclidean space has
+$2^d$ slots within distance $d$. Correct — and that space has a
+name.
+
+- **Unit level prices ($c \equiv 1$, the v0 model): hyperbolic
+  geometry.** Exponential ball growth is *the* signature of
+  hyperbolic space, and trees are its discrete archetype
+  (0-hyperbolic in Gromov's sense). Kraft is the packing law of
+  that geometry — "only so much fits nearby" is a true isoperimetric
+  statement there, and the entropy theorem is native to it.
+  Distance-as-depth is an *informational* metric: cost = address
+  bits, the logarithm of any physical distance.
+- **Level prices choose the geometry.** Price level crossings
+  $c(\ell) = 2^{\ell/k}$ and the travel to depth $n$ telescopes to
+  $\Theta(2^{n/k}) = \Theta(N^{1/k})$ for $N = 2^n$ leaves —
+  polynomial ball growth $r^k$, i.e. $k$-dimensional Euclidean
+  geometry. cache-v0 §2's stated variant $\alpha = 1/2$ (random
+  access $\Theta(\sqrt N)$) is exactly $k = 2$: the mesh/VLSI
+  metric, wire distance on a chip (Thompson's model); $k = 3$
+  gives the $N^{1/3}$ of physical volume.
+- So the price schedule is a **choice of ambient geometry**: v0
+  prices the intrinsic information geometry (hyperbolic, cost =
+  bits); physical machines live at $k = 2, 3$. "Distance" is the
+  honest word in every case — only the volume-vs-radius law
+  changes, and the machine states which law it plays under.
+- **Desk-level, to verify (Campbell):** under exponential prices
+  $c(\ell) = 2^{t\ell}$, the optimal distances shift to
+  $d_i \approx \tfrac{1}{1+t}\log(1/p_i)$ and the optimal
+  amortized cost is governed by the *Rényi* entropy of order
+  $\alpha = 1/(1+t)$ — this is Campbell's exponential-cost coding
+  theorem (1965). For the 2D chip ($t = 1/2$): $\alpha = 2/3$.
+  The dictionary extends: **level prices ↦ Rényi order**; Shannon
+  entropy is the $c \equiv 1$ fiber. Candidate later target once
+  $c(\ell) \ne 1$ enters the mechanization.
+
+## 3. Move 1 — sources with memory (entropy rate; the dynamic frontier)
+
+Shannon's immediate next step: real sources are not i.i.d.; the
+true compressibility is the entropy *rate*, below the marginal
+entropy, the gap being predictability from context (Markov sources,
+AEP/typical sequences).
+
+Machine analogue: access sequences have locality and phases; static
+mounting only reaches $n(1 + H(\hat p))$ — the marginal. The
+machinery for beating it is already mechanized: re-mounting =
+reset + re-select (target 3 canonicalization). Candidate theorem
+(block adaptivity): re-mounting per block on a sequence with block
+empirical entropies $H_j$ costs
+$\sum_j n_j(1 + H_j) + O(\text{re-mount})$, which beats global $H$
+whenever the source is nonstationary. This is precisely the
+static→dynamic optimality trajectory of the BST literature
+(Bent–Sleator–Tarjan → splay); the AEP analogue says almost every
+sequence of a stationary ergodic access process costs
+$\approx n(1 + H_{\text{rate}})$.
+
+## 4. Move 2 — universal mounting (the post-Shannon lineage)
+
+Shannon assumed known statistics; the field's next leap achieved
+entropy *without* them (Lempel–Ziv, universal coding; for trees:
+splay's static-optimality theorem). Machine analogue, the most
+adic-native of the four: an **online re-mounting rule** (move-to-
+front-style promotion in the fast-state tree) competitive with the
+best static mounting in hindsight. cache-v0's promotion rules are
+embryonically this — the machine's LZ. Candidate: online rule with
+cost $\le c \cdot \mathrm{OPT}_{\text{static}} + O(\cdot)$.
+
+## 5. Move 3 — the machine is a unit-capacity channel
+
+Shannon Part I defines noiseless capacity
+$C = \lim \log N(T) / T$ — distinguishable signals per unit time.
+For the machine, free-up (AIP-2 amendment) makes cost = address
+bits acquired, so a cost budget $T$ reaches at most $2^T$ distinct
+addresses: $N(T) = 2^T$, i.e. **$C = 1$ exactly — by
+normalization, not by theorem.** Free-up was secretly the choice
+to measure cost in channel bits.
+
+Reading: *addressing is communication.* Touching head $i$
+transmits its identity into the tree — the $d_i$-step walk is the
+codeword being sent, the mounting is the codebook. Shannon's
+fundamental ratio (max symbol rate = $C/H$) becomes: accesses per
+unit cost $\to 1/(1 + H)$ — the mechanized entropy theorem *is*
+the $C/H$ identity at $C = 1$, the $+1$ being per-symbol overhead
+(the touch itself; a start bit). Separation-theorem reading:
+program = source (statistics), geometry = channel (prices),
+mounting = the code at their interface — "cost of an algorithm =
+entropy of its access stream" is a separation statement.
+
+Speculative tail: the *noisy* analogue enters where cost becomes
+history-dependent — the write-back cocycle. Channels with memory
+famously lack single-letter capacity formulas; Expo 3's conjecture
+("bandwidth cannot be statically priced" — the class is not a
+coboundary off a homomorphism) has exactly that flavor. Left as a
+resonance, not a target.
+
+## 6. Move 4 — rate–distortion (bounded near-space)
+
+Shannon's Part V: fidelity criteria. Machine analogue: Kraft is a
+hard capacity, and once the fast-state tree has bounded depth you
+cannot give everyone $d_i = \log 1/p_i$; minimum average travel
+under a nearby-slots budget is a rate–distortion function, and
+eviction is lossy compression of the working set. This is where
+cache-v0 was already heading; the k-way cliff is plausibly the
+distortion threshold in that picture.
+
+## 7. Suggested order
+
+1. Move 1 (block-adaptive re-mounting = entropy rate): natural next
+   theorem, building blocks mechanized.
+2. Move 2 (universal mounting): most machine-native; feeds cache-v0
+   directly.
+3. Move 3's identity ($C = 1$, accesses per cost $= 1/(1+H)$): a
+   free paragraph for Expo 2 / the paper — no new mechanization.
+4. §2's geometry (level prices ↦ Rényi order): with cache-v0 v1
+   ($c(\ell) \ne 1$).

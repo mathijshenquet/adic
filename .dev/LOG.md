@@ -17,9 +17,21 @@
   tree — data tree for memory, fast-state tree for heads; one cost
   notion, two trees. Mathijs: "zeker rewriten naar distance — het
   is ook mijn intuïtie, dat ding op afstand d."
-- Execution is an OPEN work item (not yet slotted): expo 2 prose,
-  Lean naming (`weightedCost` etc.), cache-v0 doc all still say
-  weight. Good terra-shaped rename track when capacity frees.
+- Execution: `track/distance-rename` (sol, ~7 min) MERGED —
+  context-aware sweep (Lean `Weighted.lean`→`Distance.lean`,
+  `weightedCost`→`distCost`; expo 2 → "Heads at a distance";
+  cache-v0/roadmap/paper docs; false friends like typst font
+  weight left alone). All 8 pins re-read at merge (pure
+  α-renames), gate independently re-run green (build + 32
+  receipts + sim + all typst, core axioms only).
+- `aips/draft/shannon-programme.md` landed: expo 2's entropy pair
+  identified as the source coding theorem; four programme moves
+  (entropy rate via re-mounting; universal mounting; machine as
+  unit-capacity channel, C=1 by free-up normalization;
+  rate–distortion for bounded near-space) + the geometry answer
+  to Mathijs's distance objection (unit prices = hyperbolic;
+  c(ℓ)=2^(ℓ/k) = k-dim Euclidean, √N = 2D/VLSI; Campbell/Rényi
+  under exponential prices — desk, verify).
 - Expo 3 corrections from the same tail applied + pushed this
   session: Grothendieck construction explicit (morphisms are pairs
   $(w,c)$; cocycle law = functoriality), $"cost"_c (w)$ component
