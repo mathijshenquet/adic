@@ -376,6 +376,282 @@ theorem pointerOfHead_up (bit : Bool) (cursor : Cursor (n + 1) (remaining + 1)) 
   · exact pointerAddress_up bit cursor
   · cases bit <;> simp [pointerOfHead, headPath, Cursor.path_left, Cursor.path_right]
 
+theorem pointerOfHead_down_at (bit : Bool) (cursor : Cursor n (remaining + 1)) :
+    { address := Path.shiftLeft n (pointerOfHead ⟨remaining + 1, cursor⟩).address bit
+      depth := ⟨(pointerOfHead ⟨remaining + 1, cursor⟩).depth.val + 1, by
+        simp only [pointerOfHead, Fin.val_mk, headPath]
+        have hlength := headPath_length (⟨remaining + 1, cursor⟩ : Head n)
+        simp [headPath] at hlength
+        omega⟩ } = pointerOfHead ⟨remaining, if bit then Cursor.right cursor else Cursor.left cursor⟩ := by
+  cases n with
+  | zero =>
+      exfalso
+      have hlength := Cursor.reversePath_length cursor
+      omega
+  | succ n => exact pointerOfHead_down bit cursor
+
+theorem pointerOfHead_up_at (bit : Bool) (cursor : Cursor n (remaining + 1)) :
+    { address := Path.shiftRight n
+        (pointerOfHead ⟨remaining, if bit then Cursor.right cursor else Cursor.left cursor⟩).address
+      depth := ⟨(pointerOfHead ⟨remaining, if bit then Cursor.right cursor else Cursor.left cursor⟩).depth.val - 1,
+        by omega⟩ } = pointerOfHead ⟨remaining + 1, cursor⟩ := by
+  cases n with
+  | zero =>
+      exfalso
+      have hlength := Cursor.reversePath_length cursor
+      omega
+  | succ n => exact pointerOfHead_up bit cursor
+
+theorem simulate_read (head : Fin k) (config next : ActionConfig n k)
+    (hstep : actionStep ⟨head, .read⟩ config = some next) :
+    ∃ target,
+      runRegisterRam (actionRamProgram n ⟨head, .read⟩) (registerEncode head config) = some target ∧
+        RegisterRep next target := by
+  cases hread : readSelected config head with
+  | none => simp [actionStep, checkRead, hread] at hstep
+  | some bit =>
+    simp [actionStep, checkRead, hread] at hstep
+    subst next
+    let target : RegisterRamConfig n k :=
+      { registerEncode head config with
+        accumulator := wordAt n (registerEncode head config).memory
+          (pointerOfHead (config.heads head)).address }
+    refine ⟨target, ?_, ?_⟩
+    · simp [target, actionRamProgram, runRegisterRam, registerStep, RegisterRamConfig.core,
+        ramStep, registerEncode]
+    · constructor
+      · simp [target, registerEncode]
+      · intro pointer
+        simp [target, registerEncode]
+
+theorem simulate_write0 (head : Fin k) (config next : ActionConfig n k)
+    (hstep : actionStep ⟨head, .write0⟩ config = some next) :
+    ∃ target,
+      runRegisterRam (actionRamProgram n ⟨head, .write0⟩)
+          (registerEncode head config) = some target ∧
+        RegisterRep next target := by
+  rcases hhead : config.heads head with ⟨remaining, cursor⟩
+  cases remaining with
+  | succ remaining =>
+      simp [actionStep, writeSelected, selectedLeaf, leafPosition, hhead] at hstep
+  | zero =>
+      have hwrite : Tree.writeAt n config.memory cursor.path false =
+          some (bitMemory n
+            (writeWord n (asBitRamMemory n config.memory) (pointerAddress ⟨0, cursor⟩) false)) := by
+        rw [← pointerAddress_leaf cursor]
+        simpa using writeAt_writeWord (asBitRamMemory n config.memory)
+          (pointerAddress ⟨0, cursor⟩) false
+      simp [actionStep, writeSelected, selectedLeaf, leafPosition, hhead, hwrite] at hstep
+      subst next
+      let target : RegisterRamConfig n k :=
+        { registerEncode head config with
+          memory := writeWord n (asBitRamMemory n config.memory) (pointerAddress ⟨0, cursor⟩) false
+          accumulator := false }
+      refine ⟨target, ?_, ?_⟩
+      · simp [target, actionRamProgram, runRegisterRam, registerStep, RegisterRamConfig.core,
+          ramStep, registerEncode]
+        rw [hhead]
+        rfl
+      · constructor
+        · simp [target]
+        · intro pointer
+          exact (registerEncode_rep head config).2 pointer
+
+theorem simulate_write1 (head : Fin k) (config next : ActionConfig n k)
+    (hstep : actionStep ⟨head, .write1⟩ config = some next) :
+    ∃ target,
+      runRegisterRam (actionRamProgram n ⟨head, .write1⟩)
+          (registerEncode head config) = some target ∧
+        RegisterRep next target := by
+  rcases hhead : config.heads head with ⟨remaining, cursor⟩
+  cases remaining with
+  | succ remaining =>
+      simp [actionStep, writeSelected, selectedLeaf, leafPosition, hhead] at hstep
+  | zero =>
+      have hwrite : Tree.writeAt n config.memory cursor.path true =
+          some (bitMemory n
+            (writeWord n (asBitRamMemory n config.memory) (pointerAddress ⟨0, cursor⟩) true)) := by
+        rw [← pointerAddress_leaf cursor]
+        simpa using writeAt_writeWord (asBitRamMemory n config.memory)
+          (pointerAddress ⟨0, cursor⟩) true
+      simp [actionStep, writeSelected, selectedLeaf, leafPosition, hhead, hwrite] at hstep
+      subst next
+      let target : RegisterRamConfig n k :=
+        { registerEncode head config with
+          memory := writeWord n (asBitRamMemory n config.memory) (pointerAddress ⟨0, cursor⟩) true
+          accumulator := true }
+      refine ⟨target, ?_, ?_⟩
+      · simp [target, actionRamProgram, runRegisterRam, registerStep, RegisterRamConfig.core,
+          ramStep, registerEncode]
+        rw [hhead]
+        rfl
+      · constructor
+        · simp [target]
+        · intro pointer
+          exact (registerEncode_rep head config).2 pointer
+
+theorem simulate_down0 (head : Fin k) (config next : ActionConfig n k)
+    (hstep : actionStep ⟨head, .down0⟩ config = some next) :
+    ∃ target,
+      runRegisterRam (actionRamProgram n ⟨head, .down0⟩) (registerEncode head config) = some target ∧
+        RegisterRep next target := by
+  rcases hhead : config.heads head with ⟨remaining, cursor⟩
+  cases remaining with
+  | zero => simp [actionStep, moveSelected, step, moveDown0, hhead] at hstep
+  | succ remaining =>
+      simp [actionStep, moveSelected, step, moveDown0, hhead] at hstep
+      subst next
+      have hdepth : (pointerOfHead (⟨remaining + 1, cursor⟩ : Head n)).depth.val < n := by
+        simp only [pointerOfHead, Fin.val_mk, headPath]
+        have hlength := headPath_length (⟨remaining + 1, cursor⟩ : Head n)
+        simp [headPath] at hlength
+        omega
+      let target : RegisterRamConfig n k :=
+        { registerEncode head config with
+          address := (pointerOfHead ⟨remaining, Cursor.left cursor⟩).address
+          activeDepth := (pointerOfHead ⟨remaining, Cursor.left cursor⟩).depth
+          pointers := setPointer (registerEncode head config).pointers head
+            (pointerOfHead ⟨remaining, Cursor.left cursor⟩) }
+      refine ⟨target, ?_, ?_⟩
+      · simp [target, actionRamProgram, runRegisterRam, registerStep, registerEncode]
+        rw [hhead, dif_pos hdepth]
+        simp
+        have hpointer :
+            { address := Path.shiftLeft n (pointerOfHead ⟨remaining + 1, cursor⟩).address false
+              depth := ⟨(pointerOfHead ⟨remaining + 1, cursor⟩).depth.val + 1, by omega⟩ } =
+              pointerOfHead ⟨remaining, Cursor.left cursor⟩ := by
+          simpa using pointerOfHead_down_at false cursor
+        exact ⟨congrArg RamPointer.address hpointer, congrArg RamPointer.depth hpointer,
+          congrArg (setPointer (fun pointer => pointerOfHead (config.heads pointer)) head) hpointer⟩
+      · constructor
+        · simp [target, registerEncode]
+        · intro pointer
+          by_cases hpointer : pointer = head
+          · subst pointer
+            simp [target, registerEncode, hhead]
+          · simp [target, registerEncode, setPointer_ne, hpointer]
+
+theorem simulate_down1 (head : Fin k) (config next : ActionConfig n k)
+    (hstep : actionStep ⟨head, .down1⟩ config = some next) :
+    ∃ target,
+      runRegisterRam (actionRamProgram n ⟨head, .down1⟩) (registerEncode head config) = some target ∧
+        RegisterRep next target := by
+  rcases hhead : config.heads head with ⟨remaining, cursor⟩
+  cases remaining with
+  | zero => simp [actionStep, moveSelected, step, moveDown1, hhead] at hstep
+  | succ remaining =>
+      simp [actionStep, moveSelected, step, moveDown1, hhead] at hstep
+      subst next
+      have hdepth : (pointerOfHead (⟨remaining + 1, cursor⟩ : Head n)).depth.val < n := by
+        simp only [pointerOfHead, Fin.val_mk, headPath]
+        have hlength := headPath_length (⟨remaining + 1, cursor⟩ : Head n)
+        simp [headPath] at hlength
+        omega
+      let target : RegisterRamConfig n k :=
+        { registerEncode head config with
+          address := (pointerOfHead ⟨remaining, Cursor.right cursor⟩).address
+          activeDepth := (pointerOfHead ⟨remaining, Cursor.right cursor⟩).depth
+          pointers := setPointer (registerEncode head config).pointers head
+            (pointerOfHead ⟨remaining, Cursor.right cursor⟩) }
+      refine ⟨target, ?_, ?_⟩
+      · simp [target, actionRamProgram, runRegisterRam, registerStep, registerEncode]
+        rw [hhead, dif_pos hdepth]
+        simp
+        have hpointer :
+            { address := Path.shiftLeft n (pointerOfHead ⟨remaining + 1, cursor⟩).address true
+              depth := ⟨(pointerOfHead ⟨remaining + 1, cursor⟩).depth.val + 1, by omega⟩ } =
+              pointerOfHead ⟨remaining, Cursor.right cursor⟩ := by
+          simpa using pointerOfHead_down_at true cursor
+        exact ⟨congrArg RamPointer.address hpointer, congrArg RamPointer.depth hpointer,
+          congrArg (setPointer (fun pointer => pointerOfHead (config.heads pointer)) head) hpointer⟩
+      · constructor
+        · simp [target, registerEncode]
+        · intro pointer
+          by_cases hpointer : pointer = head
+          · subst pointer
+            simp [target, registerEncode, hhead]
+          · simp [target, registerEncode, setPointer_ne, hpointer]
+
+theorem simulate_up_from (bit : Bool) (parent : Cursor n (remaining + 1))
+    (head : Fin k) (config next : ActionConfig n k)
+    (hhead : config.heads head =
+      ⟨remaining, if bit then Cursor.right parent else Cursor.left parent⟩)
+    (hstep : actionStep ⟨head, .up⟩ config = some next) :
+    ∃ target,
+      runRegisterRam (actionRamProgram n ⟨head, .up⟩) (registerEncode head config) = some target ∧
+        RegisterRep next target := by
+  have hnext : { config with heads := setHead config.heads head ⟨remaining + 1, parent⟩ } = next := by
+    cases bit <;> simpa [actionStep, moveSelected, step, moveUp, hhead] using hstep
+  subst next
+  have hdepth : 0 <
+      (pointerOfHead ⟨remaining, if bit then Cursor.right parent else Cursor.left parent⟩).depth.val := by
+    cases bit <;> simp [pointerOfHead, headPath, Cursor.path_left, Cursor.path_right]
+  let target : RegisterRamConfig n k :=
+    { registerEncode head config with
+      address := (pointerOfHead ⟨remaining + 1, parent⟩).address
+      activeDepth := (pointerOfHead ⟨remaining + 1, parent⟩).depth
+      pointers := setPointer (registerEncode head config).pointers head
+        (pointerOfHead ⟨remaining + 1, parent⟩) }
+  refine ⟨target, ?_, ?_⟩
+  · simp [target, actionRamProgram, runRegisterRam, registerStep, registerEncode]
+    rw [hhead, dif_pos hdepth]
+    simp
+    have hpointer :
+        { address := Path.shiftRight n
+            (pointerOfHead ⟨remaining, if bit then Cursor.right parent else Cursor.left parent⟩).address
+          depth := ⟨(pointerOfHead ⟨remaining, if bit then Cursor.right parent else Cursor.left parent⟩).depth.val - 1,
+            by omega⟩ } = pointerOfHead ⟨remaining + 1, parent⟩ :=
+      pointerOfHead_up_at bit parent
+    exact ⟨congrArg RamPointer.address hpointer, congrArg RamPointer.depth hpointer,
+      congrArg (setPointer (fun pointer => pointerOfHead (config.heads pointer)) head) hpointer⟩
+  · constructor
+    · simp [target, registerEncode]
+    · intro pointer
+      by_cases hpointer : pointer = head
+      · subst pointer
+        simp [target, registerEncode]
+      · simp [target, registerEncode, setPointer_ne, hpointer]
+
+theorem simulate_up (head : Fin k) (config next : ActionConfig n k)
+    (hstep : actionStep ⟨head, .up⟩ config = some next) :
+    ∃ target,
+      runRegisterRam (actionRamProgram n ⟨head, .up⟩) (registerEncode head config) = some target ∧
+        RegisterRep next target := by
+  rcases hhead : config.heads head with ⟨remaining, cursor⟩
+  cases cursor with
+  | root => simp [actionStep, moveSelected, step, moveUp, hhead] at hstep
+  | left parent => exact simulate_up_from false parent head config next hhead hstep
+  | right parent => exact simulate_up_from true parent head config next hhead hstep
+
+theorem ram_action_simulation :
+    ∃ c, ∀ (action : AddressedOp k) (config next : ActionConfig n k),
+      actionStep action config = some next →
+        ∃ target,
+          runRegisterRam (actionRamProgram n action) (registerEncode action.head config) = some target ∧
+            RegisterRep next target ∧ registerRamCost (actionRamProgram n action) ≤ c := by
+  refine ⟨3, ?_⟩
+  intro action config next hstep
+  rcases action with ⟨head, operation⟩
+  cases operation
+  case up =>
+    obtain ⟨target, hrun, hrep⟩ := simulate_up head config next hstep
+    exact ⟨target, hrun, hrep, actionRamProgram_cost n ⟨head, .up⟩⟩
+  case down0 =>
+    obtain ⟨target, hrun, hrep⟩ := simulate_down0 head config next hstep
+    exact ⟨target, hrun, hrep, actionRamProgram_cost n ⟨head, .down0⟩⟩
+  case down1 =>
+    obtain ⟨target, hrun, hrep⟩ := simulate_down1 head config next hstep
+    exact ⟨target, hrun, hrep, actionRamProgram_cost n ⟨head, .down1⟩⟩
+  case read =>
+    obtain ⟨target, hrun, hrep⟩ := simulate_read head config next hstep
+    exact ⟨target, hrun, hrep, actionRamProgram_cost n ⟨head, .read⟩⟩
+  case write0 =>
+    obtain ⟨target, hrun, hrep⟩ := simulate_write0 head config next hstep
+    exact ⟨target, hrun, hrep, actionRamProgram_cost n ⟨head, .write0⟩⟩
+  case write1 =>
+    obtain ⟨target, hrun, hrep⟩ := simulate_write1 head config next hstep
+    exact ⟨target, hrun, hrep, actionRamProgram_cost n ⟨head, .write1⟩⟩
+
 @[simp] theorem wordAt_repeatWord (address : RamAddress s) (word : RamWord v) :
     wordAt s (repeatWord s word) address = word := by
   induction s with
@@ -824,5 +1100,6 @@ theorem ram_program_simulation (program : RamProgram s) (config : RamConfig s v)
 #print axioms simulate_instruction
 #print axioms compileProgram_cost
 #print axioms ram_program_simulation
+#print axioms ram_action_simulation
 
 end Adic.Dyadic
