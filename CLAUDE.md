@@ -23,5 +23,10 @@ Orchestrator notes (Claude only):
 - Worker discipline (herdr launch recipe, watcher + ~10-minute fallback
   heartbeat, steer/queue delivery) lives in the global context — follow
   it.
-- Standing grants: none yet. Commit/push/merge autonomy for this repo
-  is an open item with Mathijs, not inherited from composix.
+- Standing grants (Mathijs, 2026-08-09): commit + push to main for
+  AIP/docs/LOG work — Mathijs reads on GitHub, so conversation-driven
+  doc updates should land there promptly without asking. Merge of
+  code tracks: still per-instruction. Caution: gitsitter auto-pushes
+  within seconds of a commit on main — check `git ls-remote` before
+  amending, and never amend what the remote already has (unless
+  deliberately rewriting, then `--force-with-lease`).
