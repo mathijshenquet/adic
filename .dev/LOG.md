@@ -1,5 +1,30 @@
 # adic work log
 
+## 2026-08-09 (late night) — zip green, merged; fvec launched; Letter 2
+
+- `track/lean-zip` (sol, 14 min, 440 lines): zip as oblivious
+  schedule exactly per spec — `interleave` semantics with readable
+  `leafBits` lemma, shape-independence via `OperationShape` (write
+  bits collapsed, so "oblivious" is a theorem, not a remark), exact
+  cost `20·2^n − 12`, correctness over arbitrary initial output with
+  heads returned to start. Re-verified independently (clean rebuild,
+  five theorems core-axioms-only, zero sorry); merged (`60eff47`).
+  Ladder step 1 done.
+- Letters are now Typst (Mathijs: "al stukjes formalized proza
+  math"); Letter 1 converted + compiles; gate includes letters.
+  Paper draft deferred to `aips/deferred/` earlier tonight.
+- Launched `track/lean-fvec` (spec `.dev/specs/lean-fvec.md`):
+  streaming copy as oblivious schedule + the telescoping doubling
+  bound — ladder step 2, the machine half of FVec's amortized push.
+- Letter 2 written: "The bilimit, refused" — Smyth–Plotkin
+  limit-colimit coincidence + Freyd algebraic compactness +
+  Fiore/partial maps as the categorical mechanism of the extensional
+  collapse ([0]–[3]); domain theory as adic's image under cost
+  erasure; cost-grading as the obstruction keeping Ind and Pro
+  apart (theorem-shaped: no cost-bounded cone over the projection
+  chain). Sparked by Mathijs's limits question.
+- **Open with Mathijs**: roadmap q2; Letters 1–2; veto window 5/7.
+
 ## 2026-08-09 (night, cont.) — paper draft deferred into letters
 
 - Mathijs: with AIP-3, the paper draft's calls dissolve/defer — he
