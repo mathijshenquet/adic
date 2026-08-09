@@ -57,15 +57,27 @@ name.
   bits); physical machines live at $k = 2, 3$. "Distance" is the
   honest word in every case — only the volume-vs-radius law
   changes, and the machine states which law it plays under.
-- **Desk-level, to verify (Campbell):** under exponential prices
-  $c(\ell) = 2^{t\ell}$, the optimal distances shift to
-  $d_i \approx \tfrac{1}{1+t}\log(1/p_i)$ and the optimal
-  amortized cost is governed by the *Rényi* entropy of order
-  $\alpha = 1/(1+t)$ — this is Campbell's exponential-cost coding
-  theorem (1965). For the 2D chip ($t = 1/2$): $\alpha = 2/3$.
-  The dictionary extends: **level prices ↦ Rényi order**; Shannon
-  entropy is the $c \equiv 1$ fiber. Candidate later target once
-  $c(\ell) \ne 1$ enters the mechanization.
+- **Verified with corrections (campbell-renyi report, 2026-08-10;
+  see `aips/draft/campbell-renyi.md`):** under exponential prices
+  $c(\ell) = 2^{t\ell}$ the *Rényi order claim survives*:
+  $\alpha = 1/(1+t)$, with the optimal mount shares the escort
+  distribution $r_i = p_i^\alpha / Z_\alpha$. Two repairs to the
+  original slogan: the optimal distances are
+  $d_i^* = \log_2 Z_\alpha - \alpha \log_2 p_i$ — the escort
+  offset $\log_2 Z_\alpha$ is what makes Kraft tight, not
+  optional — and the optimal *value* is affine in
+  $2^{t H_\alpha}$ (Campbell's functional is the normalized log of
+  the exponential moment, not raw travel). Kraft itself is
+  untouched. For the 2D chip ($t = 1/2$): $\alpha = 2/3$. The
+  dictionary extends: **level prices ↦ Rényi order**; Shannon
+  entropy is the $c \equiv 1$ fiber. Also repaired there: at
+  $c(\ell) = 2^\ell$ ($s = 1$) random access matches the tape but
+  streaming does NOT (the dyadic sweep pays $\Theta(N \log N)$) —
+  the tape identification holds for access, not for sweeps. The
+  report carries the discrete/ℕ formulation (rational $t = a/b$
+  via macro-levels), a six-rung Lean ladder (hard rung:
+  denominator-cleared natural Hölder), and an honest *negative*
+  verdict on the WBE metabolic rhyme (shallow — see its §8).
 
 ### Folklore anchors: how storage cost scales with size (2026-08-10)
 
@@ -102,8 +114,11 @@ laws the geometry section should be able to absorb or predict:
   with our Rényi order $k/(k+1)$ at $k = 3$; both drop out of
   Lagrange over geometric tree levels. The mammal heartbeat
   invariant ($\sim 10^9$ per life, rate $\propto M^{-1/4}$ ×
-  lifespan $\propto M^{1/4}$) is the amortized form. Open desk
-  question: is WBE a Campbell-type coding theorem in disguise?
+  lifespan $\propto M^{1/4}$) is the amortized form. RESOLVED
+  NEGATIVE (campbell-renyi report §8, 2026-08-10): the WBE
+  optimization is not a Campbell problem after a change of
+  variables — the exponent coincidence is shallow. Kept here as a
+  closed question so it is not re-opened by accident.
 - **Fractal dial**: $c(\ell) = 2^{\ell/s}$ realizes ball growth
   $r^s$ for any real $s > 0$ — non-integer $s$ is an honest
   fractal ambient dimension, $s \to \infty$ recovers the
