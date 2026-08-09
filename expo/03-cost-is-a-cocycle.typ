@@ -104,15 +104,19 @@ agree on every closed walk and differ only by boundary terms:
 Amortization-as-normalization (convo [21]) becomes: choose the
 cleanest representative of your class.
 
-#deskthm(title: "Free up is a change of representative")[
+#leanthm(
+  "Adic.Dyadic.freeUp_exchange",
+  pin: "0dc16bd7115b",
+  title: "Free up is a change of representative",
+)[
   Let $Phi$ = current depth of the head. On movement words,
-  $ 2 dot "cost"_"free" = "cost"_"sym" + delta Phi $
-  exactly (down: $2 = 1 + 1$; up: $0 = 1 - 1$). The free-`up`
-  amendment did not change the cohomology class of movement cost —
-  it chose a cleaner representative, and the boundary term
-  $Phi lt.eq n$ is the familiar "moves ≤ 2·cost + initial depth"
-  safety argument. Elementary; a mechanization would be a short
-  induction on words.
+  $2 dot "cost"_"free" + Phi("initial") =
+  "cost"_"sym" + Phi("final")$ exactly (down: $2 = 1 + 1$;
+  up: $0 = 1 - 1$). The free-`up` amendment did not change the
+  cohomology class of movement cost — it chose a cleaner
+  representative, and the boundary term is the familiar
+  "moves ≤ 2·cost + initial depth" safety argument. Lean proves
+  this by induction on words.
 ]
 
 = Bandwidth is a nontrivial class (desk-proved)
