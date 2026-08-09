@@ -1,5 +1,35 @@
 # adic work log
 
+## 2026-08-10 (cont.) — kraft, entropy-upper, reverse-per-action all merged
+
+- Merged, each independently gate-verified: `track/lean-kraft` (B4
+  phase 1: weighted cost, kraft_iff_mounting both directions with
+  constructive mounting, weighted zip + [59] example);
+  `track/lean-ram-reverse` (terra: fixed-register word RAM,
+  three-rung lemma ladder, ram_action_simulation — ≤3 instructions
+  per D action; program lift honestly deferred on a transient-
+  register compositional relation); `track/lean-entropy` (B4 phase
+  2 upper bound: inverse-frequency weights Kraft-feasible, exact
+  empirical cost, floor-log bound; lower bound honestly walled on
+  the discrete Gibbs/log-sum inequality — not weakened). Ledger at
+  27 receipts; ledger merge conflicts resolved by manifest union +
+  deterministic regeneration.
+- Expo 1 updated: reverse-per-action now a green pinned claim;
+  program lift stays desk-badged. The ledger-as-exposition
+  mechanism did its job visibly.
+- Terra calibration (Mathijs asked): capable Lean executor for
+  decomposed ladders, does not self-structure, zero false greens
+  under receipts discipline — model table updated + deployed.
+- In flight: sol on `track/lean-gibbs` (discrete log-sum via the
+  counting/prefix-code route + the entropy lower bound). Terra
+  idle — no remaining well-scoped independent item; per
+  drive-progress idle rule, correct action is nothing.
+- Queue: Expo 2 (weighted heads/Kraft — Claude), letters→expo
+  reformulation (Claude), phase 3 k-way witness (needs k-way merge
+  machinery — spec design first), program-level reverse lift.
+- **Open with Mathijs**: Expo 1 corrections; cache-v0 rev 2 (call
+  2); roadmap q2; Letter 2 closing question; veto 5/7.
+
 ## 2026-08-10 — receipts + sim merged; Expo 1 live; two tracks in flight
 
 - Drive-progress activated by Mathijs. Two workers parallel since:
