@@ -2,9 +2,10 @@
 
 #expo(3, "Cost is a cocycle", "2026-08-10")[
 
-_No Lean in this one — it is design theory ahead of the
-mechanization, and it wears the honest badges to prove it. Its
-claims are exactly the ones a future track should turn green._
+_Born as design theory ahead of the mechanization; the first box
+has since turned green (the free-up identity, mechanized
+2026-08-10). The remaining badges are honest — amber is
+desk-proved, and each is a worklist item for a future track._
 
 The machine's original cost model had a property so simple it was
 easy to mistake for essential: the cost of a run depended only on
