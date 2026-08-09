@@ -9,7 +9,7 @@
 #let demo-receipts = (
   (
     name: "Adic.Dyadic.streaming",
-    statement: "theorem streaming (n : Nat) :\n    cost (euler n) ≤ 4 * 2 ^ n ∧\n    run (euler n) (rootHead n) = some (rootHead n) ∧\n    leafVisits (euler n) (rootHead n) = some (leftToRightLeaves n) ∧\n    (leftToRightLeaves n).length = 2 ^ n",
+    statement: "theorem streaming (n : Nat) :\n    cost (euler n) ≤ 2 * 2 ^ n ∧\n    run (euler n) (rootHead n) = some (rootHead n) ∧\n    leafVisits (euler n) (rootHead n) = some (leftToRightLeaves n) ∧\n    (leftToRightLeaves n).length = 2 ^ n",
     axioms: ("propext", "Quot.sound"),
     hash: "demo-hand-pasted",
   ),
@@ -29,7 +29,7 @@ to audit anything yet.
   receipts: demo-receipts,
 )[
   A full left-to-right scan of the $2^n$ leaves costs at most
-  $4 dot 2^n$: the Euler word succeeds from the root, returns to the
+  $2 dot 2^n$: the Euler word succeeds from the root, returns to the
   root, and visits exactly the leaves, in order, once each.
 ]
 
