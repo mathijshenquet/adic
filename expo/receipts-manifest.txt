@@ -37,3 +37,7 @@ Adic.Dyadic.exchange_append
 Adic.Dyadic.freeUp_exchange
 Adic.Dyadic.freeUp_exchange_form
 Adic.Dyadic.freeUp_safety_bound
+Adic.Dyadic.adaptiveCost_entropy_upper
+Adic.Dyadic.skewedFour_adaptive_exact
+Adic.Dyadic.skewedFour_static_gibbs_lower
+Adic.Dyadic.adaptive_beats_static

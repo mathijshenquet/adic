@@ -186,4 +186,24 @@
   "theorem freeUp_safety_bound {n : Nat} (word : Word) (head final : Head n)\n  (hrun : run word head = some final) :\n  symCost word ≤ 2 * cost word + depth head",
   "name": "Adic.Dyadic.freeUp_safety_bound",
   "hash": "04916a62de94",
-  "axioms": ["Quot.sound", "propext"]}]
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem adaptiveCost_entropy_upper {k : Nat}\n  (blocks : List (List (Fin k))) :\n  adaptiveCost blocks ≤\n    (List.map (fun block => blockFloorLog block + 2 * block.length)\n          blocks).sum +\n      totalRemountCost blocks",
+  "name": "Adic.Dyadic.adaptiveCost_entropy_upper",
+  "hash": "34809a64fcef",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem skewedFour_adaptive_exact : adaptiveCost skewedFourBlocks = 664",
+  "name": "Adic.Dyadic.skewedFour_adaptive_exact",
+  "hash": "0edb196efef2",
+  "axioms": ["propext"]},
+ {"statement":
+  "theorem skewedFour_static_gibbs_lower (dists : Dists 4)\n  (hKraft : KraftOk dists) : 512 ≤ touchCost dists skewedFourTouches",
+  "name": "Adic.Dyadic.skewedFour_static_gibbs_lower",
+  "hash": "603be3d1f1a5",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem adaptive_beats_static (dists : Dists 4) (hKraft : KraftOk dists) :\n  adaptiveCost skewedFourBlocks < touchCost dists skewedFourTouches",
+  "name": "Adic.Dyadic.adaptive_beats_static",
+  "hash": "51b204ecbcfc",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]}]
