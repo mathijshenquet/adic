@@ -89,6 +89,24 @@ Kraft analysis); this AIP freezes the v0 slice to mechanize.
    the answer belongs to the size refinement, not to v0 guesswork.
    — rec: record, defer to the size-weighted v1.
 
+## 4b. The dirty-up refinement (Mathijs musing, 2026-08-10 — open)
+
+With free `up` (AIP-2 amendment), `down` = fill and `up` = commit:
+a *clean* up is a free discard, a *dirty* up (writes below since
+the descent) would pay a write-back and propagate dirtiness to the
+parent. Machinery: a dirty marking on nodes; total write-back cost
+of a written region ≈ its size — sound. Payoff worth weighing:
+under dirty-up pricing, zip's write head pays its ups while the
+read heads don't — the read/write asymmetry of real hierarchies
+falls out of the base machine, and **[72] may resolve here rather
+than in the weight layer** ("writes twice the data" becomes "pays
+write-backs"), no Kraft choice needed. Pricing principle behind
+the whole family: free is admissible exactly for
+potential-consuming operations (up consumes depth); read/write/
+down can repeat in place and must stay paid. Status: Mathijs
+thinking it over; the unconditional-free-up retrofit lands first
+(it is the read-only fiber of this model, nothing is thrown away).
+
 ## 5. Sequencing
 
 Mechanization track (after Mathijs reads this rev): weighted cost
