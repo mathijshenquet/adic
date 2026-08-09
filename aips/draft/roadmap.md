@@ -45,6 +45,29 @@ the cost lemmas).
   simulator-checked / mechanized) is the basket, not a berry — per
   the paper AIP.
 
+### Worked-examples ladder (2026-08-09)
+
+The convo's discriminating examples, split by axis: their *cost*
+side is cheap now (programs written directly as machine words; the
+bounds are corollaries of B2's lemmas) and stress-tests AIP-2 before
+the calculus exists; their *correctness* side waits for the calculus
+(decode maps are what it is for — raw-machine correctness proofs
+would be redone).
+
+1. **zip** (convo [52]–[59]) — first real machine program with a
+   proven cost bound; first genuine use of theorem 4 (two input
+   heads + write head); feeds B4's write-head question [72].
+2. **FVec push/copy** ([14]–[21]) — telescoping doubling copy;
+   also a two-stream program.
+3. **mergesort** — desk-proved honest cost (Θ(N·w·log N) bit-cost)
+   in the ledger first; Lean later.
+4. **transpose** — desk-proved layout/boundary-spike study; ledger
+   first.
+
+Calculus-tier (deferred, do not start at machine level): splay,
+union-find ([22]–[35]), path-copying red-black tree, real-time
+queue ([37]).
+
 ## 3. Recommendation (sequence)
 
 1. **Land dyadic-machine-v0** — the remaining taste calls (name is
