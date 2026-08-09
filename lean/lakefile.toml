@@ -4,3 +4,8 @@ defaultTargets = ["Adic"]
 
 [[lean_lib]]
 name = "Adic"
+
+[[lean_exe]]
+name = "receipts"
+root = "Receipts"
+supportInterpreter = true
