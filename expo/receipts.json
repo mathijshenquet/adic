@@ -62,4 +62,39 @@
   "theorem ram_program_simulation {s v : Nat} (program : RamProgram s)\n  (config : RamConfig s v) :\n  ∃ scratch',\n    runActions (compileProgram program config) (simulatorStart config) =\n        some (encodedConfig (runRam program config) scratch') ∧\n      ScratchRepresents (runRam program config) scratch' ∧\n        actionCost (compileProgram program config) ≤\n          10 * ramCost program * (s + 2 ^ v)",
   "name": "Adic.Dyadic.ram_program_simulation",
   "hash": "ae500d06e278",
-  "axioms": ["Classical.choice", "Quot.sound", "propext"]}]
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem weightedCost_append {k : Nat} (weights : Weights k)\n  (first second : ActionWord k) :\n  weightedCost weights (first ++ second) =\n    weightedCost weights first + weightedCost weights second",
+  "name": "Adic.Dyadic.weightedCost_append",
+  "hash": "f8b73d985091",
+  "axioms": ["propext"]},
+ {"statement":
+  "theorem weightedCost_zero {k : Nat} (word : ActionWord k) :\n  weightedCost (fun x => 0) word = actionCost word",
+  "name": "Adic.Dyadic.weightedCost_zero",
+  "hash": "ec00b0653fab",
+  "axioms": ["propext"]},
+ {"statement":
+  "theorem kraft_iff_mounting {k : Nat} (weights : Weights k) :\n  KraftOk weights ↔\n    ∃ paths,\n      (∀ (head : Fin k), (paths head).length = weights head) ∧\n        Function.Injective paths ∧\n          ∀ {left right : Fin k},\n            left ≠ right → PrefixIncomparable (paths left) (paths right)",
+  "name": "Adic.Dyadic.kraft_iff_mounting",
+  "hash": "95f1dbc459c2",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem weighted_zipWord {n : Nat} (weights : Weights 3) (a b : Tree n) :\n  weightedCost weights (zipWord n a b) = weightedZipCost weights n",
+  "name": "Adic.Dyadic.weighted_zipWord",
+  "hash": "b83923f8f283",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem weightedZipCost_closed (weights : Weights 3) (n : Nat) :\n  weightedZipCost weights n =\n    weightedZipLeafCost weights * 2 ^ n +\n      weightedZipNodeCost weights * (2 ^ n - 1)",
+  "name": "Adic.Dyadic.weightedZipCost_closed",
+  "hash": "1a624131020f",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem weighted_zipWord_linear_bound {n : Nat} (weights : Weights 3)\n  (a b : Tree n) :\n  weightedCost weights (zipWord n a b) ≤ (1 + maxWeight weights) * 20 * 2 ^ n",
+  "name": "Adic.Dyadic.weighted_zipWord_linear_bound",
+  "hash": "8f06a6b739c0",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem uniformThreeWeights_kraft : KraftOk uniformThreeWeights",
+  "name": "Adic.Dyadic.uniformThreeWeights_kraft",
+  "hash": "beecf57bdf70",
+  "axioms": ["Quot.sound", "propext"]}]

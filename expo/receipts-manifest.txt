@@ -12,3 +12,10 @@ Adic.Dyadic.zipWord_shape_independent
 Adic.Dyadic.copyWord_correct
 Adic.Dyadic.doublingCopyTotal_linear_bound
 Adic.Dyadic.ram_program_simulation
+Adic.Dyadic.weightedCost_append
+Adic.Dyadic.weightedCost_zero
+Adic.Dyadic.kraft_iff_mounting
+Adic.Dyadic.weighted_zipWord
+Adic.Dyadic.weightedZipCost_closed
+Adic.Dyadic.weighted_zipWord_linear_bound
+Adic.Dyadic.uniformThreeWeights_kraft
