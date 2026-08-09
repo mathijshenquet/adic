@@ -23,8 +23,12 @@ evaporates).
 
 - `letters/` at the repo root: Claude-authored letters addressed to
   Mathijs. Numbered, cited as "Letter 1"; one file per letter,
-  `letters/NN-slug.md`. English by default (the repo's language;
-  the live conversation is Dutch — letters are its distillate).
+  `letters/NN-slug.typ` — **Typst** (Mathijs, 2026-08-09: letters
+  are already pieces of formalized prose mathematics, precursor
+  chunks of the paper, so they get real typesetting; each letter
+  must `typst compile` — part of the gate). English by default (the
+  repo's language; the live conversation is Dutch — letters are its
+  distillate). Compiled PDFs are gitignored.
 - Register: a letter argues, proposes, and is allowed to be wrong
   out loud. It is never the record. AIPs stay the decision record;
   the paper stays the theory record.

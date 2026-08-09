@@ -17,7 +17,9 @@ Ground rules (AIP-3):
   letters. The decision record is `aips/`; the eventual truth is the
   paper; a letter is evidence of thought, not authority.
 - The paper cannibalizes letters freely, without citation guilt.
-- Cite as "Letter 1" (= `01-*.md`).
+- Cite as "Letter 1" (= `01-*.typ`). Letters are Typst — they are
+  already pieces of formalized prose mathematics — and each must
+  compile (`typst compile letters/NN-*.typ`, part of the gate).
 
 Precedents, and the company we like to keep: the Grothendieck–Serre
 correspondence; Bell Labs technical memoranda, out of which Shannon's
