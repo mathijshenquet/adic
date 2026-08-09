@@ -107,9 +107,10 @@ potential-consuming operations (up consumes depth); read/write/
 down can repeat in place and must stay paid. Status (updated
 2026-08-10): *direction endorsed* by Mathijs — the cocycle reading
 (Expo 3) stays categorically clean and yields cohomology links;
-open design questions collected in `aips/draft/dirty-cocycle.md`;
+open design questions collected in `aips/accepted/0005-dirty-cocycle.md`;
 pricing details remain his call at call 2. The
-unconditional-free-up retrofit landed first (read-only fiber).
+unconditional-free-up retrofit (read-only fiber) is in flight on
+`track/free-up-refresh`.
 
 ## 5. Sequencing
 

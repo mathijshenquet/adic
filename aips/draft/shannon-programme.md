@@ -111,7 +111,7 @@ laws the geometry section should be able to absorb or predict:
   parameter, and the folklore above estimates where real hardware
   sits on the dial.
 - **Write-side folklore** (for the dirty model, see
-  `dirty-cocycle.md`): SSD/flash write amplification and the
+  `aips/accepted/0005-dirty-cocycle.md`): SSD/flash write amplification and the
   random-vs-sequential write gap are dirty coalescing observed in
   the wild — the sparse–dense asymmetry is their theorem-shaped
   form.

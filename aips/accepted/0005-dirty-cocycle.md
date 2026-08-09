@@ -1,10 +1,17 @@
 # The dirty model and the cohomology of cost: questions, options, recommendations
 
-Draft rev 2 (2026-08-10, Claude; rev 1 was a bare list — this rev
-adds background and pros/cons per question, on Mathijs's request).
-Status: *direction endorsed* by Mathijs (2026-08-10: the cocycles
-stay categorically clean and yield cohomology links); pricing
-details remain his call at cache-v0 call 2. Sources: Expo 3
+**ACCEPTED** (2026-08-10, Mathijs: "I agree with all points of the
+aip as suggested") — all recommendations ratified: exchange-form
+ℕ-cohomology (§1B), §2's write-up, framework-first mechanization
+(§3), lazy-as-ground-truth with flush-inclusive interface
+statements (§5), the §9 sequencing. Amendment to §4 on acceptance:
+the classification runs *now* as a contained sol track (Mathijs's
+call) — contained meaning: its only output is a report draft; it
+does not reorder the roadmap.
+
+Rev 2 (2026-08-10, Claude; rev 1 was a bare list — this rev adds
+background and pros/cons per question, on Mathijs's request).
+Pricing details remain a Mathijs call at cache-v0 call 2. Sources: Expo 3
 (cocycle framing + three badge claims), cache-v0 §4b (dirty-up
 refinement; candidate in-machine resolution of [72]).
 

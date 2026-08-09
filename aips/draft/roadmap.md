@@ -44,7 +44,7 @@ mechanized.
   in shannon-programme §2.
 - **Dirty model** (direction endorsed by Mathijs 2026-08-10 — the
   cocycle reading stays categorically clean and buys cohomology):
-  design questions collected in `aips/draft/dirty-cocycle.md`;
+  design questions collected in `aips/accepted/0005-dirty-cocycle.md`;
   mechanization targets are Expo 3's three badge claims. Pricing
   details stay a Mathijs call (cache-v0 call 2).
 - **B3 — a checked complexity claim on ordinary-looking code.**
