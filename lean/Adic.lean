@@ -5,6 +5,7 @@ import Adic.Locality
 import Adic.Zip
 import Adic.Copy
 import Adic.Ram
+import Adic.RamLift
 import Adic.Weighted
 import Adic.Entropy
 import Adic.Gibbs

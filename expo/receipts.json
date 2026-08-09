@@ -152,4 +152,9 @@
   "theorem empiricalFloorLogTotal_le_touchCost {k : Nat} (weights : Weights k)\n  (touches : List (Fin k)) (hKraft : KraftOk weights) :\n  empiricalFloorLogTotal touches ≤ touchCost weights touches",
   "name": "Adic.Dyadic.empiricalFloorLogTotal_le_touchCost",
   "hash": "25cf50098a1d",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem ram_program_reverse_simulation {k n : Nat} :\n  ∃ c,\n    ∀ (word : ActionWord k) (source final : ActionConfig n k)\n      (start : RegisterRamConfig n k),\n      RegisterRep source start →\n        runActions word source = some final →\n          ∃ target,\n            runRegisterRam (compileActionWord n word) start = some target ∧\n              RegisterRep final target ∧\n                registerRamCost (compileActionWord n word) ≤ c * actionCost word",
+  "name": "Adic.Dyadic.ram_program_reverse_simulation",
+  "hash": "32fa4d3c56aa",
   "axioms": ["Quot.sound", "propext"]}]
