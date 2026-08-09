@@ -26,3 +26,7 @@ Adic.Dyadic.inverseFrequencyWeight_minimal
 Adic.Dyadic.empiricalWeights_kraft
 Adic.Dyadic.touchCost_empirical_exact
 Adic.Dyadic.touchCost_empirical_entropy_bound
+Adic.Dyadic.kraft_logDeficit_bound
+Adic.Dyadic.discrete_gibbs_log_sum
+Adic.Dyadic.touchCost_entropy_lower
+Adic.Dyadic.empiricalFloorLogTotal_le_touchCost
