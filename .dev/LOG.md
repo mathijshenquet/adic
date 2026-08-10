@@ -1,5 +1,30 @@
 # adic work log
 
+## 2026-08-10 (day 2, cont. 2) — local-classes MERGED: the machine's cohomology has torsion
+
+- `track/local-classes` MERGED (sol, ~40 min, 10-page report,
+  gate green): the broad-observer classification. General
+  machinery: exact edge-feasibility (exchange) system for
+  fixed-grade triviality; signed underlying-cycle criterion;
+  closed-directed-walk criterion under strong connectivity
+  (with the honest catch that irreversible observer state breaks
+  the naive shortcut); kernel-vs-integral-extension split.
+  Example verdicts, all algebraically checked: first-touch
+  TRIVIAL (potential = untouched count, the calibration case);
+  dirty write-back NONTRIVIAL (AIP-5 padding argument reused);
+  warmth NONTRIVIAL (witness pair: equal counts+endpoints, costs
+  3 vs 5); **visit-parity NONTRIVIAL with TRIVIAL double — the
+  local H¹ has 2-torsion**, and modulo-r pricing gives exact
+  period-r torsion-like classes generally. So write-back is NOT
+  the lone generator: the class monoid contains potentials
+  (trivial), holonomy classes (dirty, warmth), and integral
+  torsion. Honest walls: all-grade stabilization; the narrow
+  dirty-bit-only classification. Answers AIP-5 §4's question
+  richer than conjectured.
+- **Open for Mathijs** (from the report): is the broad-observer
+  theorem the wanted form, or cut a follow-up narrow track for
+  the single dirty-bit observer?
+
 ## 2026-08-10 (day 2, cont.) — operadic-canonicity MERGED: classification pinned
 
 - `track/operadic-canonicity` MERGED (sol, ~50 min, 18-page
