@@ -261,4 +261,43 @@
   "theorem threeHead_k3_moment :\n  expMomentCost 1 threeHeadCounts (campbellDists 1 3 threeHeadCounts) = 8",
   "name": "Adic.Dyadic.threeHead_k3_moment",
   "hash": "6c58ff9396fb",
-  "axioms": ["propext"]}]
+  "axioms": ["propext"]},
+ {"statement": "theorem dirtyCost_isCocycle {n : Nat} : IsCocycle dirtyCost",
+  "name": "Adic.Dyadic.Dirty.dirtyCost_isCocycle",
+  "hash": "4df237620353",
+  "axioms": ["propext"]},
+ {"statement":
+  "theorem dirtyCost_le_two_cleanCost_add_slack {n : Nat} (word : Word)\n  (config final : Config n) (hrun : run word config = some final) :\n  dirtyCost word config ≤ 2 * cleanCost word + config.marks.length",
+  "name": "Adic.Dyadic.Dirty.dirtyCost_le_two_cleanCost_add_slack",
+  "hash": "dad9231a8a58",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem dirtyCost_sparseWalk_expanded (n k : Nat) :\n  dirtyCost (sparseWalk n k) (root n) =\n    4 * blockLeaves k * n + 2 * blockLeaves k",
+  "name": "Adic.Dyadic.Dirty.dirtyCost_sparseWalk_expanded",
+  "hash": "70a0bb01c161",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem dirtyCost_denseWalk_expanded (n k : Nat)\n  (hblock : blockDepth k ≤ n) :\n  dirtyCost (denseWalk n k) (root n) =\n    4 * (n - blockDepth k) + 10 * blockLeaves k - 8",
+  "name": "Adic.Dyadic.Dirty.dirtyCost_denseWalk_expanded",
+  "hash": "0ad7d5bba566",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem canonical_sparse_dense_counts (k : Nat)\n  (operation : LocalOp) :\n  List.count operation (paddedDenseWalk (witnessGrade k) k) =\n    List.count operation (sparseWalk (witnessGrade k) k)",
+  "name": "Adic.Dyadic.Dirty.canonical_sparse_dense_counts",
+  "hash": "e897f7a5ba30",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem canonical_sparse_cost (k : Nat) :\n  dirtyCost (sparseWalk (witnessGrade k) k) (root (witnessGrade k)) =\n    4 * blockLeaves k * witnessGrade k + 2 * blockLeaves k",
+  "name": "Adic.Dyadic.Dirty.canonical_sparse_cost",
+  "hash": "b1537829f734",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem canonical_paddedDense_cost (k : Nat) :\n  dirtyCost (paddedDenseWalk (witnessGrade k) k) (root (witnessGrade k)) =\n    2 * blockLeaves k * witnessGrade k + 2 * (witnessGrade k - blockDepth k) +\n        6 * blockLeaves k -\n      4",
+  "name": "Adic.Dyadic.Dirty.canonical_paddedDense_cost",
+  "hash": "c8a2828a1cdf",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem dirty_not_cohomologous (n : Nat) (hn : 1 ≤ n) :\n  ¬∃ prices potential, Exchange dirtyCost (letterCost prices) potential",
+  "name": "Adic.Dyadic.Dirty.dirty_not_cohomologous",
+  "hash": "d1f4f594a35b",
+  "axioms": ["Quot.sound", "propext"]}]

@@ -52,3 +52,11 @@ Adic.Dyadic.threeHead_k2_kraft
 Adic.Dyadic.threeHead_k2_moment
 Adic.Dyadic.threeHead_k3_kraft
 Adic.Dyadic.threeHead_k3_moment
+Adic.Dyadic.Dirty.dirtyCost_isCocycle
+Adic.Dyadic.Dirty.dirtyCost_le_two_cleanCost_add_slack
+Adic.Dyadic.Dirty.dirtyCost_sparseWalk_expanded
+Adic.Dyadic.Dirty.dirtyCost_denseWalk_expanded
+Adic.Dyadic.Dirty.canonical_sparse_dense_counts
+Adic.Dyadic.Dirty.canonical_sparse_cost
+Adic.Dyadic.Dirty.canonical_paddedDense_cost
+Adic.Dyadic.Dirty.dirty_not_cohomologous
