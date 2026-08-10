@@ -334,6 +334,34 @@ constants); risk of theory-before-model if pushed ahead of call 2.
 **Recommendation:** record now (this section), state after the
 $c \equiv 1$ dirty track lands.
 
+## 8b. Addendum (2026-08-10, post-acceptance): the calculus-tier boundary, pre-connected
+
+The founding convo's splay-tree exercise ([388]–[424]) recorded a
+boundary that belongs in this AIP's orbit. It was *not* that
+potentials fail on splay trees (Sleator–Tarjan's potential is
+fine); it is that the calculus's filtration cost design cannot
+*prove* input-dependent amortized bounds: amortization-as-
+normalization resolves branches statically, which works only for
+oblivious access patterns; splay needs to charge across operation
+boundaries, and "cost(f;g) ≤ cost(f)+cost(g)" forbids exactly that
+transfer. The convo's identified fix — **time credits as a linear
+resource** (Atkey; Charguéraud–Pottier's union-find; Grodin–Harper
+in calf) — is, in this AIP's language, precisely the **exchange
+form** (§1B): "amortized cost $a$ given invariant Φ" is
+$a + \Phi_{\text{before}} = \text{actual} + \Phi_{\text{after}}$,
+credits = the potential made affine. So the v2 credit judgment is
+the calculus-level face of the cocycle framework mechanized at the
+machine level (`lean/Adic/Cocycle.lean`); when the calculus
+arrives, its amortization layer should be *defined* as this
+exchange judgment rather than invented separately. Genuinely out
+of reach even then, per the convo: *relative* bounds (static/
+dynamic optimality — cost of $f$ vs cost of $g$ on shared inputs
+needs a relational cost logic; parked). Note the machine level
+dodges this: universal mounting (Shannon move 2) quantifies over
+distance assignments, not program pairs, so its competitive
+statement stays first-order. Investigation deferred to the
+calculus tier; recorded here so the design lands pre-connected.
+
 ## 9. Suggested sequencing
 
 1. §2's padding argument written out → conjecture re-badged
