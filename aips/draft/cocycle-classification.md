@@ -108,15 +108,25 @@ not graph coverings because their updates are not invertible. “Arithmetic
 classes are exactly transgressions of observer coverings” is therefore true
 for the cyclic covering slice and false without these two qualifications.
 
-**Wall, tower stabilization.** The named examples stabilize by grade two,
-but the proposed fixed-gadget theorem is not proved and is false for the
-ambient cohomology groups: their free ranks already grow from $84$ to $6828$
-for first touch. For the finite-dimensional local-table image, stabilization
-would require a grade-compatible finite boundary summary of integral
-holonomy relations. Leaf-only reads and writes, path-wide `WriteBelow`, and
-child-wide `ParentFill` prevent the obvious grade embedding from preserving
-either labels or tables. That missing boundary-summary lemma is the precise
-obstruction.
+**Desk-proved, tower progress.** The whole-root grade embedding is the wrong
+map, but the left-subtree embedding supplies a genuine finite boundary
+object. With $W=P=\operatorname{id}$, all tower-triviality questions reduce
+exactly to two finite one-leaf graphs at grade one. More generally, if every
+reachable augmented graph is strongly connected, the integral relation
+lattices (20) form a descending chain under left-subtree lifting; after
+tensoring with $\mathbb Q$ this chain stabilizes. Thus the divisible,
+strongly-connected slice has an all-grade stabilization theorem.
+If all observer updates are permutations, finite monodromy bounds every
+arithmetic index by the exponent of one grade-independent permutation group;
+the integral relation lattices then stabilize as well.
+
+**Wall, remaining tower theorem.** The ambient cohomology groups still do not
+stabilize: their free ranks grow from $84$ to $6828$ for first touch. For
+general reset observers, signed underlying cycles need not lift through the
+reachable boundary fiber. Integrally, a descending chain of sublattices of
+$\mathbb Z^m$ need not stabilize at all. The full theorem now has two precise
+missing lemmas: reachability/saturation of the finite boundary transfer and a
+uniform bound on its arithmetic indices.
 
 ## 2. Fixed grade by Smith normal form
 
@@ -612,6 +622,21 @@ counterexamples.
 
 ## 5. The tower attack
 
+For the fixed presentation domain $D=\Sigma\times Q$ define the relation
+lattice below; $\rho_n$ simply ignores entries that are unreachable at grade
+$n$.
+
+$$
+\mathcal R_n=\left\{(t,\lambda)\in\mathbb Z^D\oplus\mathbb Z^\Sigma
+\;\middle|\;
+\rho_n(t)-\ell_n^*\lambda\in\delta\mathbb Z^{V_n}\right\}.
+\tag{20}
+$$
+
+Its positive part is Presburger at each grade. Tower triviality of $t$ asks
+for one $\lambda\in\mathbb N^\Sigma$ with
+$(t,\lambda)\in\mathcal R_n$ for every $n$.
+
 ### 5.1 What stabilizes in the examples
 
 **Desk-proved.** The four named costs have uniform tower verdicts after grade
@@ -628,7 +653,7 @@ two.
   D\,U\,D\,\mathsf{write0}\,\mathsf{write0}
   \quad\text{with}\quad
   D\,\mathsf{write0}\,U\,D\,\mathsf{write0}.
-  \tag{20}
+  \tag{21}
   $$
 
   Both paths have the same endpoint, memory, dirty path, and letter counts.
@@ -661,61 +686,346 @@ invariant summand, not the full SNF in (8), unless all nontrivial symmetry
 representations are carried as coefficients. That coefficient system grows
 with the grade, defeating the fixed-gadget claim.
 
-### 5.3 Mayer--Vietoris and the missing boundary object
+### 5.3 The left-subtree correction
 
-Cut the depth-$(n+1)$ tree into its root and two depth-$n$ subtrees. A
-Mayer--Vietoris recurrence would need each subtree to expose a finite boundary
-summary from which all global holonomy and price-extension relations can be
-reconstructed.
+The previous attack tried to keep the old root as the new root. It therefore
+turned an old leaf operation into “down, operate, up” and changed its word
+price. That obstruction is real for that embedding but does not exhaust the
+tree recursion.
 
-**Wall.** The obvious summary “root head position plus root mark” is not
-closed under the operations:
+Embed the whole grade-$n$ tree as the left depth-$n$ subtree of grade $n+1$.
+Old leaves are still leaves. Because reachable configurations permit an
+arbitrary initial head position, the head may start at the left-child root;
+conjugating by `down0` and `up` is unnecessary. Run the old word without ever
+taking `up` from that child root.
 
-- reads and writes are legal only at the grade-dependent leaf boundary;
-- `WriteBelow` changes every marked node on a root-to-leaf path, coupling the
-  boundary to unboundedly many internal nodes;
-- `ParentFill` changes two child marks across the proposed cut;
-- an exchange potential may inspect the entire augmented configuration and
-  can carry unbounded integral offsets even though the observer is finite.
-
-Consequently the grade-$n$ graph is not a label-and-cost-preserving subgraph
-of grade $n+1$. Replacing an old leaf operation by “down, operate, up” changes
-both the letter-count vector and the observer events. There is no canonical
-map under which the relation lattices form an ascending or descending chain.
-Noetherian stabilization of sublattices of a fixed $\mathbb Z^D$ therefore
-cannot yet be invoked.
-
-### 5.4 The exact theorem still needed
-
-For the fixed reachable table domain $D$ define the relation lattice
+**Lemma, desk-proved (open left-subtree lift).** Every reachable grade-$n$
+path has a grade-$(n+1)$ lift whose internal memory, head, non-root observer
+marks, letter word, and table charge are identical. The only extra state is
+the mark $q$ on the old root, which was exempt from `WriteBelow` at grade $n$
+but is non-root at grade $n+1$. If the old path contains $k$ writes, its
+boundary effect is
 
 $$
-\mathcal R_n=\left\{(t,\lambda)\in\mathbb Z^D\oplus\mathbb Z^\Sigma
-\;\middle|\;
-\rho_n(t)-\ell_n^*\lambda\in\delta\mathbb Z^{V_n}\right\}.
-\tag{21}
+q\longmapsto W^k(q).
+\tag{22}
 $$
 
-Its positive part is Presburger at each grade. Tower triviality of $t$ asks
-for one $\lambda\in\mathbb N^\Sigma$ with
-$(t,\lambda)\in\mathcal R_n$ for every $n$.
+*Proof.* Start the deeper machine with the corresponding head position and
+standard marks, keep the right subtree untouched, and replay the old path in
+the left subtree. Every old target, source, leaf, memory update, `ParentFill`,
+and table observation is unchanged. A write additionally applies $W$ to the
+one new ancestor, the old root. No table entry observes that ancestor during
+the confined path. Induction on the word proves the claim. The same replay
+also proves the required internal reachability. □
 
-**Conjectured, finite-boundary stabilization.** For each observer whose update
-monoid is a finite commuting band and whose priced events are radius zero,
-there is an effectively computable $N(A)$ and a finite boundary transfer
-object such that (21), including its positive price projection, is determined
-for every $n\ge N(A)$ by one fixed transfer relation.
+If root-normalized statements insist on the conjugation
+`down0 · word · up`, the finite cap is slightly larger: the opening down
+applies $F$ to the old root and $P$ to its two children, and the closing up
+observes and applies $L$ to the old root. Thus radius zero has a one-node
+boundary; the full `ParentFill` language has a width-one collar of three
+marks. The open lift avoids that extra cap entirely.
 
-The commuting-band and radius-zero hypotheses are deliberately stronger than
-the failed axiom lattice. They rule out (17) and the explicit cross-boundary
-reset. Leaf-only operations remain the hard case.
+Equation (22) is the missing finite transfer datum. It is a finite boundary
+automaton on $Q$, driven only by the total number of writes. It does not yet
+imply absolute stabilization, because closing a relative boundary path and
+lifting every signed cycle are separate questions.
 
-**Wall, current track.** No such transfer object or pumping lemma has been
-constructed. In particular, storing only observer states is insufficient;
-the summary must preserve an integral lattice of holonomies and its
-nonnegative price cone. This is the precise obstruction to the requested
-all-grade theorem. The fixed-grade SNF is complete, but a fixed finite gadget
-does not currently answer every grade.
+### 5.4 A complete uncoupled local-to-global theorem
+
+Assume
+
+$$
+W=P=\operatorname{id}.
+\tag{23}
+$$
+
+The observer may still have arbitrary finite, possibly irreversible $F$ and
+$L$, and the table may price every reachable event/state pair. For
+$b\in\{0,1\}$ define the finite *one-leaf graph* $\Gamma_b$ as follows. A
+vertex records
+
+$$
+(q,\epsilon,m)\in Q\times\{\text{outside},\text{inside}\}
+\times\{0,1\},
+$$
+
+restricted to the states reachable from mark $q_0$, either initial head
+phase, and arbitrary initial memory bit. Its edges are:
+
+- `downb`: $(q,\text{outside},m)\to(Fq,\text{inside},m)$;
+- `up`: $(q,\text{inside},m)\to(Lq,\text{outside},m)$;
+- `read`: an inside self-loop;
+- `write0` and `write1`: inside edges setting $m$ to the named bit.
+
+Each edge carries the corresponding table charge read at $q$ and its raw
+letter label. The down/up subgraph of $\Gamma_b$ is also the complete gadget
+for an internal node of orientation $b$.
+
+**Theorem, desk-proved (uncoupled tower classification).** Under (23), a
+local table is tower-trivial iff it is trivial at grade one. More precisely,
+the formal local class is its image in
+
+$$
+\operatorname{coker}\left(
+\mathbb Z^\Sigma\longrightarrow
+H^1(\Gamma_0;\mathbb Z)\oplus H^1(\Gamma_1;\mathbb Z)
+\right),
+\tag{24}
+$$
+
+and the natural refinement is the intersection of the corresponding finite
+edge system with $\lambda\in\mathbb N^\Sigma$.
+
+*Proof.* Necessity is restriction to grade one, whose two leaves realize
+$\Gamma_0$ and $\Gamma_1$. Conversely choose one-step potentials
+$\phi_0,\phi_1$ on the two gadgets for a common static price $\lambda$. For a
+global configuration and each non-root node $v$, let
+$\epsilon_v$ say whether the head is inside the subtree rooted at $v$.
+If $v$ is a leaf, evaluate $\phi_b$ on its actual bit; if it is internal,
+evaluate the down/up restriction at either fixed bit. Define
+
+$$
+\Phi_n=\sum_{v\ne\text{root}}
+\phi_{b(v)}(q_v,\epsilon_v,m_v).
+\tag{25}
+$$
+
+A down or up changes exactly the summand belonging to the crossed node. A
+read or write changes exactly the focused leaf summand. Assumption (23)
+ensures that no operation changes another summand. The applicable gadget edge
+equation therefore proves the global one-edge exchange equation. Summing
+gives `Exchange` for every word. Integer gadget potentials can be shifted to
+naturals before taking the finite sum, so the proof also preserves AIP-5's
+subtraction-free discipline. □
+
+**Verified, finite computation.** For both first touch and visit parity, the
+full reachable local-table image has rational rank three at grades one and
+two. Equation (24) explains the observed equality without enumerating the
+grade-two graph: it is already the image of the two grade-one leaf gadgets.
+The named first-touch class is zero; the named parity class is the order-two
+arithmetic element described earlier.
+
+This is a clean cohomology theory: the enormous global configuration graph is
+replaced by two finite cellular $H^1$ computations, and the global potential
+is the sum of local potentials.
+
+### 5.5 What survives with `WriteBelow`
+
+For a closed directed walk $w$ at grade $n$, its open lift returns the entire
+old configuration and acts on the extra boundary mark by the finite map
+$W^{k(w)}$. Starting at any reachable lift and iterating $w$ eventually
+reaches a periodic boundary state. Some positive power $w^r$ is therefore a
+closed grade-$(n+1)$ walk with exactly $r$ times the old charge and letter
+counts.
+
+**Theorem, desk-proved (strongly connected descent).** If every augmented
+$G_{A,n}$ is strongly connected, then
+
+$$
+\mathcal R_{n+1}\subseteq\mathcal R_n
+\tag{26}
+$$
+
+for the integral relation lattices (20).
+
+*Proof.* Let $(t,\lambda)\in\mathcal R_{n+1}$ and let $w$ be any directed
+closed grade-$n$ walk. Close a periodic open lift as above. Exchange on the
+lift gives
+
+$$
+r\bigl(c_t(w)-\lambda\mathbin{\cdot}N(w)\bigr)=0.
+$$
+
+The coefficient group $\mathbb Z$ is torsion-free, so the parenthesized
+integer is zero. Hence $\lambda$ prices every directed closed walk at grade
+$n$. Strong connectivity and `local-classes.md` §3.2's closed-walk criterion
+give the edge potential required by (20). □
+
+**Corollary, desk-proved (divisible stabilization).** Under the same strong
+connectivity hypothesis, the rational relation spaces
+
+$$
+(\mathcal R_n)_{\mathbb Q}
+\subseteq\mathbb Q^{D+\Sigma}
+$$
+
+form a descending chain in one fixed finite-dimensional vector space and
+therefore eventually stabilize. The same conclusion holds after imposing
+$\lambda\in\mathbb Q_{\ge0}^\Sigma$. Thus the divisible strongly-connected
+slice has a finite, although not yet effectively bounded, tower threshold.
+
+**Lemma, desk-proved (dirty is strong; warmth is not).** The dirty augmented
+graph is strongly connected at every grade. From any reachable state, moving
+the head to the root applies $L=C$ to every possibly dirty node on the active
+path; no dirty node can remain off that path, because leaving it would already
+have cleared it. The base memory can then be restored by root-to-leaf trips,
+each of which returns clean, and any target reachable state can be replayed
+from a clean root. In contrast, warmth is not strongly connected: once a
+depth-one child is filled it is hot forever, because the root is never itself
+filled and hence never sends `ParentFill` to its children.
+
+**Corollary, desk-proved/verified (dirty harvest).** The full dirty-table
+relation spaces form a descending rational chain and eventually stabilize.
+Exact computations give local-image ranks
+
+$$
+3,\ 4,\ 4
+$$
+
+at grades one, two, and three. The named dirty write-back class is already
+nonzero at grade one, so (26) makes it nonzero at every grade over
+$\mathbb Q$; the explicit paths (21) strengthen this named verdict to
+integral coefficients. The strong-connectivity theorem does not apply to
+warmth, but its write-free depth-two witness embeds unchanged at every later
+grade and gives the same uniform named verdict directly.
+
+### 5.6 Integral stabilization for permutation observers
+
+Suppose all four primitive observer updates are permutations of $Q$. Let
+$G(A)\le\operatorname{Sym}(Q)$ be the finite group they generate and let
+$e(A)$ be its exponent.
+
+**Theorem, desk-proved (permutation tower stabilization).** For a permutation
+observer, the integral relation lattices $\mathcal R_n$ eventually stabilize.
+Every arithmetic class at every grade has order dividing $e(A)$.
+
+*Proof.* Forgetting observer marks maps the augmented graph to the strongly
+connected unobserved action graph. Bijectivity gives a finite graph cover.
+Every reachable cover component is strongly connected: a reverse edge in an
+undirected path can be replaced by a directed return path followed by a
+positive power of a finite-monodromy loop. Hence (26) applies.
+
+At grade $n$, monodromy acts coordinatewise on the node marks, so its image is
+a subgroup of a power of $G(A)$ and has exponent dividing $e(A)$. Passing to
+the regular closure if the cover is not regular, the count-monodromy group of
+§4.3 is a quotient of the abelianization of this finite monodromy group. Its
+exponent therefore also divides $e(A)$. The unobserved base contributes no
+arithmetic torsion: its closed count lattice is the primitive lattice
+
+$$
+N_{\mathsf{up}}=N_{\mathsf{down0}}+N_{\mathsf{down1}},
+$$
+
+with independent primitive `read`, `write0`, and `write1` loops. Equation (2)
+now bounds all arithmetic torsion by $e(A)$.
+
+Let $S_n$ be the saturation of $\mathcal R_n$ in the fixed presentation
+lattice. The rational descent theorem says that $S_n$ eventually equals one
+fixed saturated lattice $S$. The torsion bound gives
+
+$$
+e(A)S\subseteq\mathcal R_n\subseteq S
+$$
+
+from that point on. There are only finitely many subgroups between $e(A)S$
+and $S$; since (26) is descending, the integral chain stabilizes. □
+
+This proves the candidate “arithmetic index divides the observer group
+exponent” in the genuine finite-monodromy slice. The extension from
+permutations to the maximal subgroups of a noninvertible transformation
+monoid is exactly the remaining integral conjecture below.
+
+### 5.7 Why this is not yet the full integral theorem
+
+There are two independent gaps.
+
+**Wall, reachability.** When resets make $G_{A,n}$ non-strongly-connected,
+edge feasibility is controlled by signed cycles of the underlying graph, not
+only directed closed walks. The open lift is a deterministic finite lift, but
+a noninvertible $W$ need not lift every reverse edge or signed diamond inside
+the standard-reachable fiber. Replacing the reachable graph by all mark
+assignments would manufacture a covering but would change the semantic class
+problem. The needed statement is:
+
+> the projection of reachable relative cycle lattices is saturated, up to a
+> uniformly bounded finite boundary cokernel.
+
+This is the precise reachability/realization lemma.
+
+**Wall, the Noetherian step.** Even if (26) holds, “descending subgroups of a
+finitely generated abelian group stabilize by Noetherianity” is false:
+
+$$
+\mathbb Z\supset2\mathbb Z\supset4\mathbb Z\supset\cdots.
+\tag{27}
+$$
+
+Noetherianity controls ascending chains. Tensoring with $\mathbb Q$ repairs
+the argument because finite-dimensional vector spaces satisfy the descending
+chain condition. Integrally, it would suffice to prove a uniform exponent
+$e(A)$ for the boundary torsion: after the rational spans stabilize, every
+relation lattice would lie between a fixed saturated lattice $S$ and
+$e(A)S$. Only finitely many such sublattices exist.
+
+The finite transformation monoid generated by $F,W,L,P$ is the natural source
+of such an exponent. All node updates are coordinatewise, so permutation
+subgroups of a grade-$n$ fiber embed in a power of one fixed finite monoid;
+their element orders are uniformly bounded. Turning that observation into a
+bound for the **reachable signed-cycle cokernel**, including noninvertible
+components, remains conjectural.
+
+### 5.8 The local event ledger
+
+The preceding proofs suggest the correct general cohomological object. Give
+each geometric node a copy of the finite event graph on $Q$ with edges
+
+$$
+q\to Fq,\qquad q\to Lq,\qquad q\to Wq,\qquad q\to Pq.
+$$
+
+A global signed cycle projects to local event circulations coupled by the
+tree equations
+
+$$
+\begin{aligned}
+N_F(v)&=N_{\mathsf{down}}(v),&
+N_L(v)&=N_{\mathsf{up}}(v),\\
+N_P(v)&=N_F(\operatorname{parent}(v)),&
+N_W(v)&=\sum_{x\text{ leaf below }v}N_{\mathsf{write}}(x).
+\end{aligned}
+\tag{28}
+$$
+
+Leaf gadgets additionally carry the two-state memory graph. Table cochains
+and word prices are linear functionals on this ledger. Warmth is the
+noncommuting $P/F$ gluing class; dirty write-back is the $W/L$ gluing class;
+visit torsion is local event-graph monodromy. In this sense the three families
+are now parts of one theory rather than an example list.
+
+Let $\mathcal L_n$ be the lattice of compatible local circulations satisfying
+(28), and let
+
+$$
+\eta_n:H_1(G_{A,n};\mathbb Z)\longrightarrow\mathcal L_n
+\tag{29}
+$$
+
+be the event-ledger map.
+
+**Conjectured, ledger realization.** The cokernel of $\eta_n$ has exponent
+bounded by a constant depending only on the finite observer, not on $n$.
+After tensoring with $\mathbb Q$, $\eta_n$ is therefore surjective. Under this
+statement, the tree equations (28) form the desired finite-collar chain
+complex; contracting the underlying tree gives rational stabilization, and
+the bounded exponent upgrades it to integral stabilization as in §5.6.
+
+This is the sharpened all-grade target. It is stronger and more testable than
+the previous undefined “finite boundary summary”: compute the cokernels of
+(29) at small grades, and either find growing Smith exponents or obtain
+certificates for the proposed uniform bound.
+
+### 5.9 The exact theorem still needed
+
+**Desk-proved progress.** The transfer object exists exactly in the uncoupled
+slice (23), giving (24), and the open boundary mark gives the descent theorem
+(26) in the strongly connected slice. These are genuine local-to-global
+theorems, not evidence from finitely many grades.
+
+**Wall, current full language.** Proving the ledger-realization conjecture
+(29), or finding a counterexample with unbounded cokernel exponent, is now the
+remaining hard rung. The fixed-grade SNF can compute each instance, but no
+uniform reachability/saturation proof is supplied here.
 
 ## 6. Lean rung list
 
@@ -752,12 +1062,23 @@ proofs without changing executable cost statements.
 10. **Calibration examples.** Mechanize first touch with its seen-count
     potential; parity nontriviality from the two-return loop; and the doubled
     parity exchange identity. These exercise zero and torsion.
-11. **Scheduling examples.** Mechanize the short uniform dirty pair (20), the
+11. **Scheduling examples.** Mechanize the short uniform dirty pair (21), the
     dirty-read pair (3), and the warmth paths. These exercise equal-count
     holonomy without the large sparse/dense witness.
 12. **Exact-sequence theorem.** After the graph layer is stable, formalize (1)
     for finite free abelian groups. The covering-space transgression should be
     a later track; it is not needed for the machine's SNF classifier.
+13. **One-leaf reduction.** Define the two finite gadgets $\Gamma_b$ and
+    mechanize (24)--(25) for $W=P=\operatorname{id}$. This is the smallest
+    genuine tower theorem and needs no SNF inside its sufficiency proof.
+14. **Open left lift.** Formalize the grade-$n$ replay inside the left subtree
+    and prove that only the old-root mark changes, by $W^k$ as in (22).
+15. **Strong descent.** Under finite strong connectivity, mechanize periodic
+    closure of the boundary orbit and derive (26) from the directed-loop
+    criterion.
+16. **Permutation exponent.** Represent a permutation observer as a finite
+    cover, bound count monodromy by the exponent of $G(A)$, and prove the
+    finite-sublattice argument of §5.6.
 
 **Verified vocabulary alignment.** Rungs 3--5 state costs with
 `IsCocycle`, `Exchange`, and `exchange_append`; no theorem statement requires
@@ -783,10 +1104,19 @@ true for invariant classes modulo all base cohomology and, separately, true
 as count-monodromy duality modulo word prices. Equating those versions is
 false on the dyadic action graphs.
 
-**Wall.** The all-grade result remains open at a finite-boundary transfer
-lemma, not at SNF. The ambient groups demonstrably do not stabilize. A future
-tower track should target the local relation lattices (21) under a narrower
-commuting-band observer, not attempt to stabilize all of $H^1(G_n)$.
+**Desk-proved.** There is now a clean local-to-global theory in two substantial
+slices: the uncoupled observer reduces to the finite one-leaf cohomology
+(24), and permutation observers have integral tower stabilization controlled
+by finite monodromy. Strongly connected reset observers, including dirty,
+stabilize after rationalization.
+
+**Wall.** The all-grade theorem for arbitrary noninvertible observers remains
+open at the reachable event-ledger map (29), not at SNF. Warmth supplies the
+minimal warning: its top-level hot marks make the augmented graph
+irreversible, so directed-loop descent is insufficient. The next theorem is
+a uniform saturation/exponent bound for the maximal-group pieces of the
+finite transformation monoid; the next counterexample target is an observer
+whose ledger cokernel has growing Smith exponent.
 
 ## Repository anchors
 
