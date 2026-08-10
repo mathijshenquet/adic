@@ -1,5 +1,57 @@
 # adic work log
 
+## 2026-08-10 (SESSION CLOSE) — theory completed: three closing tracks landed; one open equation remains
+
+- **All three theory-completion tracks MERGED** (sol ×3, parallel,
+  ~35 min wall each, active read-and-steer loop):
+  - `exchange-comparison`: the comparison map is INJECTIVE and
+    the ℕ-exchange monoid cancellative — the word-price quotient
+    already group-completes; group completion forgets nothing at
+    fixed grade. The honest positive datum is the witness
+    relation R_c. Boyle–Handelman comparison exact (their cone
+    degenerates under our word-price quotient). Proposal for
+    Mathijs: amend AIP-5/paper language to "pre-price ordered
+    group + distinguished price map + R_c".
+  - `pricing-surface`: HEADLINE PROVED — under the oriented
+    positive eviction surface, the dirty class monoid is exactly
+    ℕ·[write-back], uniform over the whole tower. Guard found
+    unprompted: the unoriented surface silently gives ℤ (clean-up
+    pricing = negative generator) — terminology must stay
+    "positive/oriented surcharge surface". Eviction-visibility
+    table: dirty ℕ-ray; warmth zero (invalidation is not
+    eviction-visible); mod-r keeps order r (recycling IS —
+    matches flash physics).
+  - `ledger-saturation`: the wall largely FELL — address-resolved
+    ledger defined (fixing a variance issue in the round-2
+    framing: confined lift graph), automatic saturation of full
+    relation lattices proved, the general maximal-subgroup
+    exponent bound proved, and the steered APERIODIC case proved:
+    no arithmetic torsion — completing the full formal relation
+    towers for first-touch, dirty, AND warmth. W=id now descends
+    without connectivity. Remaining wall, exact: the rational
+    phase-diamond filling equation for non-strong phase structure
+    × nontrivial WriteBelow, with a minimal abstract warning
+    example showing monoid exponents alone cannot fill it.
+- **Coverage after today**: every named observer and every current
+  claim is closed (mechanized, desk-proved, or both); exactly one
+  precisely-stated open equation remains, quarantined to exotic
+  observers no current layer uses.
+- Session-close artifacts: `.dev/REFLECTION.md` written (loop
+  scorecard, friction list incl. my 3× merge-in-worktree mistake
+  + adopted rule, herdr steer recipe drift fixed in global
+  context, devenv poppler suggestion, per-module manifest
+  suggestion); global model table updated (sol's research-
+  mathematics day; terra's ladder discipline) via nix-config.
+- **Open with Mathijs**: review stack (exchange-comparison,
+  pricing-surface, ledger-saturation, operadic-canonicity,
+  cocycle-classification r2, empirical berry, Expos 3–6); the
+  q2/paper fork (cohomology paper now a serious first-paper
+  candidate); terminology amendments (two proposals above); veto
+  5/7; warmth headline; operadic product-vs-envelope. s ≈ 2.41
+  replication: mine, on a quiet machine.
+- **Open for agents**: nothing — fleet drained; every named
+  question closed or precisely walled.
+
 ## 2026-08-10 (day 2, close) — classification round 2 MERGED: the local-to-global cocycle theory
 
 - **`track/cocycle-classification` round 2 MERGED** (sol,
