@@ -206,4 +206,59 @@
   "theorem adaptive_beats_static (dists : Dists 4) (hKraft : KraftOk dists) :\n  adaptiveCost skewedFourBlocks < touchCost dists skewedFourTouches",
   "name": "Adic.Dyadic.adaptive_beats_static",
   "hash": "51b204ecbcfc",
-  "axioms": ["Classical.choice", "Quot.sound", "propext"]}]
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem blockKraft_shift {h : Nat} (b width shift : Nat) (dists : Dists h)\n  (hwidth : ∀ (head : Fin h), dists head ≤ width) :\n  blockKraftMassAt b (width + shift) dists =\n    2 ^ (b * shift) * blockKraftMassAt b width dists",
+  "name": "Adic.Dyadic.blockKraft_shift",
+  "hash": "62fa602a4a26",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem blockTravelCost_moment_identity {h a : Nat} (ha : 0 < a)\n  (counts dists : Dists h) :\n  (2 ^ a - 1) * blockTravelCost a counts dists + finSum counts =\n    2 ^ a * expMomentCost a counts dists",
+  "name": "Adic.Dyadic.blockTravelCost_moment_identity",
+  "hash": "d72a13f22fdd",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem ceilRoot_minimal {r value candidate : Nat} (hr : 0 < r) :\n  ceilRoot r value ≤ candidate ↔ value ≤ candidate ^ r",
+  "name": "Adic.Dyadic.ceilRoot_minimal",
+  "hash": "0531c09bd662",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem blockInverseFrequencyDist_minimal {b total share dist : Nat}\n  (hb : 0 < b) (hshare : 0 < share) :\n  blockInverseFrequencyDist b total share ≤ dist ↔\n    total ≤ share * 2 ^ (b * dist)",
+  "name": "Adic.Dyadic.blockInverseFrequencyDist_minimal",
+  "hash": "678fe106ace6",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem escortCeil_pow {a b count : Nat} (ha : 0 < a) (hb : 0 < b) :\n  count ^ b ≤ escortCeil a b count ^ (a + b)",
+  "name": "Adic.Dyadic.escortCeil_pow",
+  "hash": "1b096d423a3d",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem escortFloor_pow {a b count : Nat} (ha : 0 < a) (hb : 0 < b) :\n  escortFloor a b count ^ (a + b) ≤ count ^ b",
+  "name": "Adic.Dyadic.escortFloor_pow",
+  "hash": "dcbcf9350a2d",
+  "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+ {"statement":
+  "theorem twoDimensionalSweep_bound (n : Nat) :\n  twoDimensionalSweep n ≤ 2 * 2 ^ (2 * n)",
+  "name": "Adic.Dyadic.twoDimensionalSweep_bound",
+  "hash": "3574920c6cd5",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem threeHead_k2_kraft :\n  BlockKraftOk 2 (campbellDists 1 2 threeHeadCounts)",
+  "name": "Adic.Dyadic.threeHead_k2_kraft",
+  "hash": "396678fb9313",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem threeHead_k2_moment :\n  expMomentCost 1 threeHeadCounts (campbellDists 1 2 threeHeadCounts) = 8",
+  "name": "Adic.Dyadic.threeHead_k2_moment",
+  "hash": "69c47354da22",
+  "axioms": ["propext"]},
+ {"statement":
+  "theorem threeHead_k3_kraft :\n  BlockKraftOk 3 (campbellDists 1 3 threeHeadCounts)",
+  "name": "Adic.Dyadic.threeHead_k3_kraft",
+  "hash": "0acaeecfcd4c",
+  "axioms": ["Quot.sound", "propext"]},
+ {"statement":
+  "theorem threeHead_k3_moment :\n  expMomentCost 1 threeHeadCounts (campbellDists 1 3 threeHeadCounts) = 8",
+  "name": "Adic.Dyadic.threeHead_k3_moment",
+  "hash": "6c58ff9396fb",
+  "axioms": ["propext"]}]

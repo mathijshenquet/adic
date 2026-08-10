@@ -41,3 +41,14 @@ Adic.Dyadic.adaptiveCost_entropy_upper
 Adic.Dyadic.skewedFour_adaptive_exact
 Adic.Dyadic.skewedFour_static_gibbs_lower
 Adic.Dyadic.adaptive_beats_static
+Adic.Dyadic.blockKraft_shift
+Adic.Dyadic.blockTravelCost_moment_identity
+Adic.Dyadic.ceilRoot_minimal
+Adic.Dyadic.blockInverseFrequencyDist_minimal
+Adic.Dyadic.escortCeil_pow
+Adic.Dyadic.escortFloor_pow
+Adic.Dyadic.twoDimensionalSweep_bound
+Adic.Dyadic.threeHead_k2_kraft
+Adic.Dyadic.threeHead_k2_moment
+Adic.Dyadic.threeHead_k3_kraft
+Adic.Dyadic.threeHead_k3_moment
