@@ -2,10 +2,11 @@
 
 #expo(3, "Cost is a cocycle", "2026-08-10")[
 
-_Born as design theory ahead of the mechanization; the first box
-has since turned green (the free-up identity, mechanized
-2026-08-10). The remaining badges are honest — amber is
-desk-proved, and each is a worklist item for a future track._
+_Born as design theory ahead of the mechanization (2026-08-10,
+morning); by the same midnight every box had turned green: the
+free-up identity, the nontriviality theorem, and the write
+asymmetry are all machine-checked. The design-theory-first,
+badges-honest workflow did exactly what AIP-4 promised._
 
 The machine's original cost model had a property so simple it was
 easy to mistake for essential: the cost of a run depended only on
@@ -120,7 +121,7 @@ cleanest representative of your class.
   this by induction on words.
 ]
 
-= Bandwidth is a nontrivial class (desk-proved)
+= Bandwidth is a nontrivial class (machine-checked)
 
 Now the dirty model: `down` fills, a clean `up` discards for free,
 a dirty `up` pays its write-back. This cocycle reads one bit of
@@ -128,37 +129,24 @@ local state, so it is *not* a homomorphism. The sharp question is
 whether it is secretly trivial — cohomologous to some
 word-only cost, its state-dependence absorbable into a potential.
 
-#deskthm(title: "The write-back cocycle is not cohomologous to any homomorphism")[
-  No word-homomorphism $h$ and potential $Phi$ satisfy
-  $"cost"_"dirty" = h + delta Phi$. _Desk argument (upgraded from
-  an open claim, 2026-08-10; AIP-5 §2)._ (i) $B NN$ is
-  *commutative*, so any homomorphism factors through the
-  abelianization: $h$ sees only a word's letter counts — how many
-  `down0`s, `down1`s, `up`s, `write`s — nothing of their order.
-  (ii) Build two *closed* walks at the same configuration $c_0$
-  (root, clean tree, all-zero store) with equal letter counts.
-  The sparse walk makes $m$ isolated round trips to depth-$n$
-  leaves writing 1s, then repeats them writing 0s back — store
-  restored, every path flushed. The dense walk writes a $2^k$-leaf
-  block ($2^k = m$) in one streaming sweep and erases it likewise,
-  then *pads* with clean write-free excursions in an untouched
-  subtree until every letter count matches — always solvable in
-  root-returning chunks of depth $lt.eq n$, since each walk
-  individually balances downs against ups. (iii) Identical
-  endpoints kill $delta Phi$ *exactly* (both boundary terms are
-  $Phi(c_0) - Phi(c_0) = 0$); equal counts make $h$ agree; but the
-  sparse walk pays $Theta(m n)$ in write-backs (every up on an
-  isolated dirty path pays, both passes) against the dense walk's
-  $Theta(m + n)$ (each region edge dirty-crossed once; the padding
-  pays its downs — which $h$ sees equally on both sides — but its
-  ups are clean and free). With $m = Theta(n)$ the totals are
-  $4m n + 2m$ against $2m n + 2m + Theta(m+n)$: an unexplained
-  $Theta(n^2)$ gap — contradiction. The exact padding counts are
-  written out in AIP-5 §2; the gap is precisely the sparse walk's
-  dirty ups against the padding's clean ones.
+#leanthm(
+  "Adic.Dyadic.Dirty.dirty_not_cohomologous",
+  pin: "d1f4f594a35b",
+  title: "The write-back cocycle is not cohomologous to any homomorphism",
+)[
+  No word price and no potential satisfy the exchange equation for
+  dirty cost — at *every* grade $n gt.eq 1$. The two pillars are
+  the desk argument's (AIP-5 §2): $B NN$ is commutative, so a
+  homomorphism sees only letter counts; identical endpoints kill
+  every potential on closed walks. The mechanized witness is the
+  short conjugation pair found by the classification track:
+  $"down0"^n "up"^n "down0"^n w_0 w_0$ versus
+  $"down0"^n w_0 "up"^n "down0"^n w_0$ — same endpoints, same
+  letter counts, dirty-up counts $0$ versus $n$ (costs $2n+2$
+  versus $3n+2$); exchange on both forces the contradiction.
 ]
 
-So — modulo that bookkeeping — it is a theorem, not a slogan:
+So it is a theorem, machine-checked:
 *bandwidth cannot be statically priced.*
 Latency-like costs (addressing, movement, mount distance) are
 homomorphisms; write-back cost is genuinely history-dependent, and
@@ -168,13 +156,20 @@ amplification, "it depends on your access pattern") stops being
 folklore and becomes the statement that a certain cohomology class
 is nonzero.
 
-#deskthm(title: "Sparse–dense write asymmetry")[
-  Under dirty pricing: $m$ isolated writes at pairwise tree-distant
-  leaves cost $Theta(m dot n)$ total (each pays its path home),
-  while writing a full $2^k$-subtree costs $Theta(2^k)$ — each
-  edge of the written region is dirty-crossed once, amortized
-  $O(1)$ per written leaf. The write-side twin of the boundary
-  spike; desk-level pending the dirty-bit mechanization.
+#leanthm(
+  "Adic.Dyadic.Dirty.canonical_sparse_cost",
+  pin: "b1537829f734",
+  title: "Sparse–dense write asymmetry, exact",
+)[
+  $m$ isolated depth-$n$ round-trip writes (write pass plus erase
+  pass) cost exactly $4 m n + 2 m$ under dirty pricing — each pays
+  its path home, twice — while the *count-equalized* dense block
+  walk costs $2 m n + 2(n - "blockDepth") + 6 m - 4$
+  (`canonical_paddedDense_cost`, same ledger; the padding
+  equalization is itself a receipt): equal letter counts, a
+  $Theta(m n)$ gap in write-backs. Dirtiness coalesces — the
+  write-side twin of the boundary spike, with AIP-5 §2's
+  bookkeeping machine-checked including the padding.
 ]
 
 = What this buys the programme
