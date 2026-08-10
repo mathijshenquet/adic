@@ -1,5 +1,29 @@
 # adic work log
 
+## 2026-08-10 (day 2) — operadic-canonicity launched; coefficient-ring design direction
+
+- `track/operadic-canonicity` launched (sol): pin the schedule
+  classification via the mounting operad — mountings compose by
+  grafting (dyadic-rational suboperad of the simplex operad);
+  forward direction: M_t satisfies the exact (deformed) Leibniz
+  grafting law, strict derivation at α=1 (Bradley's
+  characterization as template for the converse); literature
+  check included (import beats reprove). Proposed by Mathijs
+  after scanning campbell-renyi (§7–8 not pinned).
+- **Coefficient-ring direction (Claude, chat, Mathijs's
+  suggestion sharpened)**: for the Euclidean mechanization,
+  generalize the cocycle framework's coefficients from ℕ to an
+  ordered cancellative commutative monoid; concrete costs live
+  exactly in ℕ[2^(1/k)] = ℕ[x]/(x^k = 2) — exact, decidable
+  order (k=2,3 decide-able), executable (coefficient vectors,
+  sim keeps running); all k at once via ℕ[2^ℚ] = colim_k (a
+  graded tower of coefficient objects — work with the diagram).
+  Entropy-side bounds stay in floor/escort-root ℕ-form (macro
+  levels) — the optima (Z_α) escape every fixed number field,
+  exactly as H(p) already did in the Shannon layer. Goes into
+  the euclidean-mechanization spec when cut, after the operadic
+  report lands.
+
 ## 2026-08-10 (night, close) — ALL SEVEN tracks landed; fleet drained; expo definitions convention
 
 - **`track/adaptive-entropy` MERGED** (sol, wall→repair→green):
