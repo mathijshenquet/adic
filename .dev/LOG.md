@@ -1,5 +1,35 @@
 # adic work log
 
+## 2026-08-10 (day 2, cont. 4) — Letter 2 RESOLVED: Expo 6 live; euclidean-levels launched
+
+- **Letter 2 closing question RESOLVED by Mathijs**: the
+  no-cost-bounded-cone claim becomes a formal theorem target
+  ("mooie no-go voor die classical domain theorem"), link to be
+  clarified. Claude wrote **Expo 6 "The bilimit, refused"**
+  (Letter 2 reformulated per AIP-4 — first letters→expo item
+  done): cone asymmetry desk-proved at MACHINE level (free-up
+  makes it one line: colimit elements cost finitely many acquired
+  bits, limit points infinitely many; pigeonhole for
+  no-finite-stage-universality); the ENRICHED no-go (no bilimit,
+  algebraic compactness fails in the cost-graded enrichment)
+  stays the open calculus-tier target, now sanctioned. Link
+  clarified as a triangle: Scott/Smyth–Plotkin/Freyd = cost-erased
+  shadow; America–Rutten ultrametric = the limit side kept apart
+  (2-adic metric = our tree geometry); adic = diagram + price.
+  Parts (i)+(ii) flagged as near-verbatim Lean candidates.
+- `track/euclidean-levels` launched (terra): campbell report §9
+  ladder rungs 1–5 + streaming-boundary lemma, macro-level
+  all-natural route. Watcher + heartbeat armed.
+- Roadmap overview given to Mathijs incl. the strategic fork: B4
+  branch is essentially harvested; per the roadmap's own logic
+  the calculus branch (toward B3) is the next major branch —
+  decision put on his stack next to q2.
+- **Open with Mathijs** (updated): cache-v0 call 2 (3 real
+  decisions: dirty details, [72]-route, phase-3 go); Expo 1+2
+  corrections (+C=1); roadmap q2 + calculus-branch fork; s≈2.41
+  call; veto 5/7; warmth headline call; operadic product-vs-
+  envelope. Letter 2 ✓ resolved.
+
 ## 2026-08-10 (day 2, cont. 3) — the breakthrough-candidate framing; two tracks launched
 
 - Design conversation (Mathijs excited, Claude calibrating): the
