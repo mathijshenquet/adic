@@ -1,5 +1,58 @@
 # adic work log
 
+## 2026-08-10 (day 2, cont. 5) — priorart + classification MERGED; call 2 discharged; dirty-mech in flight
+
+- **cache-v0 call 2 DISCHARGED** (Mathijs + principled analysis):
+  eager dirty pricing (forced by up=evict + write-back-cache
+  semantics, not a new choice); commit-at-boundaries = gauge
+  (same class); `commit`-as-operation → future persistence layer;
+  [72] RESOLVED via dirty (Mathijs: "erg elegant"); size-aware
+  parked deeper (motivator gone); level scope: both.
+  `track/dirty-mech` LAUNCHED (sol): dirty observer in Lean,
+  dirty ≤ 2·clean, sparse-dense exact, dirty_not_cohomologous.
+  Mid-flight soft-steer sent: use classification's short witness
+  pair (eq 20) for nontriviality instead of the padding.
+- **`track/euclidean-levels` MERGED** (terra, honest partial):
+  macro-Kraft arithmetic, integer roots, k=2 sweep bound, (2,1,1)
+  test vectors green — 53 receipts; walls on escort achievability
+  + Hölder converse (two missing finite-sum lemmas, named).
+- **`track/cost-cohomology-priorart` MERGED** (sol, 17pp):
+  verdict — the slogan is NOT new (graph cohomology, weight
+  pushing, symbolic dynamics incl. ordered cohomology, gauge
+  freedom in thermodynamics, Baues–Wirsching); the potential
+  equation is standard amortized analysis; the credible
+  contribution is the 5-point bundle (action-category functor
+  semantics; priceability-as-factorization; ℕ-positive exchange
+  quotient; observer/tower computation; hardware
+  identifications). Paper must position accordingly; tower
+  theorem is load-bearing.
+- **`track/cocycle-classification` MERGED** (sol, 13pp — Mathijs
+  restarted the agent for a round 2, worktree kept):
+  (1) THE fixed-grade theorem: short exact sequence
+  0 → Ext¹(ℤ^Σ/B,ℤ) → Q_G → Hom(K,ℤ) → 0 — scheduling free part
+  vs arithmetic torsion part, canonical; every arithmetic
+  obstruction is torsion (proved). (2) SNF computation verified
+  grades 1–2, all four verdicts reproduced witness-free; found
+  rank-5 relation downs−ups = δdepth. (3) **Claude's axiom
+  lattice REFUTED with witnesses**: even under all three axioms
+  the dirty bit alone has rank THREE (dirty-up, dirty-read,
+  redundant-write independent; relation u_D+z_D+o_D = writes);
+  idempotence too weak (non-commuting idempotents compose to
+  counters, order-2 witness); repair needs a *pricing surface*
+  (constrain which events may be priced). (4) Transgression:
+  five-term sequence proved for graph covers; visit counter IS
+  the H²(ℤ/r) generator; full conjecture needs two
+  qualifications (reset observers aren't covers; base H¹ ≫
+  letter prices) — replacement: arithmetic classes = count-
+  monodromy characters. (5) Tower: named examples stabilize by
+  grade 2 (NEW short uniform dirty witness eq 20); ambient H¹
+  provably does NOT stabilize (84→6828); equivariant + MV
+  attacks fail at a named missing finite-boundary transfer
+  object; refined conjecture under commuting-band + pricing-
+  surface hypotheses; 12-rung Lean ladder.
+- In flight: dirty-mech (sol), cocycle-classification round 2
+  (Mathijs-initiated, watcher armed).
+
 ## 2026-08-10 (day 2, cont. 4) — Letter 2 RESOLVED: Expo 6 live; euclidean-levels launched
 
 - **Letter 2 closing question RESOLVED by Mathijs**: the
