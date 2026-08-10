@@ -83,12 +83,14 @@ Kraft analysis); this AIP freezes the v0 slice to mechanize.
    after the distance layer exists. (This replaces rev 1's
    "two-axis tower" question, which dissolves: the Kraft budget is
    normalized to 1, no separate fast-memory grade in v0.)
-3. **[72] stays open, now precisely**: zip's write head — equal
-   *touch* frequency says d = 2 like the readers ([59]); double
-   *data* rate says a bigger share. The tension is exactly
-  touch-frequency distances vs size-aware distances (§2 last bullet),
-  so the answer belongs to the size-aware refinement, not to v0 guesswork.
-   — rec: record, defer to the size-aware distance refinement in v1.
+3. **[72] RESOLVED (Mathijs, 2026-08-10): via the dirty layer.**
+   Zip's write head keeps touch-distance 2 like the readers
+   (touch-frequency pricing stands); its double data rate is paid
+   as write-backs under dirty pricing — the read/write asymmetry
+   *falls out* instead of being arranged by a Kraft choice.
+   Consequence: the size-aware refinement (§2 last bullet) loses
+   its main motivator — parked deeper, reactivate only on a
+   concrete need.
 
 ## 4b. The dirty-up refinement (Mathijs musing, 2026-08-10 — open)
 
@@ -105,12 +107,18 @@ write-backs"), no Kraft choice needed. Pricing principle behind
 the whole family: free is admissible exactly for
 potential-consuming operations (up consumes depth); read/write/
 down can repeat in place and must stay paid. Status (updated
-2026-08-10): *direction endorsed* by Mathijs — the cocycle reading
-(Expo 3) stays categorically clean and yields cohomology links;
-open design questions collected in `aips/accepted/0005-dirty-cocycle.md`;
-pricing details remain his call at call 2. The
-unconditional-free-up retrofit (read-only fiber) is in flight on
-`track/free-up-refresh`.
+2026-08-10, call 2 DISCHARGED): **pricing decided on principled
+grounds** — (a) *eager*: every dirty `up` pays $c(\ell)$ at its
+level (1 at $c \equiv 1$); this is forced by two prior decisions
+(up = evict, 2026-08-09; write-back caches pay on dirty eviction —
+the universal hardware semantics), not a new choice; (b)
+commit-at-boundaries is NOT a rival semantics but the
+flush-inclusive *gauge* — same cohomology class (differs by
+$\delta(\text{dirty-count})$; AIP-5 §5), so it costs nothing to
+have both: eager as mechanized ground truth, flush-inclusive as
+interface-statement convention; (c) `commit` as a machine
+*operation* belongs to a future persistence/durability layer, not
+v0. [72] resolves here (§4.3). The free-up retrofit is MERGED.
 
 ## 5. Sequencing
 
