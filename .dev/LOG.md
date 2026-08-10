@@ -1,5 +1,33 @@
 # adic work log
 
+## 2026-08-10 (day 2, cont. 6) — dirty-mech MERGED: Expo 3 is fully green
+
+- **`track/dirty-mech` MERGED** (sol, ~70 min): `lean/Adic/Dirty.lean`
+  — augmented dirty configurations + eager pricing per discharged
+  call 2; `dirtyCost_isCocycle`; dirty ≤ 2·clean + slack;
+  sparse/dense walks as concrete word families with EXACT costs
+  (sparse 4mn+2m — AIP-5 §2's arithmetic reproduced on the nose;
+  padded dense 2mn+2(n−blockDepth)+6m−4; count-equalization its
+  own theorem, not a hypothesis); and the flagship
+  `dirty_not_cohomologous (n ≥ 1)` via the classification track's
+  short conjugation witness (mid-flight steer paid off — costs
+  2n+2 vs 3n+2). 61 receipts. Gate independently re-run green.
+- **Expo 3 is now FULLY GREEN**: both remaining desk badges
+  flipped to leanthm (pins d1f4f594a35b, b1537829f734 re-read at
+  merge). Born as design theory in the morning, every box
+  machine-checked by midnight — AIP-4's workflow demonstrated
+  end-to-end. *Bandwidth cannot be statically priced* is a
+  machine-checked theorem.
+- Tower interim (Mathijs relayed from classification r2): the
+  left-subtree embedding WORKS — divisible strongly-connected
+  slice has an all-grade stabilization theorem; two named missing
+  lemmas remain (boundary-fiber reachability/saturation; uniform
+  arithmetic index bound). Follow-up steers sent: harvest the
+  dirty/warmth tower corollary via strong connectivity; candidate
+  lemma "index divides exponent of observer monoid group-part".
+- In flight: cocycle-classification round 2 (Mathijs-driven,
+  watcher armed).
+
 ## 2026-08-10 (day 2, cont. 5) — priorart + classification MERGED; call 2 discharged; dirty-mech in flight
 
 - **cache-v0 call 2 DISCHARGED** (Mathijs + principled analysis):
