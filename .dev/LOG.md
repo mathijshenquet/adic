@@ -1,5 +1,35 @@
 # adic work log
 
+## 2026-08-10 (day 2, cont. 3) — the breakthrough-candidate framing; two tracks launched
+
+- Design conversation (Mathijs excited, Claude calibrating): the
+  candidate claim is *"cost models of a machine form a computable
+  cohomology; resources are classes; amortization is gauge;
+  hardware phenomena are its structure (bandwidth = free rank,
+  invalidation = 2nd free class, recycling granularity =
+  torsion)"*. Between us and that claim: (1) the tower/
+  stabilization theorem, (2) the ℕ-cone (monoid) refinement,
+  (3) honest prior-art positioning — Claude pre-flagged weight
+  pushing (Mohri) as adjacent art, plus Parry–Tuncel/Livšic/
+  entropy-production cocycles.
+- Physical reading found for the "unphysical" mod-r class: flash
+  block-erase / nursery GC / log compaction — recycling costs;
+  torsion = "amortizable only fractionally"; the ℚ-quotient is
+  the industry's write-amplification average. Axiom (1) of the
+  lattice re-read as currency-granularity choice, not
+  pathology-exclusion.
+- Grothendieck framing confirmed for all observer classes:
+  augmented configurations = coverings C̃ → C; classification =
+  H¹ of coverings; fixed grade = graph cohomology + SNF; counters
+  = transgressions of finite monodromy (conjecture); tower =
+  local-to-global/sheaf attack.
+- LAUNCHED (sol ×2, prompts verified working, watchers +
+  heartbeat armed): `track/cost-cohomology-priorart` (honest
+  positioning sweep, hallucination-guarded citations) and
+  `track/cocycle-classification` (SNF method validating all four
+  example verdicts in one computation; axiom lattice both slices;
+  transgression conjecture; tower stabilization attack).
+
 ## 2026-08-10 (day 2, cont. 2) — local-classes MERGED: the machine's cohomology has torsion
 
 - `track/local-classes` MERGED (sol, ~40 min, 10-page report,
