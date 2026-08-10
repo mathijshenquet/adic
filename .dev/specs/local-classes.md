@@ -1,9 +1,8 @@
 # Track: local-classes — classifying the local cocycle classes
 
-**DORMANT** (Mathijs 2026-08-10, superseding his same-day
-activation): wait until the cocycle theory has crystallized
-(free-up landed, framework mechanized, padding argument written).
-Spec stays ready to fire.
+**ACTIVE** (Mathijs 2026-08-10 day 2: crystallization condition
+met — framework mechanized, padding argument complete, schedule
+classification operadically pinned).
 
 Worker: gpt-5.6-sol, herdr worktree, branch `track/local-classes`.
 LOG.md at worktree root; first action: add it to `.git/info/exclude`,
@@ -27,10 +26,20 @@ are allowed as scratch but are not committed.
 
 `aips/accepted/0005-dirty-cocycle.md` — especially §0 (background),
 §1 (ℕ-coefficients: exchange form is the ratified framework), §2
-(the commutativity/holonomy argument), §4 (this track's question,
-verbatim). Expo 3 (`expo/03-cost-is-a-cocycle.typ`) for the
-cocycle framing. AIP-2 §3 for the machine's instructions (note:
-`up` is free by amendment).
+(the commutativity/holonomy argument — now COMPLETE with exact
+padding bookkeeping; use it), §4 (this track's question,
+verbatim), §8b (the credits/exchange bridge). Expo 3
+(`expo/03-cost-is-a-cocycle.typ`) for the cocycle framing.
+`lean/Adic/Cocycle.lean` — the exchange-form predicates are now
+MECHANIZED (IsCocycle, Exchange, freeUp_exchange); phrase your
+definitions compatibly with those exact shapes so a future
+mechanization track can consume your report directly. AIP-2 §3
+for the machine's instructions (`up` free by amendment).
+`aips/draft/operadic-canonicity.md` — the adjacent toolkit; note
+its representation wall (mounting masses are single cylinders,
+not arbitrary dyadic rationals) as a cautionary analogy for your
+observation-language choices: state precisely what your
+classification's image is, not just its ambient.
 
 ## The question
 
