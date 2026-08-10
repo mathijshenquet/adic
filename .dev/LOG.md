@@ -1,5 +1,37 @@
 # adic work log
 
+## 2026-08-10 (day 2, close) — classification round 2 MERGED: the local-to-global cocycle theory
+
+- **`track/cocycle-classification` round 2 MERGED** (sol,
+  Mathijs-driven, `88d9db6`): the left-subtree embedding yields a
+  genuine local-to-global theory. Results: (1) W=P=id observers:
+  the ENTIRE tower reduces exactly to two finite one-leaf graphs —
+  grade 1 decides all grades. (2) Strongly connected augmented
+  graphs: relation lattices form a descending chain; over ℚ always
+  stabilizes. (3) **Dirty is strongly connected → its
+  nontriviality is uniform over the whole tower** (harvest steer
+  landed; agrees with the independently mechanized
+  dirty_not_cohomologous n≥1). (4) Warmth is NOT strongly
+  connected (hot root-children can never be re-invalidated — the
+  root is never re-filled) but stays uniformly nontrivial from
+  grade 2 via the direct witness. (5) Permutation observers
+  stabilize integrally; torsion index divides the exponent of the
+  observer group — the candidate lemma confirmed for that slice.
+  (6) ONE remaining wall, precisely named: a uniform
+  exponent/saturation theorem for the reachable signed-cycle
+  event ledger of general irreversible reset observers; naive
+  Noetherian reasoning insufficient.
+- Scorecard of the day's steers: left-subtree embedding (Claude)
+  → core of the theory; dirty/warmth connectivity harvest → dirty
+  yes, warmth no-with-sharp-reason; index-divides-exponent →
+  confirmed for permutation observers. Both wall-repairs came
+  from the joint conversation loop.
+- The cohomology chapter is now paper-shaped: SES + verified SNF
+  + local-to-global tower theorems (per slice) + mechanized
+  flagship (Expo 3 fully green) + honest priorart positioning.
+  Remaining open: the saturation lemma (exotic irreversible
+  observers only — no current claim depends on it).
+
 ## 2026-08-10 (day 2, cont. 6) — dirty-mech MERGED: Expo 3 is fully green
 
 - **`track/dirty-mech` MERGED** (sol, ~70 min): `lean/Adic/Dirty.lean`
