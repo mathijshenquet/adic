@@ -1,5 +1,25 @@
 # adic work log
 
+## 2026-08-10 (day 2, cont.) — operadic-canonicity MERGED: classification pinned
+
+- `track/operadic-canonicity` MERGED (sol, ~50 min, 18-page
+  report, full gate green incl. cargo): mountings DO form an
+  operad under grafting (depths add, masses multiply — exactly
+  the proposed law). Honest wall: the mounting-mass image is NOT
+  the dyadic-rational suboperad (one cylinder mass per head;
+  density fails), so the direct Bradley import breaks — repaired
+  via the product operad Δ × Mounting. The graft-local object is
+  the partition functional Z_α = Σp^α (not M_t itself), with the
+  exact multiplicative grafting law; conditional converse: two
+  character branches — additive ⇒ linear cost ⇒ Shannon,
+  multiplicative ⇒ exponential schedules ⇒ Campbell/Rényi — then
+  Furuichi + Baez–Fritz–Leinster imported for uniqueness (import
+  beat reprove, as hoped). Labelled dyadic envelope documented as
+  optional non-literal extension. campbell-renyi §8's qualified
+  KN claim is superseded by this route. AIP-5 §8b splay/credits
+  addendum landed same window.
+- **Review for Mathijs**: aips/draft/operadic-canonicity.pdf.
+
 ## 2026-08-10 (day 2) — operadic-canonicity launched; coefficient-ring design direction
 
 - `track/operadic-canonicity` launched (sol): pin the schedule
